@@ -44,8 +44,10 @@ namespace XiaoZhi.Unity
             var buildName = _buildTarget switch
             {
                 BuildTarget.StandaloneWindows64 => $"{PlayerSettings.productName}.exe",
-                BuildTarget.Android => $"{PlayerSettings.productName}-${_buildTarget}.apk",
+                BuildTarget.Android => $"{PlayerSettings.productName}-{_buildTarget}.apk",
                 BuildTarget.StandaloneOSX => $"{PlayerSettings.productName}.dmg",
+                BuildTarget.StandaloneLinux64 => $"{PlayerSettings.productName}",
+                BuildTarget.iOS => $"{PlayerSettings.productName}",
                 _ => throw new ArgumentOutOfRangeException()
             };
             return Path.Combine(buildPath, buildName);

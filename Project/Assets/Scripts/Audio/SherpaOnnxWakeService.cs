@@ -46,8 +46,8 @@ namespace XiaoZhi.Unity
                 SampleRate = sampleRate
             };
             _vadConfig.SileroVad.Model = FileUtility.GetFullPath(resourceType, Config.Instance.VadModelConfig);
-            _vadConfig.SileroVad.MinSpeechDuration = 0.2f;
-            _vadConfig.SileroVad.Threshold = 0.7f;
+            _vadConfig.SileroVad.MinSpeechDuration = 0.25f;
+            _vadConfig.SileroVad.Threshold = 0.75f;
             _vadConfig.Debug = 0;
         }
 
