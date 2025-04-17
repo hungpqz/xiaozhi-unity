@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Localization;
 using UniVRM10;
 
 namespace XiaoZhi.Unity
@@ -82,6 +83,11 @@ namespace XiaoZhi.Unity
             _mainUI.SetStatus(status);
         }
 
+        public void SetStatus(LocalizedString status)
+        {
+            _mainUI.SetStatus(status);
+        }
+
         public void SetEmotion(string emotion)
         {
             _mainUI.ShowLoading(emotion == "loading");
@@ -89,6 +95,11 @@ namespace XiaoZhi.Unity
         }
 
         public void SetChatMessage(ChatRole role, string content)
+        {
+            
+        }
+
+        public void SetChatMessage(ChatRole role, LocalizedString content)
         {
             
         }

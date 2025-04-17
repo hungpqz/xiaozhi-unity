@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Localization;
 using UnityEngine.Pool;
 using Object = UnityEngine.Object;
 
@@ -181,6 +182,11 @@ namespace XiaoZhi.Unity
         }
 
         public async UniTask ShowNotificationUI(string message, float duration = 3.0f)
+        {
+            await ShowNotificationUI<NotificationUI>(new NotificationUIData(message, duration));
+        }
+        
+        public async UniTask ShowNotificationUI(LocalizedString message, float duration = 3.0f)
         {
             await ShowNotificationUI<NotificationUI>(new NotificationUIData(message, duration));
         }

@@ -3,6 +3,9 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using UnityEngine.UI;
 
 namespace XiaoZhi.Unity
@@ -12,11 +15,11 @@ namespace XiaoZhi.Unity
         private RectTransform _trSet;
         private Button _btnSet;
         private GameObject _goLoading;
-        private GameObject _goChat;
-        private TextMeshProUGUI _textChat;
+        private GameObject _goStatus;
+        private TextMeshProUGUI _textStatus;
+        private LocalizeStringEvent _localizeStatus;
 
         private CancellationTokenSource _autoHideCts;
-        private DeviceState _lastDeviceState;
 
         public override string GetResourcePath()
         {
@@ -38,12 +41,15 @@ namespace XiaoZhi.Unity
             _trSet = GetComponent<RectTransform>(Tr, "BtnSet");
             _trSet.GetComponent<XButton>().onClick.AddListener(() => { ShowModuleUI<SettingsUI>().Forget(); });
             GetComponent<XButton>(Tr, "ClickRole").onClick.AddListener(() => Context.App.ToggleChatState().Forget());
-            _goChat = Tr.Find("Chat").gameObject;
-            _textChat = GetComponent<TextMeshProUGUI>(Tr, "Chat/Text");
+            _goStatus = Tr.Find("Status").gameObject;
+            _textStatus = GetComponent<TextMeshProUGUI>(Tr, "Status/Text");
+            _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
         {
+            _localizeStatus.StringReference = null;
+            _textStatus.text = "";
             Context.App.OnDeviceStateUpdate -= OnDeviceStateUpdate;
             Context.App.OnDeviceStateUpdate += OnDeviceStateUpdate;
             AppSettings.Instance.OnAutoHideUIUpdate -= OnAutoHideUIUpdate;
@@ -68,15 +74,19 @@ namespace XiaoZhi.Unity
 
         public void SetStatus(string status)
         {
-            _goChat.SetActive(!string.IsNullOrEmpty(status));
-            _textChat.text = status;
+            _localizeStatus.StringReference = null;
+            _textStatus.text = status;
+        }
+
+        public void SetStatus(LocalizedString status)
+        {
+            _localizeStatus.StringReference = status;
         }
 
         private void OnDeviceStateUpdate(DeviceState state)
         {
             ClearAutoHideCts();
             DetectCompVisible();
-            _lastDeviceState = state;
         }
 
         private void OnAutoHideUIUpdate(bool autoHide)

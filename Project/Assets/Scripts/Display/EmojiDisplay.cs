@@ -1,4 +1,6 @@
 using Cysharp.Threading.Tasks;
+using UnityEngine.Localization;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 namespace XiaoZhi.Unity
 {
@@ -34,12 +36,22 @@ namespace XiaoZhi.Unity
             _emojiMainUI.SetStatus(status);
         }
 
+        public void SetStatus(LocalizedString status)
+        {
+            _emojiMainUI.SetStatus(status);
+        }
+
         public void SetEmotion(string emotion)
         {
             _emojiMainUI.SetEmotion(emotion);
         }
 
         public void SetChatMessage(ChatRole role, string content)
+        {
+            _emojiMainUI.SetChatMessage(role, content);
+        }
+
+        public void SetChatMessage(ChatRole role, LocalizedString content)
         {
             _emojiMainUI.SetChatMessage(role, content);
         }

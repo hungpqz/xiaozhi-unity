@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using Debug = UnityEngine.Debug;
 
 namespace XiaoZhi.Unity
@@ -75,12 +76,12 @@ namespace XiaoZhi.Unity
             AppSettings.Load();
             await Config.Load();
             await InitDisplay();
-            await Lang.Strings.LoadStrings(AppSettings.Instance.GetLangCode());
+            await Lang.LoadLocale();
             SetDeviceState(DeviceState.Starting);
             if (!await CheckRequestPermission())
             {
                 SetDeviceState(DeviceState.Error);
-                _display.SetChatMessage(ChatRole.System, Lang.Strings.Get("Permission_Request_Failed"));
+                _display.SetChatMessage(ChatRole.System, Lang.GetRef("Permission_Request_Failed"));
                 return;
             }
 
@@ -88,7 +89,7 @@ namespace XiaoZhi.Unity
             if (!await CheckNewVersion(_cts.Token))
             {
                 SetDeviceState(DeviceState.Error);
-                _display.SetChatMessage(ChatRole.System, Lang.Strings.Get("ACTIVATION_FAILED_TIPS"));
+                _display.SetChatMessage(ChatRole.System, Lang.GetRef("ACTIVATION_FAILED_TIPS"));
                 return;
             }
 
@@ -96,9 +97,9 @@ namespace XiaoZhi.Unity
             _display.SetChatMessage(ChatRole.System, "");
             if (Config.Instance.EnableWakeService)
             {
-                _display.SetStatus(Lang.Strings.Get("LOADING_RESOURCES"));
+                _display.SetStatus(Lang.GetRef("LOADING_RESOURCES"));
                 await PrepareResource(_cts.Token);
-                _display.SetStatus(Lang.Strings.Get("LOADING_MODEL"));
+                _display.SetStatus(Lang.GetRef("LOADING_MODEL"));
                 await InitializeWakeService();
             }
 
@@ -106,7 +107,7 @@ namespace XiaoZhi.Unity
             if (!_codec.GetInputDevice(out _))
             {
                 SetDeviceState(DeviceState.Error);
-                _display.SetStatus(Lang.Strings.Get("STATE_MIC_NOT_FOUND"));
+                _display.SetStatus(Lang.GetRef("STATE_MIC_NOT_FOUND"));
                 return;
             }
 
@@ -192,39 +193,39 @@ namespace XiaoZhi.Unity
             {
                 case DeviceState.Unknown:
                 case DeviceState.Idle:
-                    _display.SetStatus(Lang.Strings.Get("STATE_STANDBY"));
+                    _display.SetStatus(Lang.GetRef("STATE_STANDBY"));
                     _display.SetEmotion("sleep");
                     break;
 
                 case DeviceState.Connecting:
-                    _display.SetStatus(Lang.Strings.Get("STATE_CONNECTING"));
+                    _display.SetStatus(Lang.GetRef("STATE_CONNECTING"));
                     _display.SetChatMessage(ChatRole.System, "");
                     _display.SetEmotion("yawn");
                     break;
 
                 case DeviceState.Listening:
-                    _display.SetStatus(Lang.Strings.Get("STATE_LISTENING"));
+                    _display.SetStatus(Lang.GetRef("STATE_LISTENING"));
                     _display.SetEmotion("neutral");
                     _opusDecoder.ResetState();
                     _opusEncoder.ResetState();
                     break;
 
                 case DeviceState.Speaking:
-                    _display.SetStatus(Lang.Strings.Get("STATE_SPEAKING"));
+                    _display.SetStatus(Lang.GetRef("STATE_SPEAKING"));
                     _opusDecoder.ResetState();
                     if (_wakeService is { IsRunning: true })
                         _wakeService.ClearVadBuffer();
                     break;
                 case DeviceState.Starting:
-                    _display.SetStatus(Lang.Strings.Get("STATE_STARTING"));
+                    _display.SetStatus(Lang.GetRef("STATE_STARTING"));
                     _display.SetEmotion("loading");
                     break;
                 case DeviceState.Activating:
-                    _display.SetStatus(Lang.Strings.Get("ACTIVATION"));
+                    _display.SetStatus(Lang.GetRef("ACTIVATION"));
                     _display.SetEmotion("activation");
                     break;
                 case DeviceState.Error:
-                    _display.SetStatus(Lang.Strings.Get("STATE_ERROR"));
+                    _display.SetStatus(Lang.GetRef("STATE_ERROR"));
                     _display.SetEmotion("error");
                     break;
             }
@@ -247,7 +248,7 @@ namespace XiaoZhi.Unity
             if (!await _protocol.OpenAudioChannel())
             {
                 SetDeviceState(DeviceState.Idle);
-                _context.UIManager.ShowNotificationUI(Lang.Strings.Get("Connect_Failed_Tips")).Forget();
+                _context.UIManager.ShowNotificationUI(Lang.GetRef("Connect_Failed_Tips")).Forget();
                 return false;
             }
 
@@ -567,7 +568,7 @@ namespace XiaoZhi.Unity
                         if (showTips)
                         {
                             showTips = false;
-                            _context.UIManager.ShowNotificationUI(Lang.Strings.Get("ACTIVATION_CODE_COPIED")).Forget();
+                            _context.UIManager.ShowNotificationUI(Lang.GetRef("ACTIVATION_CODE_COPIED")).Forget();
                         }
                     }
                     catch (Exception)
@@ -591,11 +592,9 @@ namespace XiaoZhi.Unity
             {
                 if (i.Granted) continue;
                 var permissionName =
-                    Lang.Strings.Get($"Permission_{Enum.GetName(typeof(PermissionType), i.Type)}");
-                _context.UIManager.ShowNotificationUI(
-                        Lang.Strings.Get(string.Format(Lang.Strings.Get("Permission_Request_Failed"),
-                            permissionName)))
-                    .Forget();
+                    Lang.GetRef($"Permission_{Enum.GetName(typeof(PermissionType), i.Type)}");
+                _context.UIManager.ShowNotificationUI(Lang.GetRef("Permission_One_Request_Failed",
+                    new KeyValuePair<string, IVariable>("0", permissionName))).Forget();
                 success = false;
             }
 
@@ -605,7 +604,7 @@ namespace XiaoZhi.Unity
         private async UniTask CheckInternetReachability()
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
-                _display.SetStatus(Lang.Strings.Get("State_Internet_Break"));
+                _display.SetStatus(Lang.GetRef("State_Internet_Break"));
             while (Application.internetReachability == NetworkReachability.NotReachable)
                 await UniTask.Delay(1000);
         }
@@ -616,7 +615,7 @@ namespace XiaoZhi.Unity
                 _protocol?.IsAudioChannelOpened() != true)
             {
                 SetDeviceState(DeviceState.Idle);
-                _context.UIManager.ShowNotificationUI(Lang.Strings.Get("CONNECTION_CLOSED_TIPS")).Forget();
+                _context.UIManager.ShowNotificationUI(Lang.GetRef("CONNECTION_CLOSED_TIPS")).Forget();
             }
         }
     }

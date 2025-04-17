@@ -1,5 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Localization;
+using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 namespace XiaoZhi.Unity
 {
@@ -11,8 +13,12 @@ namespace XiaoZhi.Unity
         
         void SetStatus(string status);
         
+        void SetStatus(LocalizedString status);
+        
         void SetEmotion(string emotion);
 
         void SetChatMessage(ChatRole role, string content);
+        
+        void SetChatMessage(ChatRole role, LocalizedString content);
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine.Events;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -103,7 +105,9 @@ namespace XiaoZhi.Unity
             if (!tr) return;
             var text = tr.GetComponent<TextMeshProUGUI>();
             if (!text) return;
-            text.text = Lang.Strings.Get(key, args);
+            var localize = tr.GetComponent<LocalizeStringEvent>();
+            if (!localize) localize.StringReference = null;
+            text.text = Lang.Get(key, args);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -219,6 +223,11 @@ namespace XiaoZhi.Unity
         }
 
         public async UniTask ShowNotificationUI(string message, float duration = 3)
+        {
+            await _uiService.ShowNotificationUI(message, duration);
+        }
+        
+        public async UniTask ShowNotificationUI(LocalizedString message, float duration = 3)
         {
             await _uiService.ShowNotificationUI(message, duration);
         }

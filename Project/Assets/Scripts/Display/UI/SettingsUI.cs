@@ -3,6 +3,8 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization.Components;
+using UnityEngine.Localization.Settings;
 using UnityEngine.UI;
 
 namespace XiaoZhi.Unity
@@ -69,31 +71,6 @@ namespace XiaoZhi.Unity
             _btnRestart.onClick.AddListener(() => { Context.Restart().Forget(); });
 
             GetComponent<XButton>(content, "Top/BtnClose").onClick.AddListener(() => Close().Forget());
-            SetLang(content, "Title/Text", "SettingsUI_Title");
-            SetLang(content, "OTAUrl/Title/Text", "SettingsUI_OTAUrl");
-            SetLang(content, "OTAUrl/InputField/Text Area/Placeholder", "SettingsUI_Placeholder",
-                Lang.Strings.Get("SettingsUI_OTAUrl"));
-            SetLang(content, "WebSocketUrl/Title/Text", "SettingsUI_WebSocketUrl");
-            SetLang(content, "WebSocketUrl/InputField/Text Area/Placeholder", "SettingsUI_Placeholder",
-                Lang.Strings.Get("SettingsUI_WebSocketUrl"));
-            SetLang(content, "WebSocketAccessToken/Title/Text", "SettingsUI_WebSocketAccessToken");
-            SetLang(content, "WebSocketAccessToken/InputField/Text Area/Placeholder", "SettingsUI_Placeholder",
-                Lang.Strings.Get("SettingsUI_WebSocketAccessToken"));
-            SetLang(content, "CustomMacAddress/Title/Text", "SettingsUI_CustomMacAddress");
-            SetLang(content, "CustomMacAddress/InputField/Text Area/Placeholder", "SettingsUI_Placeholder",
-                Lang.Strings.Get("SettingsUI_CustomMacAddress"));
-            SetLang(content, "DisplayMode/Title/Text", "SettingsUI_DisplayMode");
-            SetLang(content, "Character/Title/Text", "SettingsUI_Character");
-            SetLang(content, "BreakMode/Title/Text", "SettingsUI_BreakMode");
-            SetLang(content, "Keywords/Title/Text", "SettingsUI_Keywords");
-            SetLang(content, "Keywords/InputField/Text Area/Placeholder", "SettingsUI_Placeholder",
-                Lang.Strings.Get("SettingsUI_Keywords"));
-            SetLang(content, "Keywords/Tips_Help/Text", "SettingsUI_Keywords_Help");
-            SetLang(content, "Volume/Title/Text", "SettingsUI_Volume");
-            SetLang(content, "AutoHide/Title/Text", "SettingsUI_AutoHide");
-            SetLang(content, "Theme/Title/Text", "SettingsUI_Theme");
-            SetLang(content, "Lang/Title/Text", "SettingsUI_Lang");
-            SetLang(content, "Restart/Button/Text", "SettingsUI_Restart");
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
@@ -129,8 +106,8 @@ namespace XiaoZhi.Unity
             {
                 var go = _listDisplayMode.GetChild(i).gameObject;
                 go.SetActive(true);
-                GetComponent<TextMeshProUGUI>(go.transform, "Text").text =
-                    Lang.Strings.Get($"SettingsUI_DisplayMode_{Enum.GetName(typeof(DisplayMode), i)}");
+                GetComponent<LocalizeStringEvent>(go.transform, "Text").StringReference =
+                    Lang.GetRef($"SettingsUI_DisplayMode_{Enum.GetName(typeof(DisplayMode), i)}");
                 var toggle = go.GetComponent<XToggle>();
                 RemoveUniqueListener(toggle);
                 toggle.isOn = (DisplayMode)values.GetValue(i) == AppSettings.Instance.GetDisplayMode();
@@ -145,7 +122,7 @@ namespace XiaoZhi.Unity
                 var displayMode = (DisplayMode)Enum.GetValues(typeof(DisplayMode)).GetValue(index);
                 if (AppSettings.Instance.GetDisplayMode() == displayMode) return;
                 AppSettings.Instance.SetDisplayMode(displayMode);
-                ShowNotificationUI(Lang.Strings.Get("SettingsUI_Modify_Tips")).Forget();
+                ShowNotificationUI(Lang.GetRef("SettingsUI_Modify_Tips")).Forget();
                 UpdateCharacter();
             }
         }
@@ -187,7 +164,7 @@ namespace XiaoZhi.Unity
                     case DisplayMode.VRM:
                         if (AppSettings.Instance.GetVRMModel() == index) return;
                         AppSettings.Instance.SetVRMModel(index);
-                        ShowNotificationUI(Lang.Strings.Get("SettingsUI_Modify_Tips")).Forget();
+                        ShowNotificationUI(Lang.GetRef("SettingsUI_Modify_Tips")).Forget();
                         break;
                 }
             }
@@ -201,8 +178,8 @@ namespace XiaoZhi.Unity
             {
                 var go = _listBreakMode.GetChild(i).gameObject;
                 go.SetActive(true);
-                GetComponent<TextMeshProUGUI>(go.transform, "Text").text =
-                    Lang.Strings.Get($"SettingsUI_BreakMode_{Enum.GetName(typeof(BreakMode), i)}");
+                GetComponent<LocalizeStringEvent>(go.transform, "Text").StringReference =
+                    Lang.GetRef($"SettingsUI_BreakMode_{Enum.GetName(typeof(BreakMode), i)}");
                 var toggle = go.GetComponent<XToggle>();
                 RemoveUniqueListener(toggle);
                 toggle.isOn = (BreakMode)values.GetValue(i) == AppSettings.Instance.GetBreakMode();
@@ -224,7 +201,7 @@ namespace XiaoZhi.Unity
         {
             if (AppSettings.Instance.GetKeywords().Equals(text)) return;
             AppSettings.Instance.SetKeywords(text);
-            ShowNotificationUI(Lang.Strings.Get("SettingsUI_Modify_Tips")).Forget();
+            ShowNotificationUI(Lang.GetRef("SettingsUI_Modify_Tips")).Forget();
         }
 
         private void UpdateVolume()
@@ -256,17 +233,16 @@ namespace XiaoZhi.Unity
 
         private void UpdateLangList()
         {
-            var codes = Enum.GetValues(typeof(Lang.Code));
-            Tools.EnsureChildren(_listLang, codes.Length);
-            for (var i = 0; i < codes.Length; i++)
+            var locales = LocalizationSettings.AvailableLocales.Locales;
+            Tools.EnsureChildren(_listLang, locales.Count);
+            for (var i = 0; i < locales.Count; i++)
             {
                 var go = _listLang.GetChild(i).gameObject;
                 go.SetActive(true);
-                var code = (Lang.Code)codes.GetValue(i);
-                go.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = Lang.GetLangName(code);
+                go.transform.Find("Text").GetComponent<TextMeshProUGUI>().text = locales[i].LocaleName;
                 var toggle = go.GetComponent<XToggle>();
                 RemoveUniqueListener(toggle);
-                toggle.isOn = code == AppSettings.Instance.GetLangCode();
+                toggle.isOn = locales[i] == LocalizationSettings.SelectedLocale;
                 AddUniqueListener(toggle, i, OnToggleLang);
             }
         }
@@ -275,8 +251,7 @@ namespace XiaoZhi.Unity
         {
             if (isOn)
             {
-                AppSettings.Instance.SetLangCode((Lang.Code)index);
-                ShowNotificationUI(Lang.Strings.Get("SettingsUI_Modify_Tips")).Forget();
+                Lang.SetLocale(LocalizationSettings.AvailableLocales.Locales[index]).Forget();
             }
         }
 
@@ -289,7 +264,7 @@ namespace XiaoZhi.Unity
         {
             if (!Tools.IsValidMacAddress(value))
             {
-                ShowNotificationUI(Lang.Strings.Get("SettingsUI_Invalid_MacAddress_Tips")).Forget();
+                ShowNotificationUI(Lang.GetRef("SettingsUI_Invalid_MacAddress_Tips")).Forget();
                 UpdateCustomMacAddress();
                 return;
             }
@@ -316,7 +291,7 @@ namespace XiaoZhi.Unity
         {
             if (!Tools.IsValidUrl(value))
             {
-                ShowNotificationUI(Lang.Strings.Get("SettingsUI_Invalid_Url_Tips")).Forget();
+                ShowNotificationUI(Lang.GetRef("SettingsUI_Invalid_Url_Tips")).Forget();
                 UpdateWebSocketUrl();
                 return;
             }

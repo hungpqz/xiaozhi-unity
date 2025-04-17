@@ -24,8 +24,6 @@ namespace XiaoZhi.Unity
         private string _keywords;
 
         private int _outputVolume;
-
-        private Lang.Code _langCode;
         
         private string _webSocketUrl;
 
@@ -42,7 +40,6 @@ namespace XiaoZhi.Unity
             _breakMode = (BreakMode)GetInt("break_mode", (int)BreakMode.Keyword);
             _autoHideUI = GetInt("auto_hide_ui") == 1;
             _outputVolume = GetInt("output_volume", 50);
-            _langCode = Enum.Parse<Lang.Code>(GetString("lang_code", Enum.GetName(typeof(Lang.Code), Lang.Code.CN)));
             _vrmModel = GetInt("vrm_model");
         }
         
@@ -116,16 +113,6 @@ namespace XiaoZhi.Unity
             SetInt("output_volume", _outputVolume);
             Save();
             OnOutputVolumeUpdate?.Invoke(_outputVolume);
-        }
-
-        public Lang.Code GetLangCode() => _langCode;
-
-        public void SetLangCode(Lang.Code code)
-        {
-            if (_langCode == code) return;
-            _langCode = code;
-            SetString("lang_code", Enum.GetName(typeof(Lang.Code), _langCode));
-            Save();
         }
 
         public bool IsFirstEnter()

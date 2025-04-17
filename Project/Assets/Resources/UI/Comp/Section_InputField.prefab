@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5733053526050457636}
   - component: {fileID: 5434995702342359406}
   - component: {fileID: 1316691831116575919}
+  - component: {fileID: 3192030764180500857}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -76,8 +77,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291151812
-  m_fontColor: {r: 0.76862746, g: 0.78039217, b: 0.77254903, a: 1}
+    rgba: 4282795844
+  m_fontColor: {r: 0.26666668, g: 0.2784314, b: 0.27450982, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -150,6 +151,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _background: 1
   _alpha: 1
+--- !u!114 &3192030764180500857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105793199219925783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:a7b2e24c04810a64480b1c3fd755abb3
+    m_TableEntryReference:
+      m_KeyId: 3314955662
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5434995702342359406}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &5152598295510671074
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,7 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.13725491, g: 0.14117648, b: 0.14901961, a: 1}
+  m_Color: {r: 0.9529412, g: 0.96862745, b: 0.9882353, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -588,6 +629,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: c8314cba261d63a49888f49d3be0307c,
         type: 3}
+    - target: {fileID: 7488743683598141429, guid: 2fbdb3894c866534bb8ebf9612d8d990,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488743683598141429, guid: 2fbdb3894c866534bb8ebf9612d8d990,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488743683598141429, guid: 2fbdb3894c866534bb8ebf9612d8d990,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7488743683598141429, guid: 2fbdb3894c866534bb8ebf9612d8d990,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7633015821520374412, guid: 2fbdb3894c866534bb8ebf9612d8d990,
         type: 3}
       propertyPath: m_Pivot.x
@@ -706,7 +767,7 @@ PrefabInstance:
     - target: {fileID: 8350670771407928628, guid: 2fbdb3894c866534bb8ebf9612d8d990,
         type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4291151812
+      value: 4282795844
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

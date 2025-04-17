@@ -69,6 +69,8 @@ namespace XiaoZhi.Unity
                 return string.Join(":", Enumerable.Range(0, 6)
                     .Select(i => vendorId.Substring(i * 2, 2)));
             }
+
+            return string.Empty;
 #else
             var adapters = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
             var adapter = adapters.OrderByDescending(i => i.Id).FirstOrDefault(i =>
@@ -80,7 +82,6 @@ namespace XiaoZhi.Unity
                 var bytes = adapter.GetPhysicalAddress().GetAddressBytes();
                 return string.Join(":", bytes.Select(b => b.ToString("x2")));
             }
-
             return string.Empty;
 #endif
         }

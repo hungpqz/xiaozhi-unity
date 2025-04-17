@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Localization;
 
 namespace XiaoZhi.Unity
 {
@@ -24,6 +25,8 @@ namespace XiaoZhi.Unity
         UniTask ShowNotificationUI<T>(NotificationUIData notification) where T : NotificationUI, new();
 
         UniTask ShowNotificationUI(string message, float duration = 3.0f);
+        
+        UniTask ShowNotificationUI(LocalizedString message, float duration = 3.0f);
 
         UniTask CloseUI<T>() where T : BaseUI;
 

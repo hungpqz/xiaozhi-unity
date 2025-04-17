@@ -2,6 +2,8 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 namespace XiaoZhi.Unity
@@ -10,6 +12,8 @@ namespace XiaoZhi.Unity
     {
         public string Message;
 
+        public LocalizedString LocalizedMessage;
+
         public float Duration;
 
         public NotificationUIData(string message, float duration = 3.0f)
@@ -17,11 +21,19 @@ namespace XiaoZhi.Unity
             Message = message;
             Duration = duration;
         }
+        
+        public NotificationUIData(LocalizedString message, float duration = 3.0f)
+        {
+            LocalizedMessage = message;
+            Duration = duration;
+        }
     }
 
     public class NotificationUI : BaseUI
     {
         private TextMeshProUGUI _text;
+
+        private LocalizeStringEvent _localize;
 
         private CancellationTokenSource _cts;
 
@@ -33,12 +45,14 @@ namespace XiaoZhi.Unity
         protected override void OnInit()
         {
             _text = GetComponent<TextMeshProUGUI>(Tr, "Text");
+            _localize = GetComponent<LocalizeStringEvent>(Tr, "Text");
             GetComponent<XButton>(Tr).onClick.AddListener(() => Close().Forget());
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
         {
             if (data is not NotificationUIData uiData) return;
+            _localize.StringReference = uiData.LocalizedMessage;
             _text.text = uiData.Message;
             _cts = new CancellationTokenSource();
             DelayedClose((int)(uiData.Duration * 1000), _cts.Token).Forget();

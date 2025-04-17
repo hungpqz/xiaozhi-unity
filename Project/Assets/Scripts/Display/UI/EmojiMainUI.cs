@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 
 namespace XiaoZhi.Unity
@@ -26,10 +28,12 @@ namespace XiaoZhi.Unity
         private const int SpectrumUpdateInterval = 50;
         private const float OutputScaleFactor = 0.5f;
 
-        private TMP_Text _textStatus;
-        private TMP_Text _textChat;
+        private TextMeshProUGUI _textStatus;
+        private LocalizeStringEvent _localizeStatus;
+        private TextMeshProUGUI _textChat;
+        private LocalizeStringEvent _localizeChat;
         private Transform _trEmotion;
-        private TMP_Text _textEmotion;
+        private TextMeshProUGUI _textEmotion;
         private RectTransform _trSet;
         private Button _btnSet;
         private Button _btnChat;
@@ -59,10 +63,12 @@ namespace XiaoZhi.Unity
                     AutoHideComp();
                 }
             });
-            _textStatus = Tr.Find("Status").GetComponent<TMP_Text>();
-            _textChat = Tr.Find("Chat").GetComponent<TMP_Text>();
+            _textStatus = Tr.Find("Status").GetComponent<TextMeshProUGUI>();
+            _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
+            _textChat = Tr.Find("Chat").GetComponent<TextMeshProUGUI>();
+            _localizeChat = GetComponent<LocalizeStringEvent>(_textChat, "");
             _trEmotion = Tr.Find("Emotion");
-            _textEmotion = _trEmotion.GetComponent<TMP_Text>();
+            _textEmotion = _trEmotion.GetComponent<TextMeshProUGUI>();
             GetComponent<XButton>(_textEmotion).onClick.AddListener(() => Context.App.ToggleChatState().Forget());
             _goLoading = Tr.Find("Loading").gameObject;
             _trSet = GetComponent<RectTransform>(Tr, "BtnSet");
@@ -73,7 +79,9 @@ namespace XiaoZhi.Unity
         protected override async UniTask OnShow(BaseUIData data = null)
         {
             _textEmotion.text = "";
+            _localizeStatus.StringReference = null;
             _textStatus.text = "";
+            _localizeChat.StringReference = null;
             _textChat.text = "";
             _loopCts = new CancellationTokenSource();
             UniTask.Void(LoopUpdate, _loopCts.Token);
@@ -105,7 +113,13 @@ namespace XiaoZhi.Unity
 
         public void SetStatus(string status)
         {
+            _localizeStatus.StringReference = null;
             _textStatus.text = status;
+        }
+
+        public void SetStatus(LocalizedString status)
+        {
+            _localizeStatus.StringReference = status;
         }
 
         public void SetEmotion(string emotion)
@@ -125,6 +139,7 @@ namespace XiaoZhi.Unity
 
         public void SetChatMessage(ChatRole role, string content)
         {
+            _localizeChat.StringReference = null;
             if (_textEmotion.text == "🤖")
             {
                 _textChat.text = $"<u><link=\"{Config.Instance.ActivationURL}\">{content}</link></u>";
@@ -132,6 +147,11 @@ namespace XiaoZhi.Unity
             }
 
             _textChat.text = content;
+        }
+
+        public void SetChatMessage(ChatRole role, LocalizedString content)
+        {
+            _localizeChat.StringReference = content;
         }
 
         private async UniTaskVoid LoopUpdate(CancellationToken token)
@@ -175,7 +195,7 @@ namespace XiaoZhi.Unity
             foreach (var sample in outputSpectrum) sums += sample;
             _normalizedOutputDb = Tools.Linear2dB(Math.Max(sums, 0) / outputSpectrum.Length);
         }
-        
+
         private void OnDeviceStateUpdate(DeviceState state)
         {
             ClearAutoHideCts();

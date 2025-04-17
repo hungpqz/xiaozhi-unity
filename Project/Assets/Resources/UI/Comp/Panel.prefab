@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6668601107020267794}
   - component: {fileID: 6268927572768651949}
   - component: {fileID: 5226359595377732239}
+  - component: {fileID: 7861859957576229016}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -149,8 +150,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _background: 1
-  _react: 0
   _alpha: 1
+--- !u!114 &7861859957576229016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52648347934951667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6268927572768651949}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &190825336913878494
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,7 +316,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _background: 1
-  _react: 0
   _alpha: 1
 --- !u!1 &1535014536261305710
 GameObject:
@@ -563,7 +602,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _background: 0
-  _react: 0
   _alpha: 1
 --- !u!1 &8917959716390730158
 GameObject:
@@ -575,8 +613,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5529177238338392209}
   - component: {fileID: 3158051875019014319}
-  - component: {fileID: 5819606732010944172}
   - component: {fileID: 1091329984875548965}
+  - component: {fileID: 3217381736900782497}
   m_Layer: 5
   m_Name: Viewport
   m_TagString: Untagged
@@ -612,111 +650,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8917959716390730158}
   m_CullTransparentMesh: 0
---- !u!114 &5819606732010944172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8917959716390730158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86bfa46edb710064fb60144606c4893b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_onion: 0
-  m_onionWidth: 10
-  m_antialiasing: -1
-  m_outline: 0
-  m_outlineWidth: 1
-  m_outlineInnerSoftWidth: 0
-  m_outlineInnerSoftness: 0
-  m_outlineColor: {r: 0, g: 0, b: 0, a: 1}
-  m_outlineType: 0
-  m_outlineGradationColor: {r: 0, g: 1, b: 1, a: 1}
-  m_outlineGradationAngle: 0
-  m_outlineGradationRadius: 0.5
-  m_outlineGradationSmooth: 0.5
-  m_outlineGradationRange: {x: 0.25, y: 0.75}
-  m_outlineGradationOffset: {x: 0, y: 0}
-  m_outlineGradationShape: 0
-  m_outlineEffectType: 0
-  m_outlineEffectColor: {r: 1, g: 1, b: 1, a: 1}
-  m_outlineEffectOffset: {x: 0, y: 0}
-  m_outlineEffectAngle: 0
-  m_outlineEffectShinyBlur: 0
-  m_outlineEffectShinyWidth: 0.25
-  m_outlineEffectPatternTexture: {fileID: 0}
-  m_outlineEffectPatternRow: 5
-  m_outlineEffectPatternScroll: 0
-  m_outlineEffectPatternParamsX: 1
-  m_outlineEffectPatternParamsY: 1
-  m_outlineEffectPatternParamsZ: 1
-  m_outlineEffectPatternParamsW: 1
-  m_outlineEffectPatternScale: {x: 1, y: 1}
-  m_shadow: 0
-  m_shadowWidth: 10
-  m_shadowInnerSoftWidth: 0
-  m_shadowSoftness: 0
-  m_shadowDilate: 0
-  m_shadowOffset: {x: 0, y: 4}
-  m_shadowColor: {r: 0, g: 0, b: 0, a: 0.25}
-  m_shadowEffectType: 0
-  m_shadowGradationColor: {r: 0, g: 0, b: 0, a: 1}
-  m_shadowGradationAngle: 0
-  m_shadowGradationRadius: 0.5
-  m_shadowGradationSmooth: 0.5
-  m_shadowGradationRange: {x: 0.25, y: 0.75}
-  m_shadowGradationOffset: {x: 0, y: 0}
-  m_shadowGradationShape: 0
-  m_fillColor: {r: 1, g: 1, b: 1, a: 1}
-  m_activeImageType: 0
-  m_sprite: {fileID: 0}
-  m_texture: {fileID: 0}
-  m_uvRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  m_gradationColor: {r: 1, g: 1, b: 1, a: 1}
-  m_gradationAngle: 0
-  m_gradationRadius: 0.5
-  m_gradationSmooth: 0.5
-  m_gradationRange: {x: 0.25, y: 0.75}
-  m_gradationOffset: {x: 0, y: 0}
-  m_gradationShape: 0
-  m_graphicEffectType: 0
-  m_graphicEffectColor: {r: 1, g: 1, b: 1, a: 1}
-  m_graphicEffectOffset: {x: 0, y: 0}
-  m_graphicEffectAngle: 0
-  m_graphicEffectShinyBlur: 0
-  m_graphicEffectShinyWidth: 0.25
-  m_graphicEffectPatternTexture: {fileID: 0}
-  m_graphicEffectPatternRow: 5
-  m_graphicEffectPatternScroll: 0
-  m_graphicEffectPatternParamsX: 1
-  m_graphicEffectPatternParamsY: 1
-  m_graphicEffectPatternParamsZ: 1
-  m_graphicEffectPatternParamsW: 1
-  m_graphicEffectPatternScale: {x: 1, y: 1}
-  m_rainbowSaturation: 1
-  m_rainbowValue: 1
-  m_rainbowHueOffset: 0
-  m_independent: 1
-  m_radius: 40
-  m_radiusX: 0
-  m_radiusY: 40
-  m_radiusZ: 0
-  m_radiusW: 40
 --- !u!114 &1091329984875548965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -730,6 +663,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &3217381736900782497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8917959716390730158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a9aa8db4ea3254cacfc3112979a217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1001 &1991805080553239029
 PrefabInstance:
   m_ObjectHideFlags: 0
