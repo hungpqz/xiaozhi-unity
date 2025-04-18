@@ -29,13 +29,13 @@ namespace XiaoZhi.Unity
         
         public override void OnSelect(BaseEventData eventData)
         {
-            if (!Config.IsMobile())
+            if (!AppUtility.IsMobile())
                 base.OnSelect(eventData);
         }
 
         public override void OnDeselect(BaseEventData eventData)
         {
-            if (!Config.IsMobile())
+            if (!AppUtility.IsMobile())
                 base.OnDeselect(eventData);
         }
 

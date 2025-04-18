@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Localization;
 using UnityEngine.Pool;
-using Object = UnityEngine.Object;
 
 namespace XiaoZhi.Unity
 {
@@ -100,9 +100,8 @@ namespace XiaoZhi.Unity
                 ui = type != null ? Activator.CreateInstance(type) as T : new T();
                 if (ui == null) throw new NullReferenceException($"Failed to create UI instance of type {alias}");
                 ui.RegisterUIService(this);
-                var prefab = await Resources.LoadAsync($"UI/{ui.GetResourcePath()}") as GameObject;
-                if (!prefab) throw new IOException($"Failed to load UI prefab: {ui.GetResourcePath()}");
-                var go = Object.Instantiate(prefab, parent);
+                var go = await Addressables.InstantiateAsync(ui.GetResourcePath(), parent);
+                if (!go) throw new IOException($"Failed to load UI prefab: {ui.GetResourcePath()}");
                 go.SetActive(false);
                 ui.Init(go);
                 _uiMap[alias] = ui;

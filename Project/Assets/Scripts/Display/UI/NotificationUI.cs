@@ -21,7 +21,7 @@ namespace XiaoZhi.Unity
             Message = message;
             Duration = duration;
         }
-        
+
         public NotificationUIData(LocalizedString message, float duration = 3.0f)
         {
             LocalizedMessage = message;
@@ -39,7 +39,7 @@ namespace XiaoZhi.Unity
 
         public override string GetResourcePath()
         {
-            return "NotificationUI/NotificationUI";
+            return "Assets/Res/UI/NotificationUI/NotificationUI.prefab";
         }
 
         protected override void OnInit()
@@ -53,10 +53,10 @@ namespace XiaoZhi.Unity
         {
             if (data is not NotificationUIData uiData) return;
             _localize.StringReference = uiData.LocalizedMessage;
-            _text.text = uiData.Message;
+            if (_localize.StringReference == null) _text.text = uiData.Message;
             _cts = new CancellationTokenSource();
             DelayedClose((int)(uiData.Duration * 1000), _cts.Token).Forget();
-            
+
             var height = LayoutUtility.GetPreferredHeight(Tr);
             await Tr.SetAnchorPosY(height + 16).DOAnchorPosY(-60, AnimationDuration).SetEase(Ease.InOutSine);
         }

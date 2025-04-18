@@ -40,7 +40,7 @@ namespace XiaoZhi.Unity
             var url = AppSettings.Instance.GetWebSocketUrl();
             var token = AppSettings.Instance.GetWebSocketAccessToken();
             var deviceId = AppSettings.Instance.GetMacAddress();
-            var clientId = Config.GetUUid();
+            var clientId = AppUtility.GetUUid();
             Debug.Log($"url: {url}");
             Debug.Log($"token: {token}");
             Debug.Log($"deviceId: {deviceId}");
@@ -89,7 +89,7 @@ namespace XiaoZhi.Unity
                     format = "opus",
                     sample_rate = 16000,
                     channels = 1,
-                    frame_duration = Config.Instance.OpusFrameDurationMs
+                    frame_duration = AppPresets.Instance.OpusFrameDurationMs
                 }
             };
             await SendJson(helloMessage);

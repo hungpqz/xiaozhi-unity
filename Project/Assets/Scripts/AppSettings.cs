@@ -76,7 +76,7 @@ namespace XiaoZhi.Unity
         public string GetKeywords()
         {
             _keywords ??=
-                FileUtility.ReadAllText(FileUtility.FileType.DataPath, Config.Instance.KeyWordSpotterKeyWordsFile);
+                FileUtility.ReadAllText(FileUtility.FileType.DataPath, AppPresets.Instance.KeyWordSpotterKeyWordsFile);
             return _keywords;
         }
 
@@ -84,7 +84,7 @@ namespace XiaoZhi.Unity
         {
             if (_keywords.Equals(keywords)) return;
             _keywords = keywords;
-            FileUtility.WriteAllText(Config.Instance.KeyWordSpotterKeyWordsFile, _keywords);
+            FileUtility.WriteAllText(AppPresets.Instance.KeyWordSpotterKeyWordsFile, _keywords);
         }
 
         public bool IsAutoHideUI()
@@ -128,7 +128,7 @@ namespace XiaoZhi.Unity
 
         public string GetWebSocketUrl()
         {
-            _webSocketUrl ??= GetString("web_socket_url", Config.Instance.WebSocketUrl);
+            _webSocketUrl ??= GetString("web_socket_url", AppPresets.Instance.WebSocketUrl);
             return _webSocketUrl;
         }
 
@@ -142,7 +142,7 @@ namespace XiaoZhi.Unity
 
         public string GetWebSocketAccessToken()
         {
-            _webSocketAccessToken ??= GetString("web_socket_access_token", Config.Instance.WebSocketAccessToken);
+            _webSocketAccessToken ??= GetString("web_socket_access_token", AppPresets.Instance.WebSocketAccessToken);
             return _webSocketAccessToken;
         }
 
@@ -156,7 +156,7 @@ namespace XiaoZhi.Unity
 
         public string GetMacAddress()
         {
-            _customMacAddress ??= GetString("custom_mac_address", Config.GetMacAddress());
+            _customMacAddress ??= GetString("custom_mac_address", AppUtility.GetMacAddress());
             return _customMacAddress;
         }
 

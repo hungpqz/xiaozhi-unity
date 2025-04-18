@@ -16,7 +16,67 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 3223e73fd5f2332419416c15824e48f0
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 03ff8b72f21dff745b92e8f7b0997b0c
+    m_Address: Assets/Res/UI/MaskUI/MaskUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 115758f82119e1c46a567ac7dfbeacaf
+    m_Address: Assets/Res/UI/SettingsUI/SettingsUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ef66b151a374a64b7a04beb381b201d
+    m_Address: Assets/Settings/OTAPostData.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 415a1c2821865dd45ac338b0bd5ec413
+    m_Address: Assets/Res/VRM/Ao/CombatUniform/prefab.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57a478770838afe439778b4d969fb6ca
+    m_Address: Assets/Res/Sprite/Common.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5b5bec4fad44cf744a3d6baf0a538297
+    m_Address: Assets/Res/UI/MainUI/VRMMainUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5caad0a8eace6f64f98bc55dcfa79058
+    m_Address: Assets/Res/UI/MainUI/EmojiMainUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74e25153ba5f0e94c9e40266b9e4836c
+    m_Address: Assets/Res/UI/NotificationUI/NotificationUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ab0c9952c8f9444187a67af3852c9e8
+    m_Address: Assets/Res/VRM/Ao/Brother/prefab.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8db7ec5a466bbd4991ad3399b64c66c
+    m_Address: Assets/Settings/AppPresets.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4ac52fb8d83aa344982e01e0d99ccfc
+    m_Address: Assets/Res/Sprite/Icon.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da26442f4c66f0442bfd1210ec74a733
+    m_Address: Assets/Settings/ThemeSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 63df72acf4c063249aea2a9fa4ba07d6, type: 2}
   m_SchemaSet:

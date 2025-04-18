@@ -74,7 +74,7 @@ namespace XiaoZhi.Unity
         public async UniTaskVoid Start()
         {
             AppSettings.Load();
-            await Config.Load();
+            await AppPresets.Load();
             await InitDisplay();
             await Lang.LoadLocale();
             SetDeviceState(DeviceState.Starting);
@@ -95,7 +95,7 @@ namespace XiaoZhi.Unity
 
             SetDeviceState(DeviceState.Starting);
             _display.SetChatMessage(ChatRole.System, "");
-            if (Config.Instance.EnableWakeService)
+            if (AppPresets.Instance.EnableWakeService)
             {
                 _display.SetStatus(Lang.GetRef("LOADING_RESOURCES"));
                 await PrepareResource(_cts.Token);
@@ -165,17 +165,17 @@ namespace XiaoZhi.Unity
 #if UNITY_ANDROID && !UNITY_EDITOR
             var streamingAssets = new[]
             {
-                Config.Instance.KeyWordSpotterModelConfigTransducerEncoder,
-                Config.Instance.KeyWordSpotterModelConfigTransducerDecoder,
-                Config.Instance.KeyWordSpotterModelConfigTransducerJoiner,
-                Config.Instance.KeyWordSpotterModelConfigToken,
-                Config.Instance.KeyWordSpotterKeyWordsFile,
-                Config.Instance.VadModelConfig
+                AppPresets.Instance.KeyWordSpotterModelConfigTransducerEncoder,
+                AppPresets.Instance.KeyWordSpotterModelConfigTransducerDecoder,
+                AppPresets.Instance.KeyWordSpotterModelConfigTransducerJoiner,
+                AppPresets.Instance.KeyWordSpotterModelConfigToken,
+                AppPresets.Instance.KeyWordSpotterKeyWordsFile,
+                AppPresets.Instance.VadModelConfig
             };
 #else
             var streamingAssets = new[]
             {
-                Config.Instance.KeyWordSpotterKeyWordsFile
+                AppPresets.Instance.KeyWordSpotterKeyWordsFile
             };
 #endif
             await UniTask.WhenAll(streamingAssets.Select(i =>
@@ -348,7 +348,7 @@ namespace XiaoZhi.Unity
 
         private void SendAudio(ReadOnlySpan<short> data)
         {
-            var frameSize = Config.Instance.ServerInputSampleRate / 1000 * Config.Instance.OpusFrameDurationMs *
+            var frameSize = AppPresets.Instance.ServerInputSampleRate / 1000 * AppPresets.Instance.OpusFrameDurationMs *
                             _codec.InputChannels;
             var dataLen = data.Length;
             for (var i = 0; i < dataLen; i += frameSize)
@@ -363,7 +363,7 @@ namespace XiaoZhi.Unity
             if (_opusDecodeSampleRate == sampleRate) return;
             _opusDecodeSampleRate = sampleRate;
             _opusDecoder.Dispose();
-            _opusDecoder = new OpusDecoder(_opusDecodeSampleRate, 1, Config.Instance.OpusFrameDurationMs);
+            _opusDecoder = new OpusDecoder(_opusDecodeSampleRate, 1, AppPresets.Instance.OpusFrameDurationMs);
             if (_opusDecodeSampleRate == _codec.OutputSampleRate) return;
             Debug.Log($"Resampling audio from {_opusDecodeSampleRate} to {_codec.OutputSampleRate}");
             _outputResampler ??= new OpusResampler();
@@ -374,7 +374,7 @@ namespace XiaoZhi.Unity
         {
             _freeBuffer = new DynamicBuffer<short>();
             _wakeService = new SherpaOnnxWakeService();
-            _wakeService.Initialize(Config.Instance.ServerInputSampleRate);
+            _wakeService.Initialize(AppPresets.Instance.ServerInputSampleRate);
             _wakeService.OnVadStateChanged += speaking =>
             {
                 if (_voiceDetected == speaking) return;
@@ -433,12 +433,12 @@ namespace XiaoZhi.Unity
 
         private void InitializeAudio()
         {
-            var inputSampleRate = Config.Instance.AudioInputSampleRate;
-            var outputSampleRate = Config.Instance.AudioOutputSampleRate;
+            var inputSampleRate = AppPresets.Instance.AudioInputSampleRate;
+            var outputSampleRate = AppPresets.Instance.AudioOutputSampleRate;
             _opusDecodeSampleRate = outputSampleRate;
-            _opusDecoder = new OpusDecoder(_opusDecodeSampleRate, 1, Config.Instance.OpusFrameDurationMs);
-            var resampleRate = Config.Instance.ServerInputSampleRate;
-            _opusEncoder = new OpusEncoder(resampleRate, 1, Config.Instance.OpusFrameDurationMs);
+            _opusDecoder = new OpusDecoder(_opusDecodeSampleRate, 1, AppPresets.Instance.OpusFrameDurationMs);
+            var resampleRate = AppPresets.Instance.ServerInputSampleRate;
+            _opusEncoder = new OpusEncoder(resampleRate, 1, AppPresets.Instance.OpusFrameDurationMs);
             _inputResampler = new OpusResampler();
             _inputResampler.Configure(inputSampleRate, resampleRate);
             _codec = new FMODAudioCodec(inputSampleRate, 1, outputSampleRate, 1);
@@ -541,13 +541,14 @@ namespace XiaoZhi.Unity
         {
             var success = false;
             var macAddr = AppSettings.Instance.GetMacAddress();
-            var boardName = Config.GetBoardName();
+            var boardName = AppUtility.GetBoardName();
             _ota = new OTA();
-            _ota.SetCheckVersionUrl(Config.Instance.OtaVersionUrl);
+            _ota.SetCheckVersionUrl(AppPresets.Instance.OtaVersionUrl);
             _ota.SetHeader("Device-Id", macAddr);
             _ota.SetHeader("Accept-Language", "zh-CN");
-            _ota.SetHeader("User-Agent", $"{boardName}/{Config.GetVersion()}");
-            _ota.SetPostData(Config.BuildOtaPostData(macAddr, boardName));
+            _ota.SetHeader("User-Agent", $"{boardName}/{AppUtility.GetVersion()}");
+            var postData = await OTA.LoadPostData(macAddr, boardName);
+            _ota.SetPostData(postData);
             var showTips = true;
             const int maxRetry = 100;
             for (var i = 0; i < maxRetry; i++)

@@ -29,23 +29,23 @@ namespace XiaoZhi.Unity
             _kwsConfig.FeatConfig.SampleRate = sampleRate;
             _kwsConfig.FeatConfig.FeatureDim = 80;
             _kwsConfig.ModelConfig.Transducer.Encoder = FileUtility.GetFullPath(resourceType,
-                Config.Instance.KeyWordSpotterModelConfigTransducerEncoder);
+                AppPresets.Instance.KeyWordSpotterModelConfigTransducerEncoder);
             _kwsConfig.ModelConfig.Transducer.Decoder = FileUtility.GetFullPath(resourceType,
-                Config.Instance.KeyWordSpotterModelConfigTransducerDecoder);
+                AppPresets.Instance.KeyWordSpotterModelConfigTransducerDecoder);
             _kwsConfig.ModelConfig.Transducer.Joiner = FileUtility.GetFullPath(resourceType,
-                Config.Instance.KeyWordSpotterModelConfigTransducerJoiner);
+                AppPresets.Instance.KeyWordSpotterModelConfigTransducerJoiner);
             _kwsConfig.ModelConfig.Tokens =
-                FileUtility.GetFullPath(resourceType, Config.Instance.KeyWordSpotterModelConfigToken);
+                FileUtility.GetFullPath(resourceType, AppPresets.Instance.KeyWordSpotterModelConfigToken);
             _kwsConfig.ModelConfig.Provider = "cpu";
-            _kwsConfig.ModelConfig.NumThreads = Config.Instance.KeyWordSpotterModelConfigNumThreads;
+            _kwsConfig.ModelConfig.NumThreads = AppPresets.Instance.KeyWordSpotterModelConfigNumThreads;
             _kwsConfig.ModelConfig.Debug = 0;
             _kwsConfig.KeywordsFile =
-                FileUtility.GetFullPath(FileUtility.FileType.DataPath, Config.Instance.KeyWordSpotterKeyWordsFile);
+                FileUtility.GetFullPath(FileUtility.FileType.DataPath, AppPresets.Instance.KeyWordSpotterKeyWordsFile);
             _vadConfig = new VadModelConfig
             {
                 SampleRate = sampleRate
             };
-            _vadConfig.SileroVad.Model = FileUtility.GetFullPath(resourceType, Config.Instance.VadModelConfig);
+            _vadConfig.SileroVad.Model = FileUtility.GetFullPath(resourceType, AppPresets.Instance.VadModelConfig);
             _vadConfig.SileroVad.MinSpeechDuration = 0.25f;
             _vadConfig.SileroVad.Threshold = 0.75f;
             _vadConfig.Debug = 0;

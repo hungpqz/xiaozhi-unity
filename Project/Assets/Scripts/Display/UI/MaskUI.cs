@@ -18,7 +18,7 @@ namespace XiaoZhi.Unity
         
         public override string GetResourcePath()
         {
-            return "MaskUI/MaskUI";
+            return "Assets/Res/UI/MaskUI/MaskUI.prefab";
         }
 
         protected override void OnInit()

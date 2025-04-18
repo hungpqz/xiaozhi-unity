@@ -11,6 +11,15 @@ namespace XiaoZhi.Unity
 {
     public class OTA
     {
+        public static async UniTask<string> LoadPostData(string macAddress, string boardName)
+        {
+            const string path = "Assets/Settings/OTAPostData.json";
+            var content = await FileUtility.ReadAllTextAsync(FileUtility.FileType.Addressable, path);
+            content = content.Replace("{mac}", macAddress);
+            content = content.Replace("{board_name}", boardName);
+            return content;
+        }
+        
         private string _checkVersionUrl;
         private readonly Dictionary<string, string> _headers = new();
         private string _postData;

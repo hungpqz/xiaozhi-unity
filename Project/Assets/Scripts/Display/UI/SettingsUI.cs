@@ -30,7 +30,7 @@ namespace XiaoZhi.Unity
 
         public override string GetResourcePath()
         {
-            return "SettingsUI/SettingsUI";
+            return "Assets/Res/UI/SettingsUI/SettingsUI.prefab";
         }
 
         protected override void OnInit()
@@ -136,14 +136,13 @@ namespace XiaoZhi.Unity
             switch (displayMode)
             {
                 case DisplayMode.VRM:
-                    var values = Config.Instance.VRMCharacterModels;
-                    var names = Config.Instance.VRMCharacterNames;
+                    var values = AppPresets.Instance.VRMCharacterModels;
                     Tools.EnsureChildren(_listCharacter, values.Length);
                     for (var i = 0; i < values.Length; i++)
                     {
                         var go = _listCharacter.GetChild(i).gameObject;
                         go.SetActive(true);
-                        GetComponent<TextMeshProUGUI>(go.transform, "Text").text = names[i];
+                        GetComponent<TextMeshProUGUI>(go.transform, "Text").text = values[i].Name;
                         var toggle = go.GetComponent<XToggle>();
                         RemoveUniqueListener(toggle);
                         toggle.isOn = i == AppSettings.Instance.GetVRMModel();

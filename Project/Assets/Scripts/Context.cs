@@ -26,6 +26,7 @@ namespace XiaoZhi.Unity
             UIManager.Dispose();
             App.Dispose();
             DOTween.KillAll();
+            AppUtility.Clear();
             Resources.UnloadUnusedAssets();
         }
 

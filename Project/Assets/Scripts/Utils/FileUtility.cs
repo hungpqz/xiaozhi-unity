@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace XiaoZhi.Unity
 {
@@ -31,7 +32,12 @@ namespace XiaoZhi.Unity
             /// <summary>
             /// Resources目录
             /// </summary>
-            Resources
+            Resources,
+
+            /// <summary>
+            /// Addressable
+            /// </summary>
+            Addressable
         }
 
         /// <summary>
@@ -52,6 +58,7 @@ namespace XiaoZhi.Unity
                 case FileType.DataPath:
                     return Path.Combine(Application.persistentDataPath, relativePath);
                 case FileType.Resources:
+                case FileType.Addressable:
                     return relativePath;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -86,6 +93,11 @@ namespace XiaoZhi.Unity
                     var text = asset?.text;
                     Resources.UnloadAsset(asset);
                     return text;
+                case FileType.Addressable:
+                    var asset1 = Addressables.LoadAssetAsync<TextAsset>(relativePath).WaitForCompletion();
+                    var text1 = asset1?.text;
+                    Resources.UnloadAsset(asset1);
+                    return text1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -118,6 +130,11 @@ namespace XiaoZhi.Unity
                     var text = asset?.text;
                     Resources.UnloadAsset(asset);
                     return text;
+                case FileType.Addressable:
+                    var asset1 = await Addressables.LoadAssetAsync<TextAsset>(relativePath);
+                    var text1 = asset1?.text;
+                    Resources.UnloadAsset(asset1);
+                    return text1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -151,6 +168,11 @@ namespace XiaoZhi.Unity
                     var bytes = asset?.bytes;
                     Resources.UnloadAsset(asset);
                     return bytes;
+                case FileType.Addressable:
+                    var asset1 = Addressables.LoadAssetAsync<TextAsset>(relativePath).WaitForCompletion();
+                    var bytes1 = asset1?.bytes;
+                    Resources.UnloadAsset(asset1);
+                    return bytes1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -183,6 +205,11 @@ namespace XiaoZhi.Unity
                     var bytes = asset?.bytes;
                     Resources.UnloadAsset(asset);
                     return bytes;
+                case FileType.Addressable:
+                    var asset1 = await Addressables.LoadAssetAsync<TextAsset>(relativePath);
+                    var bytes1 = asset1?.bytes;
+                    Resources.UnloadAsset(asset1);
+                    return bytes1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -194,7 +221,8 @@ namespace XiaoZhi.Unity
         /// <param name="relativePath">相对路径</param>
         /// <param name="cancellationToken"></param>
         /// <returns>复制是否成功</returns>
-        public static async UniTask<bool> CopyStreamingAssetsToDataPath(string relativePath, CancellationToken cancellationToken = default)
+        public static async UniTask<bool> CopyStreamingAssetsToDataPath(string relativePath,
+            CancellationToken cancellationToken = default)
         {
             var targetPath = GetFullPath(FileType.DataPath, relativePath);
             var targetDir = Path.GetDirectoryName(targetPath);
@@ -241,12 +269,13 @@ namespace XiaoZhi.Unity
                 case FileType.DataPath:
                     return File.Exists(GetFullPath(type, relativePath));
                 case FileType.Resources:
+                case FileType.Addressable:
                     throw new NotSupportedException();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteAllText(string relativePath, string content)
         {
@@ -254,7 +283,8 @@ namespace XiaoZhi.Unity
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static async UniTask WriteAllTextAsync(string relativePath, string content, CancellationToken cancellationToken = default)
+        public static async UniTask WriteAllTextAsync(string relativePath, string content,
+            CancellationToken cancellationToken = default)
         {
             await File.WriteAllTextAsync(GetFullPath(FileType.DataPath, relativePath), content, cancellationToken);
         }
@@ -266,7 +296,8 @@ namespace XiaoZhi.Unity
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static async UniTask WriteAllBytesAsync(string relativePath, byte[] bytes, CancellationToken cancellationToken = default)
+        public static async UniTask WriteAllBytesAsync(string relativePath, byte[] bytes,
+            CancellationToken cancellationToken = default)
         {
             await File.WriteAllBytesAsync(GetFullPath(FileType.DataPath, relativePath), bytes, cancellationToken);
         }

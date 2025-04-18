@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Localization;
 using UniVRM10;
+using Object = UnityEngine.Object;
 
 namespace XiaoZhi.Unity
 {
@@ -17,6 +20,7 @@ namespace XiaoZhi.Unity
         private ULipSyncAudioProxy _lipSyncAudioProxy;
         private FaceAnimation _faceAnim;
         private CancellationTokenSource _loopCts;
+        private string _emotion;
 
         public VRMDisplay(Context context)
         {
@@ -41,7 +45,7 @@ namespace XiaoZhi.Unity
                 _lipSyncAudioProxy.Dispose();
                 _lipSyncAudioProxy = null;
             }
-            
+
             if (_character)
             {
                 Object.Destroy(_character);
@@ -54,16 +58,14 @@ namespace XiaoZhi.Unity
             _mainUI = await _context.UIManager.ShowSceneUI<VRMMainUI>();
             _mainCamera = Camera.main;
             UpdateCameraColor();
-            var modelName = Config.Instance.VRMCharacterModels[AppSettings.Instance.GetVRMModel()];
-            var modelPath = $"VRM/{modelName}/prefab";
-            var prefab = (GameObject)await Resources.LoadAsync<GameObject>(modelPath);
-            if (!prefab)
+            var modelPath = AppPresets.Instance.VRMCharacterModels[AppSettings.Instance.GetVRMModel()].Path;
+            _character = await Addressables.InstantiateAsync(modelPath);
+            if (!_character)
             {
                 _context.UIManager.ShowNotificationUI($"Load character failed: {modelPath}").Forget();
                 return false;
             }
 
-            _character = Object.Instantiate(prefab);
             _character.GetComponent<TransformFollower>().SetFollower(_mainCamera!.transform);
             _lipSync = _character.GetComponent<uLipSync.uLipSync>();
             _faceAnim = new FaceAnimation(_character.GetComponent<Vrm10Instance>(), "loading");
@@ -90,18 +92,19 @@ namespace XiaoZhi.Unity
 
         public void SetEmotion(string emotion)
         {
-            _mainUI.ShowLoading(emotion == "loading");
-            _faceAnim.SetExpression(emotion);
+            _emotion = emotion;
+            _mainUI.ShowLoading(_emotion == "loading");
+            _faceAnim.SetExpression(_emotion);
         }
 
         public void SetChatMessage(ChatRole role, string content)
         {
-            
+            if (_emotion == "activation") _mainUI.SetActivateLink(content);
         }
 
         public void SetChatMessage(ChatRole role, LocalizedString content)
         {
-            
+            throw new NotSupportedException();
         }
 
         private void OnThemeChanged(ThemeSettings.Theme theme)

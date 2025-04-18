@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 using UnityEngine.UI;
 
 namespace XiaoZhi.Unity
@@ -15,7 +14,6 @@ namespace XiaoZhi.Unity
         private RectTransform _trSet;
         private Button _btnSet;
         private GameObject _goLoading;
-        private GameObject _goStatus;
         private TextMeshProUGUI _textStatus;
         private LocalizeStringEvent _localizeStatus;
 
@@ -23,7 +21,7 @@ namespace XiaoZhi.Unity
 
         public override string GetResourcePath()
         {
-            return "MainUI/VRMMainUI";
+            return "Assets/Res/UI/MainUI/VRMMainUI.prefab";
         }
 
         protected override void OnInit()
@@ -41,7 +39,6 @@ namespace XiaoZhi.Unity
             _trSet = GetComponent<RectTransform>(Tr, "BtnSet");
             _trSet.GetComponent<XButton>().onClick.AddListener(() => { ShowModuleUI<SettingsUI>().Forget(); });
             GetComponent<XButton>(Tr, "ClickRole").onClick.AddListener(() => Context.App.ToggleChatState().Forget());
-            _goStatus = Tr.Find("Status").gameObject;
             _textStatus = GetComponent<TextMeshProUGUI>(Tr, "Status/Text");
             _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
         }
@@ -81,6 +78,11 @@ namespace XiaoZhi.Unity
         public void SetStatus(LocalizedString status)
         {
             _localizeStatus.StringReference = status;
+        }
+        
+        public void SetActivateLink(string content)
+        {
+            SetStatus($"<u><link=\"{AppPresets.Instance.ActivationURL}\">{content}</link></u>");
         }
 
         private void OnDeviceStateUpdate(DeviceState state)

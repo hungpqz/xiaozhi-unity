@@ -26,9 +26,9 @@ namespace XiaoZhi.Unity
         {
 #if UNITY_EDITOR
             _settings =
-                UnityEditor.AssetDatabase.LoadAssetAtPath<ThemeSettings>("Assets/Resources/ThemeSettings.asset");
+                UnityEditor.AssetDatabase.LoadAssetAtPath<ThemeSettings>("Assets/Settings/ThemeSettings.asset");
 #else
-            _settings = Resources.Load<ThemeSettings>("ThemeSettings");
+            _settings = UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<ThemeSettings>("Assets/Settings/ThemeSettings.asset").WaitForCompletion(); 
 #endif
             if (!_settings) throw new NullReferenceException("Can not load Theme Settings.");
             _background = new Dictionary<ThemeSettings.Theme, Dictionary<ThemeSettings.Background, Color>>();

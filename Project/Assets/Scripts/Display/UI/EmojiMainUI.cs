@@ -49,7 +49,7 @@ namespace XiaoZhi.Unity
 
         public override string GetResourcePath()
         {
-            return "MainUI/EmojiMainUI";
+            return "Assets/Res/UI/MainUI/EmojiMainUI.prefab";
         }
 
         protected override void OnInit()
@@ -142,7 +142,7 @@ namespace XiaoZhi.Unity
             _localizeChat.StringReference = null;
             if (_textEmotion.text == "🤖")
             {
-                _textChat.text = $"<u><link=\"{Config.Instance.ActivationURL}\">{content}</link></u>";
+                _textChat.text = $"<u><link=\"{AppPresets.Instance.ActivationURL}\">{content}</link></u>";
                 return;
             }
 
