@@ -46,7 +46,7 @@ namespace XiaoZhi.Unity
                 BuildTarget.StandaloneWindows64 => $"{PlayerSettings.productName}.exe",
                 BuildTarget.Android => $"{PlayerSettings.productName}-{_buildTarget}.apk",
                 BuildTarget.StandaloneOSX => $"{PlayerSettings.productName}.dmg",
-                BuildTarget.StandaloneLinux64 => $"{PlayerSettings.productName}",
+                BuildTarget.StandaloneLinux64 => $"{PlayerSettings.productName}.app",
                 BuildTarget.iOS => $"{PlayerSettings.productName}",
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -84,12 +84,13 @@ namespace XiaoZhi.Unity
             switch (_buildTarget)
             {
                 case BuildTarget.StandaloneWindows64:
-                    CreateWindowsBuildZip(buildPath);
+                case BuildTarget.StandaloneLinux64:
+                    CreateBuildZip(buildPath);
                     break;
             }
         }
 
-        private static void CreateWindowsBuildZip(string exePath)
+        private static void CreateBuildZip(string exePath)
         {
             EditorUtility.DisplayProgressBar("Creating zip archive", "Please wait...", 0);
             var buildDir = Path.GetDirectoryName(exePath);

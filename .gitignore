@@ -15,3 +15,13 @@ Project/Assets/Plugins/FMOD/Cache.meta
 Project/Assets/StreamingAssets/**/*.bank
 Project/Assets/StreamingAssets/**/*.bank.meta
 Project/Builds
+Project/Assets/AddressableAssetsData/iOS
+Project/Assets/AddressableAssetsData/iOS.meta
+Project/Assets/AddressableAssetsData/Windows
+Project/Assets/AddressableAssetsData/Windows.meta
+Project/Assets/AddressableAssetsData/OSX
+Project/Assets/AddressableAssetsData/OSX.meta
+Project/Assets/AddressableAssetsData/Linux
+Project/Assets/AddressableAssetsData/Linux.meta
+Project/Assets/AddressableAssetsData/Android
+Project/Assets/AddressableAssetsData/Android.meta
