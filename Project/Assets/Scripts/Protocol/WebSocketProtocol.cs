@@ -92,7 +92,7 @@ namespace XiaoZhi.Unity
                     frame_duration = AppPresets.Instance.OpusFrameDurationMs
                 }
             };
-            await SendJson(helloMessage);
+            await SendText(JsonConvert.SerializeObject(helloMessage));
             await Task.WhenAny(_helloTaskCompletionSource.Task, Task.Delay(10000));
             if (_helloTaskCompletionSource.Task.IsCompletedSuccessfully) return true;
             Debug.LogError("连接失败: 连接超时");
@@ -181,20 +181,20 @@ namespace XiaoZhi.Unity
             var audioParams = message["audio_params"];
             if (audioParams != null) ServerSampleRate = audioParams["sample_rate"]?.Value<int>() ?? 16000;
             _isAudioChannelOpen = true;
-            _helloTaskCompletionSource.SetResult(true);
             InvokeOnChannelOpened();
+            _helloTaskCompletionSource.SetResult(true);
         }
-
-        protected override async UniTask SendJson(object data)
+        
+        protected override async UniTask SendText(string text)
         {
             if (!_isConnected || _webSocket.State != WebSocketState.Open)
             {
                 SetError("WebSocket is not connected");
                 return;
             }
-
-            var jsonStr = JsonConvert.SerializeObject(data);
-            var bytes = Encoding.UTF8.GetBytes(jsonStr);
+            
+            Debug.Log($"SendText: {text}");
+            var bytes = Encoding.UTF8.GetBytes(text);
             await _webSocket.SendAsync(
                 new ArraySegment<byte>(bytes),
                 WebSocketMessageType.Text,

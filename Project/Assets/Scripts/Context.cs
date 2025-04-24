@@ -1,12 +1,15 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
+using XiaoZhi.Unity.IOT;
 
 namespace XiaoZhi.Unity
 {
     public class Context
     {
         public App App { get; private set; }
+        
+        public ThingManager Thing { get; private set; }
 
         public UIManager UIManager { get; private set; }
         
@@ -15,9 +18,12 @@ namespace XiaoZhi.Unity
         public void Init()
         {
             UIManager = new UIManager();
-            UIManager.Init(this);
+            UIManager.Inject(this);
+            Thing = new ThingManager();
+            Thing.Inject(this);
+            Thing.AddThing(new ThingAppSettings());
             App = new App();
-            App.Init(this);
+            App.Inject(this);
             Application.runInBackground = true;
         }
 

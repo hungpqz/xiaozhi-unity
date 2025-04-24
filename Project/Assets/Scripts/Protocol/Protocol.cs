@@ -1,62 +1,22 @@
 using System;
-using System.Buffers;
+using System.IO;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 namespace XiaoZhi.Unity
 {
-    public enum MessageType
-    {
-        Hello,
-        Listen,
-        Abort,
-        WakeWordDetected,
-        IoT,
-        STT,
-        LLM,
-        TTS
-    }
-
-    public enum ListenState
-    {
-        Start,
-        Stop,
-        Detect
-    }
-
-    public enum ListenMode
+    public enum ListeningMode
     {
         AutoStop,
-        ManualStop,
-        AlwaysOn
-    }
-
-    public enum TTSState
-    {
-        Start,
-        Stop,
-        SentenceStart
+        ManualStop
     }
 
     public enum AbortReason
     {
         None,
         WakeWordDetected
-    }
-
-    public enum ConnectionState
-    {
-        Disconnected,
-        Connecting,
-        Connected,
-        Error
-    }
-
-    public enum AudioState
-    {
-        Idle,
-        Listening,
-        Speaking
     }
 
     public abstract class Protocol: IDisposable
@@ -91,76 +51,90 @@ namespace XiaoZhi.Unity
         {
             if (reason == AbortReason.WakeWordDetected)
             {
-                await SendJson(new
+                await SendText(JsonConvert.SerializeObject(new
                 {
                     session_id = SessionId,
                     type = "abort",
                     reason = "wake_word_detected"
-                });
+                }));
             }
             else
             {
-                await SendJson(new
+                await SendText(JsonConvert.SerializeObject(new
                 {
                     session_id = SessionId,
                     type = "abort"
-                });
+                }));
             }
         }
 
         public virtual async UniTask SendWakeWordDetected(string wakeWord)
         {
-            await SendJson(new
+            await SendText(JsonConvert.SerializeObject(new
             {
                 session_id = SessionId,
                 type = "listen",
                 state = "detect",
                 text = wakeWord
-            });
+            }));
         }
 
-        public virtual async UniTask SendStartListening(ListenMode mode)
+        public virtual async UniTask SendStartListening(ListeningMode mode)
         {
-            await SendJson(new
+            await SendText(JsonConvert.SerializeObject(new
             {
-                ession_id = SessionId,
+                session_id = SessionId,
                 type = "listen",
                 state = "start",
                 mode = mode.ToString().ToLower()
-            });
+            }));
         }
 
         public virtual async UniTask SendStopListening()
         {
-            await SendJson(new
+            await SendText(JsonConvert.SerializeObject(new
             {
                 session_id = SessionId,
                 type = "listen",
                 state = "stop"
-            });
+            }));
         }
 
         public virtual async UniTask SendIotDescriptors(string descriptors)
         {
-            await SendJson(new
-            {
-                session_id = SessionId,
-                type = "iot",
-                descriptors
-            });
+            await using var stringWriter = new StringWriter();
+            using var jsonWriter = new JsonTextWriter(stringWriter);
+            await jsonWriter.WriteStartObjectAsync();
+            await jsonWriter.WritePropertyNameAsync("session_id");
+            await jsonWriter.WriteValueAsync(SessionId);
+            await jsonWriter.WritePropertyNameAsync("type");
+            await jsonWriter.WriteValueAsync("iot");
+            await jsonWriter.WritePropertyNameAsync("update");
+            await jsonWriter.WriteValueAsync(true);
+            await jsonWriter.WritePropertyNameAsync("descriptors");
+            await jsonWriter.WriteRawValueAsync(descriptors);
+            await jsonWriter.WriteEndObjectAsync();
+            await SendText(stringWriter.ToString());
         }
 
         public virtual async UniTask SendIotStates(string states)
         {
-            await SendJson(new
-            {
-                session_id = SessionId,
-                type = "iot",
-                states
-            });
+            await using var stringWriter = new StringWriter();
+            using var jsonWriter = new JsonTextWriter(stringWriter);
+            await jsonWriter.WriteStartObjectAsync();
+            await jsonWriter.WritePropertyNameAsync("session_id");
+            await jsonWriter.WriteValueAsync(SessionId);
+            await jsonWriter.WritePropertyNameAsync("type");
+            await jsonWriter.WriteValueAsync("iot");
+            await jsonWriter.WritePropertyNameAsync("update");
+            await jsonWriter.WriteValueAsync(true);
+            await jsonWriter.WritePropertyNameAsync("states");
+            await jsonWriter.WriteRawValueAsync(states);
+            await jsonWriter.WriteEndObjectAsync();
+            await SendText(stringWriter.ToString());
         }
-
-        protected abstract UniTask SendJson(object data);
+        
+        protected abstract UniTask SendText(string text);
 
         protected void InvokeOnAudioData(ReadOnlySpan<byte> data)
         {

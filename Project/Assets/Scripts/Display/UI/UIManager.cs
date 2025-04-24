@@ -20,11 +20,15 @@ namespace XiaoZhi.Unity
         private Context _context;
         public Context Context => _context;
 
-        public void Init(Context context)
+        public UIManager()
         {
-            _context = context;
             _canvasMap = Enum.GetNames(typeof(UILayer))
                 .ToDictionary(Enum.Parse<UILayer>, i => GameObject.Find($"UICamera/Canvas{i}"));
+        }
+
+        public void Inject(Context context)
+        {
+            _context = context;
         }
 
         public async UniTask Load()

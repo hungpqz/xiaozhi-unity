@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine.Localization;
-using UnityEngine.Localization.SmartFormat.PersistentVariables;
 
 namespace XiaoZhi.Unity
 {
