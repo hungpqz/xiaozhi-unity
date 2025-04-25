@@ -62,7 +62,7 @@ namespace XiaoZhi.Unity.IOT
             using var jsonWriter = new JsonTextWriter(stringWriter);
             jsonWriter.WriteStartArray();
             foreach (var state in states)
-                jsonWriter.WriteRaw(state);
+                jsonWriter.WriteRawValue(state);
             jsonWriter.WriteEndArray();
             json = stringWriter.ToString();
             return changed;

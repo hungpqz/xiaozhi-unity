@@ -22,6 +22,7 @@ namespace XiaoZhi.Unity
             Thing = new ThingManager();
             Thing.Inject(this);
             Thing.AddThing(new ThingAppSettings());
+            Thing.AddThing(new ThingMiot());
             App = new App();
             App.Inject(this);
             Application.runInBackground = true;

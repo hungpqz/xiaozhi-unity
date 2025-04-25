@@ -47,6 +47,8 @@ namespace XiaoZhi.Unity
             Neutral,
             Title,
             TextField,
+            Focus,
+            Critical
         }
 
         [Serializable]

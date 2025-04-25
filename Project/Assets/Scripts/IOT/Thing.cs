@@ -331,9 +331,9 @@ namespace XiaoZhi.Unity.IOT
 
     public abstract class Thing
     {
-        protected readonly PropertyList properties;
-        protected readonly MethodList methods;
-        protected Context context;
+        protected readonly PropertyList Properties;
+        protected readonly MethodList Methods;
+        protected Context Context;
         
         public string Name { get; }
 
@@ -343,13 +343,13 @@ namespace XiaoZhi.Unity.IOT
         {
             Name = name;
             Description = description;
-            properties = new PropertyList();
-            methods = new MethodList();
+            Properties = new PropertyList();
+            Methods = new MethodList();
         }
 
         public void Inject(Context ctx)
         {
-            context = ctx;
+            Context = ctx;
         }
 
         public void GetDescriptorJson(JsonWriter writer)
@@ -360,9 +360,9 @@ namespace XiaoZhi.Unity.IOT
             writer.WritePropertyName("description");
             writer.WriteValue(Description);
             writer.WritePropertyName("properties");
-            properties.GetDescriptorJson(writer);
+            Properties.GetDescriptorJson(writer);
             writer.WritePropertyName("methods");
-            methods.GetDescriptorJson(writer);
+            Methods.GetDescriptorJson(writer);
             writer.WriteEndObject();
         }
 
@@ -374,7 +374,7 @@ namespace XiaoZhi.Unity.IOT
             jsonWriter.WritePropertyName("name");
             jsonWriter.WriteValue(Name);
             jsonWriter.WritePropertyName("state");
-            properties.GetStateJson(jsonWriter);
+            Properties.GetStateJson(jsonWriter);
             jsonWriter.WriteEndObject();
             return stringWriter.ToString();
         }
@@ -385,7 +385,7 @@ namespace XiaoZhi.Unity.IOT
             {
                 var methodName = command["method"].Value<string>();
                 var inputParams = command["parameters"];
-                var method = methods[methodName];
+                var method = Methods[methodName];
                 foreach (var param in method.Parameters)
                 {
                     var inputParam = inputParams?[param.Name];
