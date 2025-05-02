@@ -15,7 +15,12 @@ namespace XiaoZhi.Unity.MIOT
 {
     public class MiAccount
     {
-        private class Token
+        public const string Miio = "xiaomiio";
+        public const string Mina = "micoapi";
+        private const string AccountDomain = "https://account.xiaomi.com";
+        private const string MinaDomain = "https://api2.mina.mi.com";
+
+        public class Token
         {
             public string Region;
             public string DeviceId;
@@ -24,35 +29,27 @@ namespace XiaoZhi.Unity.MIOT
             public string PassToken;
             public string Ssecurity;
             public string ServiceToken;
+
+            public bool IsValid => !string.IsNullOrEmpty(ServiceToken);
         }
 
-        private const string Miio = "xiaomiio";
-        private const string Mina = "micoapi";
+        private readonly Token _token;
 
-        private Token _token;
-        private Func<UniTask<(string, string, string)>> _inputProxy;
-
-        public void SetInputProxy(Func<UniTask<(string, string, string)>> inputProxy)
+        public MiAccount(string sid)
         {
-            _inputProxy = inputProxy;
+            _token = ReadToken(sid);
+            if (string.IsNullOrEmpty(_token.DeviceId))
+                _token.DeviceId = GetRandom(16);
         }
 
         public async UniTask<(bool, string)> MinaRequest(string uri, Dictionary<string, string> data = null)
         {
-            _token ??= ReadToken(Mina);
-            var isValidToken = !string.IsNullOrEmpty(_token.ServiceToken);
-            if (!isValidToken)
-            {
-                var (success, error) = await Login(Mina);
-                if (!success) return (false, error);
-            }
-
-            const string domainUri = "https://api2.mina.mi.com";
+            if (!_token.IsValid) return (false, "Mina ServiceToken is null.");
             var method = data != null ? UnityWebRequest.kHttpVerbPOST : UnityWebRequest.kHttpVerbGET;
             var requestId = $"app_ios_{GetRandom(30)}";
             if (data != null) data["requestId"] = requestId;
             else uri += $"&requestId={requestId}";
-            var url = $"{domainUri}{uri}";
+            var url = $"{MinaDomain}{uri}";
             using var request = new UnityWebRequest(url, method);
             request.SetRequestHeader("User-Agent",
                 "MiHome/6.0.103 (com.xiaomi.mihome; build:6.0.103.1; iOS 14.4.0) Alamofire/6.0.103 MICO/iOSApp/appStore/6.0.103");
@@ -70,7 +67,7 @@ namespace XiaoZhi.Unity.MIOT
             }
             catch (Exception ex)
             {
-                return (false, $"HTTP Request Error: {ex}");
+                return (false, $"HTTP Request Error: {url}\n{ex}");
             }
 
             return (request.result == UnityWebRequest.Result.Success, request.downloadHandler.text);
@@ -78,15 +75,7 @@ namespace XiaoZhi.Unity.MIOT
 
         public async UniTask<(bool, string)> MiioRequest(string uri, string data = null)
         {
-            Debug.Log(data);
-            _token ??= ReadToken(Miio);
-            var isValidToken = !string.IsNullOrEmpty(_token.ServiceToken);
-            if (!isValidToken)
-            {
-                var (success, error) = await Login(Miio);
-                if (!success) return (false, error);
-            }
-
+            if (!_token.IsValid) return (false, "Miio ServiceToken is null.");
             var regionPrefix = _token.Region == "cn" ? "" : _token.Region + ".";
             var domainUri = $"https://{regionPrefix}api.io.mi.com";
             var method = data != null ? UnityWebRequest.kHttpVerbPOST : UnityWebRequest.kHttpVerbGET;
@@ -111,22 +100,20 @@ namespace XiaoZhi.Unity.MIOT
             }
             catch (Exception ex)
             {
-                return (false, $"HTTP Request Error: {ex}");
+                return (false, $"HTTP Request Error: {url}\n{ex}");
             }
 
             return (request.result == UnityWebRequest.Result.Success, request.downloadHandler.text);
         }
 
-        private async UniTask<(bool, string)> Login(string sid)
+        public async UniTask<(bool, string)> Login(string region, string userId, string passToken)
         {
-            if (string.IsNullOrEmpty(_token.DeviceId))
-                _token.DeviceId = GetRandom(16);
-            // (_token.Region, _token.UserId, _token.PassToken) = await _inputProxy();
-            _token.UserId = "2556468231";
-            _token.PassToken =
-                "V1:DXmurwq2/R1BHTELu6obCV2W16Ch9IjHqkrWktEk0sg5IViAJnt7Bwl8Pc3raeFQt2prC+QOxdpVUGVRo0GpXCnMuSqa7pyqov1hz2TLcNpglaYFRI+aJjbRuuMkQHCt2Ccn9LhRwIofNREc/9DsjwqXHmLYxw51zExWpIFk6MfXoUZe9f68D1P/wJ2/xr/Q430ny5GHE/SougB0EJmfdM8OGmfAn0dno5UjhwTvnOgkWg1WsNj+mr7iALa0Ipy2W1BhKAhyYmjPx58xhDvu04fVM9g/oOfr2aGP7o0FogfFp6jSvvsnA51nAc4na2QUlgiHiM6xJKyKQnfgWFOf+A==";
-            const string domainUri = "https://account.xiaomi.com";
-            var url = $"{domainUri}/pass/serviceLogin?sid={sid}&_json=true";
+            if (_token.UserId == userId && _token.Region == region && _token.PassToken == passToken && _token.IsValid)
+                return (true, null);
+            _token.Region = region;
+            _token.UserId = userId;
+            _token.PassToken = passToken;
+            var url = $"{AccountDomain}/pass/serviceLogin?sid={_token.Sid}&_json=true";
             using var request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET);
             request.SetRequestHeader("User-Agent",
                 "APP/com.xiaomi.mihome APPV/6.0.103 iosPassportSDK/3.9.0 iOS/14.4 miHSTS");
@@ -138,7 +125,7 @@ namespace XiaoZhi.Unity.MIOT
             }
             catch (Exception ex)
             {
-                return (false, $"HTTP Request Error: {ex}");
+                return (false, $"HTTP Request Error: {url}\n{ex}");
             }
 
             var jsonResponse = request.downloadHandler.text;
@@ -164,7 +151,7 @@ namespace XiaoZhi.Unity.MIOT
             }
             catch (Exception ex)
             {
-                return (false, $"HTTP Request Error: {ex}");
+                return (false, $"HTTP Request Error: {url}\n{ex}");
             }
 
             jsonResponse = secondRequest.downloadHandler.text;
@@ -178,7 +165,18 @@ namespace XiaoZhi.Unity.MIOT
                 return (false, $"Error when request {url}: missing serviceToken in cookie.");
             _token.ServiceToken = serviceTokenMatch.Groups[1].Value;
             SaveToken(_token);
-            return (true, null);
+            return (true, _token.UserId);
+        }
+
+        public void Logout()
+        {
+            _token.ServiceToken = null;
+            SaveToken(_token);
+        }
+
+        public Token GetToken()
+        {
+            return _token;
         }
 
         private Token ReadToken(string sid)
@@ -233,7 +231,7 @@ namespace XiaoZhi.Unity.MIOT
 
         private static string GetRandom(int length)
         {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();
             var result = new char[length];
             for (var i = 0; i < length; i++) result[i] = chars[random.Next(chars.Length)];

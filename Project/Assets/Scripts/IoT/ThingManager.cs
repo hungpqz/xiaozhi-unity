@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace XiaoZhi.Unity.IOT
+namespace XiaoZhi.Unity.IoT
 {
     public class ThingManager
     {
@@ -17,11 +18,21 @@ namespace XiaoZhi.Unity.IOT
         {
             _context = ctx;
         }
+        
+        public async UniTask Load()
+        {
+            await UniTask.WhenAll(_things.Select(t => t.Load()));
+        }
 
         public void AddThing(Thing thing)
         {
             thing.Inject(_context);
             _things.Add(thing);
+        }
+
+        public T GetThing<T>() where T : Thing
+        {
+            return _things.OfType<T>().FirstOrDefault();
         }
 
         public string GetDescriptorsJson()

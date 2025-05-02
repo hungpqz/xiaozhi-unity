@@ -225,9 +225,7 @@ namespace XiaoZhi.Unity
             CancellationToken cancellationToken = default)
         {
             var targetPath = GetFullPath(FileType.DataPath, relativePath);
-            var targetDir = Path.GetDirectoryName(targetPath);
-            if (!string.IsNullOrEmpty(targetDir) && !Directory.Exists(targetDir))
-                Directory.CreateDirectory(targetDir);
+            EnsureDirectoryExists(targetPath);
             var request =
                 UnityEngine.Networking.UnityWebRequest.Get(GetFullPath(FileType.StreamingAssets, relativePath));
             await request.SendWebRequest();
@@ -279,27 +277,42 @@ namespace XiaoZhi.Unity
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteAllText(string relativePath, string content)
         {
-            File.WriteAllText(GetFullPath(FileType.DataPath, relativePath), content);
+            var fullPath = GetFullPath(FileType.DataPath, relativePath);
+            EnsureDirectoryExists(fullPath);
+            File.WriteAllText(fullPath, content);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static async UniTask WriteAllTextAsync(string relativePath, string content,
             CancellationToken cancellationToken = default)
         {
-            await File.WriteAllTextAsync(GetFullPath(FileType.DataPath, relativePath), content, cancellationToken);
+            var fullPath = GetFullPath(FileType.DataPath, relativePath);
+            EnsureDirectoryExists(fullPath);
+            await File.WriteAllTextAsync(fullPath, content, cancellationToken);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteAllBytes(string relativePath, byte[] bytes)
         {
-            File.WriteAllBytes(GetFullPath(FileType.DataPath, relativePath), bytes);
+            var fullPath = GetFullPath(FileType.DataPath, relativePath);
+            EnsureDirectoryExists(fullPath);
+            File.WriteAllBytes(fullPath, bytes);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static async UniTask WriteAllBytesAsync(string relativePath, byte[] bytes,
             CancellationToken cancellationToken = default)
         {
-            await File.WriteAllBytesAsync(GetFullPath(FileType.DataPath, relativePath), bytes, cancellationToken);
+            var fullPath = GetFullPath(FileType.DataPath, relativePath);
+            EnsureDirectoryExists(fullPath);
+            await File.WriteAllBytesAsync(fullPath, bytes, cancellationToken);
+        }
+
+        private static void EnsureDirectoryExists(string filePath)
+        {
+            var targetDir = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(targetDir) && !Directory.Exists(targetDir))
+                Directory.CreateDirectory(targetDir);
         }
     }
 }

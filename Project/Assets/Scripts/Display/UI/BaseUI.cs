@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 
 namespace XiaoZhi.Unity
 {
-    public abstract class BaseUI : IUIService
+    public class BaseUI : IUIService
     {
         public const float AnimationDuration = 0.25f;
         
@@ -65,7 +65,10 @@ namespace XiaoZhi.Unity
             await _uiService.CloseUI(this);
         }
 
-        public abstract string GetResourcePath();
+        public virtual string GetResourcePath()
+        {
+            return null;
+        }
 
         public virtual MaskUIData GetMaskData()
         {
@@ -200,6 +203,11 @@ namespace XiaoZhi.Unity
         public bool IsUIVisible(string alias)
         {
             return _uiService.IsUIVisible(alias);
+        }
+
+        public async UniTask<T> LoadUI<T>(Type type = null, Transform parent = null) where T : BaseUI, new()
+        {
+            return await _uiService.LoadUI<T>(type, parent);
         }
 
         public async UniTask<T> ShowSceneUI<T>(BaseUIData data = null) where T : BaseUI, new()

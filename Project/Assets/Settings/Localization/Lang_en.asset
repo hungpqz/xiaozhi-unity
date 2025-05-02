@@ -225,6 +225,67 @@ MonoBehaviour:
     m_Localized: XiaoZhi Unity
     m_Metadata:
       m_Items: []
+  - m_Id: 7052005739552768
+    m_Localized: PassToken
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7052053349097472
+    m_Localized: Login
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7052100107198464
+    m_Localized: Logout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7052665411297280
+    m_Localized: House
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7052731333173248
+    m_Localized: Room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7054277517205504
+    m_Localized: MIoT
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7054207824650240
+    m_Localized: Common
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7051894095568896
+    m_Localized: User ID/Email/Phone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7052185847160832
+    m_Localized: Login Successful
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7052351807381504
+    m_Localized: Login Failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7052790267338752
+    m_Localized: Voice control the selected IoT devices below, changes will take
+      effect after restart
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7053541869838336
+    m_Localized: Refresh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7053570470797312
+    m_Localized: Clear Selection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7053948998344704
+    m_Localized: 'Failed to modify {0} property: {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7077900567142400
+    m_Localized: Loading MIoT...
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

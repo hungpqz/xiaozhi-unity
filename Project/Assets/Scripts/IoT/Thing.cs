@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 
-namespace XiaoZhi.Unity.IOT
+namespace XiaoZhi.Unity.IoT
 {
     public static class Utils
     {
@@ -17,9 +18,17 @@ namespace XiaoZhi.Unity.IOT
             var typeName = typeof(T).Name;
             return typeName switch
             {
-                nameof(Int32) => "number",
+                nameof(Byte) => "uint8",
+                nameof(SByte) => "int8",
+                nameof(Single) => "float",
                 _ => typeName.ToLower()
             };
+        }
+
+        public static bool MaybeJson(string str)
+        {
+            return (str.StartsWith("{") && str.EndsWith("}")) ||
+                   (str.StartsWith("[") && str.EndsWith("]"));
         }
     }
 
@@ -48,6 +57,7 @@ namespace XiaoZhi.Unity.IOT
         string Name { get; }
         string Description { get; }
         Type ValueType { get; }
+        string ValueString { get; }
         void GetDescriptorJson(JsonWriter writer);
     }
 
@@ -68,13 +78,16 @@ namespace XiaoZhi.Unity.IOT
 
         public Type ValueType => typeof(T);
 
+        public string ValueString => Value?.ToString() ?? "";
+
         public T Value { get; set; }
 
         public void GetDescriptorJson(JsonWriter writer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("description");
-            writer.WriteValue(Description);
+            if (Utils.MaybeJson(Description)) writer.WriteRawValue(Description);
+            else writer.WriteValue(Description);
             writer.WritePropertyName("type");
             writer.WriteValue(Utils.TypeString<T>());
             writer.WriteEndObject();
@@ -83,7 +96,7 @@ namespace XiaoZhi.Unity.IOT
 
     public class ParameterList : IEnumerable<IParameter>
     {
-        private readonly List<IParameter> _parameters = new();
+        private readonly Dictionary<string, IParameter> _parameters = new();
 
         public ParameterList()
         {
@@ -91,22 +104,21 @@ namespace XiaoZhi.Unity.IOT
 
         public ParameterList(IEnumerable<IParameter> parameters)
         {
-            _parameters.AddRange(parameters);
+            foreach (var parameter in parameters)
+                _parameters[parameter.Name] = parameter;
         }
 
         public void AddParameter<T>(string name, string description, bool required = true)
         {
-            _parameters.Add(new Parameter<T>(name, description, required));
+            _parameters[name] = new Parameter<T>(name, description, required);
         }
 
         public void AddParameter(IParameter parameter)
         {
-            _parameters.Add(parameter);
+            _parameters[parameter.Name] = parameter;
         }
 
-        public IParameter this[string name] =>
-            _parameters.FirstOrDefault(p => p.Name == name) ??
-            throw new ArgumentException($"Parameter not found: {name}");
+        public IParameter this[string name] => _parameters.GetValueOrDefault(name);
 
         public T GetValue<T>(string name)
         {
@@ -133,7 +145,7 @@ namespace XiaoZhi.Unity.IOT
         public void GetDescriptorJson(JsonWriter writer)
         {
             writer.WriteStartArray();
-            foreach (var parameter in _parameters)
+            foreach (var parameter in _parameters.Values)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName(parameter.Name);
@@ -146,12 +158,12 @@ namespace XiaoZhi.Unity.IOT
 
         public IEnumerator<IParameter> GetEnumerator()
         {
-            return _parameters.GetEnumerator();
+            return _parameters.Values.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return _parameters.Values.GetEnumerator();
         }
     }
 
@@ -180,7 +192,8 @@ namespace XiaoZhi.Unity.IOT
         {
             writer.WriteStartObject();
             writer.WritePropertyName("description");
-            writer.WriteValue(Description);
+            if (Utils.MaybeJson(Description)) writer.WriteRawValue(Description);
+            else writer.WriteValue(Description);
             writer.WritePropertyName("type");
             writer.WriteValue(Utils.TypeString<T>());
             writer.WriteEndObject();
@@ -194,7 +207,7 @@ namespace XiaoZhi.Unity.IOT
 
     public class PropertyList
     {
-        private readonly List<IProperty> _properties = new();
+        private readonly Dictionary<string, IProperty> _properties = new();
 
         public PropertyList()
         {
@@ -202,22 +215,31 @@ namespace XiaoZhi.Unity.IOT
 
         public PropertyList(IEnumerable<IProperty> properties)
         {
-            _properties.AddRange(properties);
+            foreach (var property in properties)
+                _properties[property.Name] = property;
+        }
+
+        public void Clear()
+        {
+            _properties.Clear();
         }
 
         public void AddProperty<T>(string name, string description, Func<T> getter)
         {
-            _properties.Add(new Property<T>(name, description, getter));
+            _properties[name] = new Property<T>(name, description, getter);
         }
 
         public void AddProperty(IProperty property)
         {
-            _properties.Add(property);
+            _properties[property.Name] = property;
         }
 
-        public IProperty this[string name] =>
-            _properties.FirstOrDefault(p => p.Name == name) ??
-            throw new ArgumentException($"Property not found: {name}");
+        public void RemoveProperty(string name)
+        {
+            _properties.Remove(name);
+        }
+
+        public IProperty this[string name] => _properties.GetValueOrDefault(name);
 
         public T GetValue<T>(string name)
         {
@@ -233,7 +255,7 @@ namespace XiaoZhi.Unity.IOT
         public void GetDescriptorJson(JsonWriter writer)
         {
             writer.WriteStartArray();
-            foreach (var property in _properties)
+            foreach (var property in _properties.Values)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName(property.Name);
@@ -247,7 +269,7 @@ namespace XiaoZhi.Unity.IOT
         public void GetStateJson(JsonWriter writer)
         {
             writer.WriteStartArray();
-            foreach (var property in _properties)
+            foreach (var property in _properties.Values)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName(property.Name);
@@ -282,7 +304,8 @@ namespace XiaoZhi.Unity.IOT
         {
             writer.WriteStartObject();
             writer.WritePropertyName("description");
-            writer.WriteValue(_description);
+            if (Utils.MaybeJson(Description)) writer.WriteRawValue(Description);
+            else writer.WriteValue(Description);
             writer.WritePropertyName("parameters");
             _parameters.GetDescriptorJson(writer);
             writer.WriteEndObject();
@@ -296,7 +319,7 @@ namespace XiaoZhi.Unity.IOT
 
     public class MethodList
     {
-        private readonly List<Method> _methods = new();
+        private readonly Dictionary<string, Method> _methods = new();
 
         public MethodList()
         {
@@ -304,22 +327,30 @@ namespace XiaoZhi.Unity.IOT
 
         public MethodList(IEnumerable<Method> methods)
         {
-            _methods.AddRange(methods);
+            foreach (var method in methods) _methods[method.Name] = method;
+        }
+
+        public void Clear()
+        {
+            _methods.Clear();
         }
 
         public void AddMethod(string name, string description, ParameterList parameters, Action<ParameterList> callback)
         {
-            _methods.Add(new Method(name, description, parameters, callback));
+            _methods[name] = new Method(name, description, parameters, callback);
         }
 
-        public Method this[string name] =>
-            _methods.FirstOrDefault(m => m.Name == name) ??
-            throw new ArgumentException($"Method not found: {name}");
+        public void RemoveMethod(string name)
+        {
+            _methods.Remove(name);
+        }
+
+        public Method this[string name] => _methods.GetValueOrDefault(name);
 
         public void GetDescriptorJson(JsonWriter writer)
         {
             writer.WriteStartArray();
-            foreach (var method in _methods)
+            foreach (var method in _methods.Values)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName(method.Name);
@@ -331,10 +362,10 @@ namespace XiaoZhi.Unity.IOT
 
     public abstract class Thing
     {
-        protected readonly PropertyList Properties;
-        protected readonly MethodList Methods;
-        protected Context Context;
-        
+        protected readonly PropertyList _properties;
+        protected readonly MethodList _methods;
+        protected Context _context;
+
         public string Name { get; }
 
         public string Description { get; }
@@ -343,13 +374,18 @@ namespace XiaoZhi.Unity.IOT
         {
             Name = name;
             Description = description;
-            Properties = new PropertyList();
-            Methods = new MethodList();
+            _properties = new PropertyList();
+            _methods = new MethodList();
         }
 
         public void Inject(Context ctx)
         {
-            Context = ctx;
+            _context = ctx;
+        }
+
+        public virtual async UniTask Load()
+        {
+            await UniTask.CompletedTask;
         }
 
         public void GetDescriptorJson(JsonWriter writer)
@@ -360,9 +396,9 @@ namespace XiaoZhi.Unity.IOT
             writer.WritePropertyName("description");
             writer.WriteValue(Description);
             writer.WritePropertyName("properties");
-            Properties.GetDescriptorJson(writer);
+            _properties.GetDescriptorJson(writer);
             writer.WritePropertyName("methods");
-            Methods.GetDescriptorJson(writer);
+            _methods.GetDescriptorJson(writer);
             writer.WriteEndObject();
         }
 
@@ -374,7 +410,7 @@ namespace XiaoZhi.Unity.IOT
             jsonWriter.WritePropertyName("name");
             jsonWriter.WriteValue(Name);
             jsonWriter.WritePropertyName("state");
-            Properties.GetStateJson(jsonWriter);
+            _properties.GetStateJson(jsonWriter);
             jsonWriter.WriteEndObject();
             return stringWriter.ToString();
         }
@@ -385,7 +421,13 @@ namespace XiaoZhi.Unity.IOT
             {
                 var methodName = command["method"].Value<string>();
                 var inputParams = command["parameters"];
-                var method = Methods[methodName];
+                var method = _methods[methodName];
+                if (method == null)
+                {
+                    Debug.LogError($"Method not found: {methodName}");
+                    return;
+                }
+                
                 foreach (var param in method.Parameters)
                 {
                     var inputParam = inputParams?[param.Name];
@@ -393,7 +435,8 @@ namespace XiaoZhi.Unity.IOT
                         throw new ArgumentException($"Parameter {param.Name} is required");
                     if (inputParam == null) continue;
                     var genericType = param.ValueType;
-                    var commandValue = typeof(Extensions).GetMethod("Value", BindingFlags.Public | BindingFlags.Static, null,
+                    var commandValue = typeof(Extensions).GetMethod("Value", BindingFlags.Public | BindingFlags.Static,
+                        null,
                         new[] { typeof(IEnumerable<JToken>) }, null)!.MakeGenericMethod(genericType);
                     var value = commandValue.Invoke(null, new object[] { inputParam });
                     var paramValue = param.GetType().GetProperty("Value");

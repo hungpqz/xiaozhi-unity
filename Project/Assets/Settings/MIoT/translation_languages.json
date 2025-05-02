@@ -1,0 +1,368 @@
+{
+  "zh": {
+    "off": "关闭",
+    "idle": "空闲",
+    "busy": "工作中",
+    "pause": "暂停",
+    "fault": "错误",
+    "_globals": {
+      "mode": "模式",
+      "switch status": "开关",
+      "battery level": "电量",
+      "target temperature": "目标温度",
+      "temperature": "温度",
+      "relative humidity": "湿度",
+      "illumination": "光照度",
+      "indicator light": "指示灯",
+      "physical control locked": "童锁"
+    },
+    "clock": {
+      "stop alarm": "关掉闹钟"
+    },
+    "fan_level": {
+      "auto": "auto",
+      "low": "low",
+      "medium": "medium",
+      "middle": "middle",
+      "high": "high",
+      "quiet": "静音",
+      "turbo": "超强",
+      "level1": "一档",
+      "level2": "二档",
+      "level3": "三档",
+      "level4": "四档",
+      "level5": "五档",
+      "level6": "六档",
+      "level7": "七档"
+    },
+    "mode": {
+      "auto": "自动",
+      "basic": "标准",
+      "low": "低档",
+      "medium": "中档",
+      "high": "高档",
+      "sleep": "睡眠模式",
+      "smart": "智能模式",
+      "favorite": "喜爱模式"
+    },
+    "air_conditioner": {
+      "air conditioner": "空调"
+    },
+    "air_conditioner.mode": {
+      "cool": "制冷",
+      "dry": "除湿",
+      "fan": "送风",
+      "heat": "制热"
+    },
+    "air_fresh.mode": {
+      "auto": "自动",
+      "interval": "间歇",
+      "smart": "智能",
+      "silent": "静音",
+      "strong": "强力",
+      "none": "手动",
+      "sleep": "睡眠",
+      "favorite": "最爱"
+    },
+    "battery": {
+      "battery battery level": "电量",
+      "battery charging state": "充电状态"
+    },
+    "door_state": {
+      "open": "开门",
+      "close": "关门",
+      "close_timeout": "超时未关",
+      "knock": "敲门",
+      "breaking": "撬门",
+      "stuck": "门卡住"
+    },
+    "environment": {
+      "environment air quality": "空气质量",
+      "environment temperature": "温度",
+      "environment relative humidity": "湿度",
+      "environment pm2.5 density": "PM2.5 浓度",
+      "environment co2 density": "CO2 浓度",
+      "environment tvoc density": "TVOC 浓度"
+    },
+    "fan.mode": {
+      "basic": "标准",
+      "basic wind": "标准风",
+      "straight wind": "直吹风",
+      "natural wind": "自然风",
+      "energy saving": "节能风",
+      "none": "手动",
+      "baby": "婴儿",
+      "smart": "智能",
+      "sleep": "睡眠",
+      "strong": "强力",
+      "circular wind": "循环风"
+    },
+    "filter": {
+      "filter left time": "滤芯剩余时间",
+      "filter used time": "滤芯已用时间",
+      "filter life level": "滤芯剩余寿命"
+    },
+    "intelligent_speaker": {
+      "wake up": "唤醒",
+      "play music": "播放音乐",
+      "play radio": "播放广播",
+      "play text": "朗读文本",
+      "execute text directive": "执行指令"
+    },
+    "ir_aircondition_control": {
+      "ir aircondition control": "红外空调",
+      "mode for ir": "模式",
+      "temperature for ir": "目标温度",
+      "turn on": "打开",
+      "turn off": "关闭",
+      "fan speed down": "风速-",
+      "fan speed up": "风速+",
+      "temperature down": "温度-",
+      "temperature up": "温度+"
+    },
+    "ir_aircondition_control.ir_mode": {
+      "auto": "自动",
+      "cool": "制冷",
+      "dry": "除湿",
+      "fan": "风扇",
+      "heat": "制热"
+    },
+    "light": {
+      "light": "灯光"
+    },
+    "light.mode": {
+      "day": "日光",
+      "night": "夜光",
+      "color": "彩光",
+      "warmth": "温馨",
+      "tv": "电视模式",
+      "reading": "阅读模式",
+      "computer": "电脑模式",
+      "hospitality": "会客模式",
+      "entertainment": "娱乐模式",
+      "lighting": "照明",
+      "night light": "夜灯"
+    },
+    "lock_method": {
+      "bluetooth": "蓝牙",
+      "password": "密码",
+      "biological": "生物",
+      "key": "钥匙",
+      "turntable": "转盘",
+      "nfc": "NFC",
+      "one_time_password": "一次性密码",
+      "two_step_verification": "双重认证",
+      "coercion": "胁迫",
+      "homekit": "Homekit",
+      "manual": "人工",
+      "automatic": "自动"
+    },
+    "lock_action": {
+      "outside_unlock": "门外开锁",
+      "lock": "上锁",
+      "anti_lock_on": "开启反锁",
+      "anti_lock_off": "解除反锁",
+      "inside_unlock": "门内开锁",
+      "lock_inside": "门内上锁",
+      "child_lock_on": "开启童锁",
+      "child_lock_off": "关闭童锁",
+      "lock_outside": "门外上锁"
+    },
+    "magnet_sensor": {
+      "magnet sensor": "门窗传感器",
+      "magnet sensor illumination": "光照度"
+    },
+    "motion_sensor": {
+      "motion sensor": "运动侦测",
+      "motion sensor illumination": "光照度"
+    },
+    "occupancy_sensor": {
+      "occupancy sensor occupancy status": "状态"
+    },
+    "occupancy_sensor.occupancy_status": {
+      "someone exists": "有人",
+      "no one exists": "无人"
+    },
+    "physical_control_locked": {
+      "physical control locked": "物理锁"
+    },
+    "play_control": {
+      "play control": "播放器",
+      "keycodes": "遥控按键"
+    },
+    "power_consumption": {
+      "power consumption": "用电量",
+      "power consumption electric power": "功率",
+      "power consumption electric current": "电流",
+      "power consumption electric voltage": "电压",
+      "power consumption voltage": "电压"
+    },
+    "ptc_bath_heater": {
+      "ptc bath heater": "浴霸"
+    },
+    "ptc_bath_heater.mode": {
+      "fan": "吹风",
+      "heat": "暖风",
+      "ventilate": "换气",
+      "dry": "除湿",
+      "defog": "除雾",
+      "quick heat": "极速加热",
+      "quick defog": "快速除雾"
+    },
+    "speaker": {
+      "speaker": "音响",
+      "speaker volume": "音量"
+    },
+    "sweep.suction_state": {
+      "medium": "中档",
+      "silent": "安静",
+      "slient": "安静",
+      "standard": "标准",
+      "turbo": "强力"
+    },
+    "television": {
+      "input control": "输入源",
+      "tv input control": "输入源"
+    },
+    "temperature_humidity_sensor": {
+      "temperature humidity sensor temperature": "温度",
+      "temperature humidity sensor relative humidity": "湿度",
+      "temperature humidity sensor atmospheric pressure": "气压"
+    },
+    "vacuum": {
+      "robot cleaner": "扫地机",
+      "robot cleaner status": "扫地机状态"
+    },
+    "vacuum.mode": {
+      "basic": "正常",
+      "silent": "安静",
+      "standard": "正常",
+      "strong": "强力",
+      "turbo": "强力",
+      "full speed": "全速"
+    },
+    "vacuum.sweep_mop_type": {
+      "sweep": "扫地",
+      "mop": "拖地",
+      "sweep mop": "扫拖同步",
+      "sweep before mopping": "先扫后拖"
+    },
+    "washer": {
+      "drying level": "烘干级别",
+      "drying time": "烘干时长",
+      "high water switch": "高水位",
+      "rinsh times": "漂洗次数",
+      "shake time": "清新抖散",
+      "sleep mode": "夜间洗",
+      "soak time": "浸泡时长",
+      "spin speed": "脱水转速",
+      "start wash": "开始洗涤",
+      "status": "工作状态",
+      "steam sterilization": "蒸汽除菌",
+      "target temperature": "洗涤温度",
+      "target water level": "水位"
+    },
+    "washer.mode": {
+      "aromatherapy wash": "香薰洗",
+      "baby care": "婴童洗",
+      "bacteria mite removal": "除菌螨",
+      "boiling": "高温洗",
+      "color protection": "护色洗",
+      "cotton": "棉麻洗",
+      "daily wash": "日常洗",
+      "delicate wash": "轻柔洗",
+      "down coat": "羽绒服",
+      "drum clean": "筒清洁",
+      "drum dry": "筒风干",
+      "dry air wash": "轻干洗",
+      "dry timing": "定时烘干",
+      "dry": "单烘干",
+      "gold wash": "黄金洗",
+      "heavy wash": "大件洗",
+      "intensive": "强力洗",
+      "jacket": "冲锋衣",
+      "jeans": "牛仔洗",
+      "mite removal": "除螨",
+      "mix": "混合洗",
+      "new clothes wash": "新衣洗",
+      "pleased wash dry": "随心洗烘",
+      "quick wash dry": "快洗烘",
+      "quick wash": "快速洗",
+      "rinse spin": "漂+脱",
+      "rinse": "单漂洗",
+      "shirt": "衬衣",
+      "silk": "真丝洗",
+      "smart": "智能洗",
+      "soak wash": "浸泡洗",
+      "sock": "袜子",
+      "spin": "单脱水",
+      "sportswear": "运动服",
+      "super quick": "超快洗",
+      "synthetic": "化纤洗",
+      "towel": "毛巾",
+      "underwear": "内衣洗",
+      "user define": "自定义",
+      "wash dry": "洗+烘",
+      "wool": "羊毛洗"
+    },
+    "washer.drying_level": {
+      "extra": "特干",
+      "moist": "微湿",
+      "none": "不烘干",
+      "normal": "正常",
+      "smart": "智能烘干",
+      "timed": "定时烘干"
+    },
+    "dishwasher": {
+      "dishwasher status": "状态",
+      "dishwasher switch status": "开关",
+      "dishwasher mode": "洗涤模式",
+      "Start Wash": "开始洗涤",
+      "Stop Washing": "停止洗涤",
+      "dishwasher left time": "洗涤剩余时间"
+    },
+    "dishwasher.mode": {
+      "Basic": "标准洗",
+      "Energy Saving": "节能洗",
+      "Quick Wash": "快速洗",
+      "Intensive": "强力洗",
+      "Glass": "玻璃洗",
+      "Disinfecting": "消毒洗"
+    },
+    "dishwasher.status": {
+      "Off": "已关机",
+      "Idle": "已停止",
+      "Busy": "工作中",
+      "Paused": "暂停",
+      "Completed": "洗涤完成",
+      "Delay": "已预约",
+      "Preservation": "保留"
+    },
+    "water_heater": {
+      "water heater": "热水器"
+    },
+    "water_heater.mode": {
+      "low": "低温",
+      "medium": "中温",
+      "high": "高温"
+    },
+    "airer": {
+      "airer": "晾衣架",
+      "dryer": "干燥功能",
+      "drying_level": "烘干级别",
+      "left_time": "剩余时间",
+      "fault": "设备故障"
+    },
+    "airer.dryer": {
+      "Air Drying": "风干",
+      "Hot Air Drying": "烘干"
+    },
+    "airer.fault": {
+      "No Faults": "无故障",
+      "Obstruction": "遇阻",
+      "Overweight": "超重",
+      "Overheat": "过热",
+      "Motor Failure": "电机故障"
+    }
+  }
+}

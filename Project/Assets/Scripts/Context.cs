@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
-using XiaoZhi.Unity.IOT;
+using XiaoZhi.Unity.IoT;
 
 namespace XiaoZhi.Unity
 {
@@ -9,7 +9,7 @@ namespace XiaoZhi.Unity
     {
         public App App { get; private set; }
         
-        public ThingManager Thing { get; private set; }
+        public ThingManager ThingManager { get; private set; }
 
         public UIManager UIManager { get; private set; }
         
@@ -19,10 +19,10 @@ namespace XiaoZhi.Unity
         {
             UIManager = new UIManager();
             UIManager.Inject(this);
-            Thing = new ThingManager();
-            Thing.Inject(this);
-            Thing.AddThing(new ThingAppSettings());
-            Thing.AddThing(new ThingMiot());
+            ThingManager = new ThingManager();
+            ThingManager.Inject(this);
+            ThingManager.AddThing(new ThingAppSettings());
+            ThingManager.AddThing(new ThingMiot());
             App = new App();
             App.Inject(this);
             Application.runInBackground = true;

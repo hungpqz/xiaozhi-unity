@@ -101,7 +101,7 @@ namespace XiaoZhi.Unity
                 _display.SetStatus(Lang.GetRef("LOADING_MODEL"));
                 await InitializeWakeService();
             }
-
+            
             InitializeAudio();
             if (!_codec.GetInputDevice(out _))
             {
@@ -110,6 +110,8 @@ namespace XiaoZhi.Unity
                 return;
             }
 
+            _display.SetStatus(Lang.GetRef("LOADING_THINGS"));
+            await _context.ThingManager.Load();
             InitializeProtocol();
             StartDisplay();
             SetDeviceState(DeviceState.Idle);
@@ -205,7 +207,7 @@ namespace XiaoZhi.Unity
                 case DeviceState.Listening:
                     _display.SetStatus(Lang.GetRef("STATE_LISTENING"));
                     _display.SetEmotion("neutral");
-                    if (_context.Thing.GetStatesJson(out var json, true))
+                    if (_context.ThingManager.GetStatesJson(out var json, true))
                         _protocol.SendIotStates(json).Forget();
                     _protocol.SendStartListening(_listeningMode).Forget();
                     _opusDecoder.ResetState();
@@ -460,9 +462,9 @@ namespace XiaoZhi.Unity
                     Debug.Log(
                         $"Server sample rate {_protocol.ServerSampleRate} does not match device output sample rate {_codec.OutputSampleRate}, resampling may cause distortion");
                 SetDecodeSampleRate(_protocol.ServerSampleRate);
-                var json = _context.Thing.GetDescriptorsJson();
+                var json = _context.ThingManager.GetDescriptorsJson();
                     _protocol.SendIotDescriptors(json).Forget();
-                if (_context.Thing.GetStatesJson(out json))
+                if (_context.ThingManager.GetStatesJson(out json))
                     _protocol.SendIotStates(json).Forget();
             };
             _protocol.OnChannelClosed += () =>
@@ -539,7 +541,7 @@ namespace XiaoZhi.Unity
                     {
                         var commands = message["commands"];
                         if (commands == null) return;
-                        foreach (var command in commands) _context.Thing.Invoke(command);
+                        foreach (var command in commands) _context.ThingManager.Invoke(command);
                         break;
                     }
                     case "alert":

@@ -7,6 +7,10 @@ namespace XiaoZhi.Unity
     public class XToggle : Toggle
     {
         [SerializeField] private ColourModifier[] _reactModifiers;
+
+        [SerializeField] private ThemeSettings.Background _offBackground = ThemeSettings.Background.Stateful;
+        
+        [SerializeField] private ThemeSettings.Background _onBackground = ThemeSettings.Background.SpotThin;
         
         protected override void OnEnable()
         {
@@ -54,7 +58,7 @@ namespace XiaoZhi.Unity
         private void UpdateBackground()
         {
             if (_reactModifiers == null) return;
-            var background = isOn ? ThemeSettings.Background.SpotThin : ThemeSettings.Background.Stateful;
+            var background = isOn ? _onBackground : _offBackground;
             foreach (var modifier in _reactModifiers)
                 if (modifier)
                     modifier.SetBackground(background);

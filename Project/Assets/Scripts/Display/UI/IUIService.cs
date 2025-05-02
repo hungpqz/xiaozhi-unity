@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Localization;
 
 namespace XiaoZhi.Unity
@@ -15,6 +16,8 @@ namespace XiaoZhi.Unity
         bool IsUIVisible<T>() where T : BaseUI;
         
         bool IsUIVisible(string alias);
+        
+        UniTask<T> LoadUI<T>(Type type = null, Transform parent = null) where T : BaseUI, new();
 
         UniTask<T> ShowSceneUI<T>(BaseUIData data = null) where T : BaseUI, new();
 
@@ -27,7 +30,7 @@ namespace XiaoZhi.Unity
         UniTask ShowNotificationUI(string message, float duration = 3.0f);
         
         UniTask ShowNotificationUI(LocalizedString message, float duration = 3.0f);
-
+        
         UniTask CloseUI<T>() where T : BaseUI;
 
         UniTask CloseUI(BaseUI ui);

@@ -193,5 +193,67 @@ PrefabInstance:
     - {fileID: 1176640906994717424, guid: ffbdac3af381d3a44ab46fbb710106f4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5006604416379883880, guid: ffbdac3af381d3a44ab46fbb710106f4,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8694926061202566298}
   m_SourcePrefab: {fileID: 100100000, guid: ffbdac3af381d3a44ab46fbb710106f4, type: 3}
+--- !u!1 &4043122046924323607 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5006604416379883880, guid: ffbdac3af381d3a44ab46fbb710106f4,
+    type: 3}
+  m_PrefabInstance: {fileID: 9036197930226215551}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8694926061202566298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043122046924323607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5595877139738906064}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &5595877139738906064 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3517182357006002095, guid: ffbdac3af381d3a44ab46fbb710106f4,
+    type: 3}
+  m_PrefabInstance: {fileID: 9036197930226215551}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043122046924323607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -57,6 +57,21 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 869e36edff778a7488df32b3c34e7c10
+    m_Address: Assets/Res/UI/MIoTUI/LoginUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a6da933eaab434b952eb497adce2811
+    m_Address: Assets/Settings/MIoT/translation_languages.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 91e98586bd47e6249a3a403322e58f9d
+    m_Address: Assets/Res/UI/SettingsUI/App.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9ab0c9952c8f9444187a67af3852c9e8
     m_Address: Assets/Res/VRM/Ao/Brother/prefab.prefab
     m_ReadOnly: 0
@@ -64,6 +79,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8db7ec5a466bbd4991ad3399b64c66c
     m_Address: Assets/Settings/AppPresets.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca9feca4d9754df4a9587f5c4da82e7e
+    m_Address: Assets/Res/UI/SettingsUI/MIoT.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

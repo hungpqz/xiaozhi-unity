@@ -16,6 +16,7 @@ namespace XiaoZhi.Unity
         private readonly Stack<SceneStackData> _stack = new();
         private readonly Queue<Tuple<Type, NotificationUIData>> _notificationQueue = new();
         private readonly Dictionary<string, BaseUI> _uiMap = new();
+        private readonly HashSet<Type> _loadingUI = new();
         private string _currentPopup;
         private Context _context;
         public Context Context => _context;
@@ -89,7 +90,8 @@ namespace XiaoZhi.Unity
 
         private async UniTask<T> EnsureUI<T>(Type type = null, Transform parent = null) where T : BaseUI, new()
         {
-            var alias = (type ?? typeof(T)).Name;
+            type ??= typeof(T);
+            var alias = type.Name;
             T ui;
             if (_uiMap.TryGetValue(alias, out var existingUI))
             {
@@ -101,13 +103,9 @@ namespace XiaoZhi.Unity
             }
             else
             {
-                ui = type != null ? Activator.CreateInstance(type) as T : new T();
-                if (ui == null) throw new NullReferenceException($"Failed to create UI instance of type {alias}");
-                ui.RegisterUIService(this);
-                var go = await Addressables.InstantiateAsync(ui.GetResourcePath(), parent);
-                if (!go) throw new IOException($"Failed to load UI prefab: {ui.GetResourcePath()}");
-                go.SetActive(false);
-                ui.Init(go);
+                _loadingUI.Add(type);
+                ui = await LoadUI<T>(type, parent);
+                _loadingUI.Remove(type);
                 _uiMap[alias] = ui;
             }
 
@@ -154,6 +152,20 @@ namespace XiaoZhi.Unity
         {
             return _uiMap.GetValueOrDefault(alias);
         }
+        
+        public async UniTask<T> LoadUI<T>(Type type = null, Transform parent = null) where T : BaseUI, new()
+        {
+            var alias = (type ?? typeof(T)).Name;
+            var ui = type != null ? Activator.CreateInstance(type) as T : new T();
+            if (ui == null)
+                throw new NullReferenceException($"Failed to create UI instance of type {alias}");
+            ui.RegisterUIService(this);
+            var go = await Addressables.InstantiateAsync(ui.GetResourcePath(), parent);
+            if (!go) throw new IOException($"Failed to load UI prefab: {ui.GetResourcePath()}");
+            go.SetActive(false);
+            ui.Init(go);
+            return ui;
+        }
 
         public async UniTask<T> ShowSceneUI<T>(BaseUIData data = null) where T : BaseUI, new()
         {
@@ -188,7 +200,7 @@ namespace XiaoZhi.Unity
         {
             await ShowNotificationUI<NotificationUI>(new NotificationUIData(message, duration));
         }
-        
+
         public async UniTask ShowNotificationUI(LocalizedString message, float duration = 3.0f)
         {
             await ShowNotificationUI<NotificationUI>(new NotificationUIData(message, duration));
@@ -342,7 +354,7 @@ namespace XiaoZhi.Unity
             _uiMap.Remove(ui.GetType().Name);
             ui.Destroy();
         }
-        
+
         public void Dispose()
         {
             _stack.Clear();

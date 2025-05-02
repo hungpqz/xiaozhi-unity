@@ -1,6 +1,5 @@
 using System;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Components;
@@ -9,7 +8,7 @@ using UnityEngine.UI;
 
 namespace XiaoZhi.Unity
 {
-    public class SettingsUI : BaseUI
+    public class AppSettingsUI : BaseUI
     {
         private TMP_InputField _inputWebSocketUrl;
         private TMP_InputField _inputWebSocketAccessToken;
@@ -30,7 +29,7 @@ namespace XiaoZhi.Unity
 
         public override string GetResourcePath()
         {
-            return "Assets/Res/UI/SettingsUI/SettingsUI.prefab";
+            return "Assets/Res/UI/SettingsUI/App.prefab";
         }
 
         protected override void OnInit()
@@ -69,8 +68,6 @@ namespace XiaoZhi.Unity
             _listLang = content.Find("Lang/List");
             _btnRestart = GetComponent<XButton>(content, "Restart/Button");
             _btnRestart.onClick.AddListener(() => { Context.Restart().Forget(); });
-
-            GetComponent<XButton>(content, "Top/BtnClose").onClick.AddListener(() => Close().Forget());
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
@@ -87,15 +84,7 @@ namespace XiaoZhi.Unity
             UpdateAutoHide();
             UpdateIconTheme();
             UpdateLangList();
-
-            Tr.DOKill();
-            await Tr.SetAnchorPosX(Tr.rect.width + 16).DOAnchorPosX(0, AnimationDuration).SetEase(Ease.InOutSine);
-        }
-
-        protected override async UniTask OnHide()
-        {
-            Tr.DOKill();
-            await Tr.DOAnchorPosX(Tr.rect.width + 16, AnimationDuration).SetEase(Ease.InOutSine);
+            await UniTask.CompletedTask;
         }
 
         private void UpdateDisplayMode()

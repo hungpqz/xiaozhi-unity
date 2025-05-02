@@ -69,10 +69,10 @@ MonoBehaviour:
     Color: {r: 1, g: 0.42352942, b: 0.21568628, a: 1}
   - Theme: 0
     Background: 9
-    Color: {r: 1, g: 0.13725491, b: 0.13725491, a: 1}
+    Color: {r: 1, g: 0.32941177, b: 0.32941177, a: 1}
   - Theme: 1
     Background: 9
-    Color: {r: 1, g: 0.13342315, b: 0.13342315, a: 1}
+    Color: {r: 1, g: 0.32941177, b: 0.32941177, a: 1}
   ActionSettings:
   - Theme: 0
     Action: 0

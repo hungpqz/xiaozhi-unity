@@ -15,7 +15,7 @@ namespace XiaoZhi.Unity
         private Graphic _graphic;
 
         private ThemeSettings.Action _action = ThemeSettings.Action.Default;
-        
+
         private Graphic GetGraphic()
         {
             _graphic ??= GetComponent<Graphic>();

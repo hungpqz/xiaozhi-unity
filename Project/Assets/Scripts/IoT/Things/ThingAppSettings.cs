@@ -2,30 +2,30 @@ using System;
 using System.Linq;
 using UnityEngine.Localization.Settings;
 
-namespace XiaoZhi.Unity.IOT
+namespace XiaoZhi.Unity.IoT
 {
     public class ThingAppSettings : Thing
     {
         public ThingAppSettings() : base("AppSettings", "设置中心，可以设置主题/音量/语言等")
         {
-            Properties.AddProperty("theme", "主题", GetTheme);
-            Methods.AddMethod("SetTheme", "设置主题",
+            _properties.AddProperty("theme", "主题", GetTheme);
+            _methods.AddMethod("SetTheme", "设置主题",
                 new ParameterList(new[]
                 {
                     new Parameter<string>("theme", "主题模式, Light 或 Dark")
                 }),
                 SetTheme);
 
-            Properties.AddProperty("volume", "当前音量值", GetVolume);
-            Methods.AddMethod("SetVolume", "设置音量",
+            _properties.AddProperty("volume", "当前音量值", GetVolume);
+            _methods.AddMethod("SetVolume", "设置音量",
                 new ParameterList(new[]
                 {
                     new Parameter<int>("volume", "0到100之间的整数")
                 }),
                 SetVolume);
 
-            Properties.AddProperty("lang", "语言", GetLang);
-            Methods.AddMethod("SetLang", "设置语言",
+            _properties.AddProperty("lang", "语言", GetLang);
+            _methods.AddMethod("SetLang", "设置语言",
                 new ParameterList(new[]
                 {
                     new Parameter<string>("lang", "语言, 简体中文 或 English")

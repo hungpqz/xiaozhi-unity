@@ -6,6 +6,7 @@ namespace XiaoZhi.Unity
         Scene,
         Module,
         Popup,
-        Notify
+        Notify,
+        Inner
     }
 }
