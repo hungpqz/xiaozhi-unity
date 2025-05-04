@@ -286,6 +286,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7889234766553088
+    m_Localized: Local login requires verification of your phone/email, <color=#FF6C37><u><link="0">click
+      here to get verification code</link></u></color>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7889102125883392
+    m_Localized: Verification Code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7889508973371392
+    m_Localized: Verify
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7895673413263360
+    m_Localized: Return to Login
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7957408966991872
     m_Localized: 
     m_Metadata:
       m_Items: []
