@@ -145,8 +145,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3314955677
-    m_Localized: <u><i><link="https://k2-fsa.github.io/sherpa/onnx/kws/index.html#what-is-open-vocabulary-keyword-spotting">How
-      to set keywords</link></i></u>
+    m_Localized: <u><i><link="0">How to set keywords</link></i></u>
     m_Metadata:
       m_Items: []
   - m_Id: 3314955678
@@ -225,8 +224,8 @@ MonoBehaviour:
     m_Localized: XiaoZhi Unity
     m_Metadata:
       m_Items: []
-  - m_Id: 7052005739552768
-    m_Localized: PassToken
+  - m_Id: 7900086924173312
+    m_Localized: Password
     m_Metadata:
       m_Items: []
   - m_Id: 7052053349097472
@@ -284,6 +283,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7077900567142400
     m_Localized: Loading MIoT...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7889234766553088
+    m_Localized: 
     m_Metadata:
       m_Items: []
   references:

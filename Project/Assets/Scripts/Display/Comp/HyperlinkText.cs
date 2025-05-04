@@ -1,9 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class HyperlinkText : MonoBehaviour, IPointerClickHandler
 {
+    public UnityEvent<string> OnClickLink;
+    
     private TMP_Text _tmpText;
 
     public void OnPointerClick(PointerEventData eventData)
@@ -12,6 +15,6 @@ public class HyperlinkText : MonoBehaviour, IPointerClickHandler
         var linkIndex = TMP_TextUtilities.FindIntersectingLink(_tmpText, eventData.position, _tmpText.canvas.worldCamera);
         if (linkIndex == -1) return;
         var linkInfo = _tmpText.textInfo.linkInfo[linkIndex];
-        Application.OpenURL(linkInfo.GetLinkID());
+        OnClickLink?.Invoke(linkInfo.GetLinkID());
     }
 }

@@ -8,14 +8,11 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Networking;
-using XiaoZhi.Unity;
-using XiaoZhi.Unity.MIOT;
 
-namespace MIoT
+namespace XiaoZhi.Unity.MIoT
 {
     public class MiotObject
     {

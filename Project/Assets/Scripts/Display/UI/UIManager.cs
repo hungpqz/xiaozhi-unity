@@ -16,7 +16,6 @@ namespace XiaoZhi.Unity
         private readonly Stack<SceneStackData> _stack = new();
         private readonly Queue<Tuple<Type, NotificationUIData>> _notificationQueue = new();
         private readonly Dictionary<string, BaseUI> _uiMap = new();
-        private readonly HashSet<Type> _loadingUI = new();
         private string _currentPopup;
         private Context _context;
         public Context Context => _context;
@@ -34,7 +33,8 @@ namespace XiaoZhi.Unity
 
         public async UniTask Load()
         {
-            await EnsureUI<MaskUI>(null, _canvasMap[UILayer.Module].transform);
+            await UniTask.WhenAll(EnsureUI<MaskUI>(null, _canvasMap[UILayer.Module].transform),
+                EnsureUI<NotificationUI>(null, _canvasMap[UILayer.Notify].transform));
         }
 
         private async UniTask<T> ShowStackUI<T>(BaseUIData data, UILayer layer) where T : BaseUI, new()
@@ -90,8 +90,7 @@ namespace XiaoZhi.Unity
 
         private async UniTask<T> EnsureUI<T>(Type type = null, Transform parent = null) where T : BaseUI, new()
         {
-            type ??= typeof(T);
-            var alias = type.Name;
+            var alias = (type ?? typeof(T)).Name;
             T ui;
             if (_uiMap.TryGetValue(alias, out var existingUI))
             {
@@ -103,9 +102,7 @@ namespace XiaoZhi.Unity
             }
             else
             {
-                _loadingUI.Add(type);
                 ui = await LoadUI<T>(type, parent);
-                _loadingUI.Remove(type);
                 _uiMap[alias] = ui;
             }
 
@@ -152,7 +149,7 @@ namespace XiaoZhi.Unity
         {
             return _uiMap.GetValueOrDefault(alias);
         }
-        
+
         public async UniTask<T> LoadUI<T>(Type type = null, Transform parent = null) where T : BaseUI, new()
         {
             var alias = (type ?? typeof(T)).Name;

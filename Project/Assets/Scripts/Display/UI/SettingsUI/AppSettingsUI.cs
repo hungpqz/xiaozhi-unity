@@ -10,6 +10,9 @@ namespace XiaoZhi.Unity
 {
     public class AppSettingsUI : BaseUI
     {
+        private const string KeywordsHelpUrl =
+            "https://k2-fsa.github.io/sherpa/onnx/kws/index.html#what-is-open-vocabulary-keyword-spotting";
+
         private TMP_InputField _inputWebSocketUrl;
         private TMP_InputField _inputWebSocketAccessToken;
         private TMP_InputField _inputCustomMacAddress;
@@ -19,6 +22,7 @@ namespace XiaoZhi.Unity
         private Transform _listBreakMode;
         private GameObject _goKeywords;
         private TMP_InputField _inputKeywords;
+        private HyperlinkText _inputKeywordsLink;
         private XSlider _sliderVolume;
         private XButton _btnTheme;
         private XRadio _radioAutoHide;
@@ -47,6 +51,8 @@ namespace XiaoZhi.Unity
             _listBreakMode = content.Find("BreakMode/List");
             _inputKeywords = GetComponent<TMP_InputField>(content, "Keywords/InputField");
             _inputKeywords.onDeselect.AddListener(OnChangeKeywords);
+            GetComponent<HyperlinkText>(content, "Keywords/Tips_Help/Text").OnClickLink
+                .AddListener(_ => Application.OpenURL(KeywordsHelpUrl));
             _sliderVolume = GetComponent<XSlider>(content, "Volume/Slider");
             _iconVolume = GetComponent<XSpriteChanger>(content, "Volume/Title/Icon");
             _sliderVolume.onValueChanged.AddListener(value =>

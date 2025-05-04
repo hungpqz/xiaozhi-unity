@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace XiaoZhi.Unity.MIOT
+namespace XiaoZhi.Unity.MIoT
 {
     public class MinaService
     {

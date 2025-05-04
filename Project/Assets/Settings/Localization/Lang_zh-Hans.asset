@@ -145,7 +145,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3314955677
-    m_Localized: "<u><i><link=\"https://k2-fsa.github.io/sherpa/onnx/kws/index.html#what-is-open-vocabulary-keyword-spotting\">\u5982\u4F55\u586B\u5199\u5173\u952E\u8BCD</link></i></u>"
+    m_Localized: "<u><i><link=\"0\">\u5982\u4F55\u586B\u5199\u5173\u952E\u8BCD</link></i></u>"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955678
@@ -228,8 +228,8 @@ MonoBehaviour:
     m_Localized: "\u7528\u6237ID/\u90AE\u7BB1/\u624B\u673A\u53F7"
     m_Metadata:
       m_Items: []
-  - m_Id: 7052005739552768
-    m_Localized: PassToken
+  - m_Id: 7900086924173312
+    m_Localized: "\u5BC6\u7801"
     m_Metadata:
       m_Items: []
   - m_Id: 7052053349097472
@@ -282,6 +282,22 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 7077900567142400
     m_Localized: "\u52A0\u8F7D\u7C73\u5BB6..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7889102125883392
+    m_Localized: "\u9A8C\u8BC1\u7801"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7889234766553088
+    m_Localized: "\u672C\u5730\u767B\u5F55\u9700\u8981\u9A8C\u8BC1\u60A8\u7684\u624B\u673A/\u90AE\u7BB1\uFF0C<color=#FF6C37><u><link=\"0\">\u70B9\u51FB\u8FD9\u91CC\u83B7\u53D6\u9A8C\u8BC1\u7801</link></u></color>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7889508973371392
+    m_Localized: "\u9A8C\u8BC1"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7895673413263360
+    m_Localized: "\u8FD4\u56DE\u767B\u5F55"
     m_Metadata:
       m_Items: []
   references:

@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace XiaoZhi.Unity.MIOT
+namespace XiaoZhi.Unity.MIoT
 {
     public class MiioService
     {
@@ -36,7 +37,7 @@ namespace XiaoZhi.Unity.MIOT
                     support_smart_home = supportSmartHome
                 }));
         }
-        
+
         public async UniTask<(bool, string)> ListDeviceV2(long homeOwner, long homeID, string startDid,
             int limit = 300, bool getSplitDevice = true, bool supportSmartHome = true,
             bool getCariotDevice = true, bool getThirdDevice = true)
@@ -54,33 +55,33 @@ namespace XiaoZhi.Unity.MIOT
                 }));
         }
 
-        public async UniTask<(bool, string)> GetProps(string did, (long, long)[] iids)
+        public async UniTask<(bool, string)> GetProps(IEnumerable<(string, long, long)> iids)
         {
             var parameters = JsonConvert.SerializeObject(iids.Select(i =>
-                new { did, siid = i.Item1, piid = i.Item2 }).ToArray());
+                new { did = i.Item1, siid = i.Item2, piid = i.Item3 }).ToArray());
             return await MiotRequest("/prop/get", parameters);
         }
 
-        public async UniTask<(bool, string)> SetProps(string did, (long, long, object)[] iids)
+        public async UniTask<(bool, string)> SetProps(IEnumerable<(string, long, long, object)> iids)
         {
             var parameters = JsonConvert.SerializeObject(iids.Select(i =>
-                new { did, siid = i.Item1, piid = i.Item2, value = i.Item3 }).ToArray());
+                new { did = i.Item1, siid = i.Item2, piid = i.Item3, value = i.Item4 }).ToArray());
             return await MiotRequest("/prop/set", parameters);
         }
 
-        public async UniTask<(bool, string)> GetProp(string did, (long, long) iid)
+        public async UniTask<(bool, string)> GetProp(string did, long siid, long piid)
         {
-            return await GetProps(did, new[] { iid });
+            return await GetProps(new[] { (did, siid, piid) });
         }
 
-        public async UniTask<(bool, string)> SetProp(string did, (long, long, object) iid)
+        public async UniTask<(bool, string)> SetProp(string did, long siid, long piid, object value)
         {
-            return await SetProps(did, new[] { iid });
+            return await SetProps(new[] { (did, siid, piid, value) });
         }
 
-        public async UniTask<(bool, string)> Action(string did, (long, long) iid, params string[] args)
+        public async UniTask<(bool, string)> Action(string did, long siid, long aiid, params string[] args)
         {
-            var parameters = JsonConvert.SerializeObject(new { did, siid = iid.Item1, aiid = iid.Item2, @in = args });
+            var parameters = JsonConvert.SerializeObject(new { did, siid, aiid, @in = args });
             return await MiotRequest("/action", parameters);
         }
 

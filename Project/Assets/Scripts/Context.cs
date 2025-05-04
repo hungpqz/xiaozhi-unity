@@ -22,7 +22,7 @@ namespace XiaoZhi.Unity
             ThingManager = new ThingManager();
             ThingManager.Inject(this);
             ThingManager.AddThing(new ThingAppSettings());
-            ThingManager.AddThing(new ThingMiot());
+            ThingManager.AddThing(new ThingMIoT());
             App = new App();
             App.Inject(this);
             Application.runInBackground = true;

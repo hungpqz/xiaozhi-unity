@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace XiaoZhi.Unity.IoT
 {
-    public class ThingManager
+    public class ThingManager : IDisposable
     {
         private Context _context;
         private readonly List<Thing> _things = new();
@@ -96,6 +97,12 @@ namespace XiaoZhi.Unity.IoT
             }
 
             thing.Invoke(command);
+        }
+
+        public void Dispose()
+        {
+            foreach (var thing in _things)
+                thing.Dispose();
         }
     }
 }

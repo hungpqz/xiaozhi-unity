@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Cysharp.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine;
 using UnityEngine.Localization.Settings;
 
-namespace XiaoZhi.Unity.MIOT
+namespace XiaoZhi.Unity.MIoT
 {
     public static class MiotTranslation
     {

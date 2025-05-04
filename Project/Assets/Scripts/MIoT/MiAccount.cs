@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,7 +12,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Random = System.Random;
 
-namespace XiaoZhi.Unity.MIOT
+namespace XiaoZhi.Unity.MIoT
 {
     public class MiAccount
     {
@@ -19,6 +20,13 @@ namespace XiaoZhi.Unity.MIOT
         public const string Mina = "micoapi";
         private const string AccountDomain = "https://account.xiaomi.com";
         private const string MinaDomain = "https://api2.mina.mi.com";
+        private const CloudServer DefaultCloudServer = CloudServer.cn;
+
+        private static readonly Dictionary<int, string> VerifyUrlMap = new()
+        {
+            { 4, "/identity/auth/verifyPhone" },
+            { 8, "/identity/auth/verifyEmail" }
+        };
 
         public class Token
         {
@@ -76,7 +84,7 @@ namespace XiaoZhi.Unity.MIOT
         public async UniTask<(bool, string)> MiioRequest(string uri, string data = null)
         {
             if (!_token.IsValid) return (false, "Miio ServiceToken is null.");
-            var regionPrefix = _token.Region == "cn" ? "" : _token.Region + ".";
+            var regionPrefix = _token.Region == DefaultCloudServer.ToString() ? "" : _token.Region + ".";
             var domainUri = $"https://{regionPrefix}api.io.mi.com";
             var method = data != null ? UnityWebRequest.kHttpVerbPOST : UnityWebRequest.kHttpVerbGET;
             var url = $"{domainUri}/app{uri}";
@@ -106,44 +114,81 @@ namespace XiaoZhi.Unity.MIOT
             return (request.result == UnityWebRequest.Result.Success, request.downloadHandler.text);
         }
 
-        public async UniTask<(bool, string)> Login(string region, string userId, string passToken)
+        public async UniTask<(bool, string)> Login(string userId, string password)
         {
-            if (_token.UserId == userId && _token.Region == region && _token.PassToken == passToken && _token.IsValid)
-                return (true, null);
-            _token.Region = region;
-            _token.UserId = userId;
-            _token.PassToken = passToken;
-            var url = $"{AccountDomain}/pass/serviceLogin?sid={_token.Sid}&_json=true";
-            using var request = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET);
-            request.SetRequestHeader("User-Agent",
-                "APP/com.xiaomi.mihome APPV/6.0.103 iosPassportSDK/3.9.0 iOS/14.4 miHSTS");
-            request.SetRequestHeader("Cookie", $"sdkVersion=3.9;userId={_token.UserId};passToken={_token.PassToken};");
-            request.downloadHandler = new DownloadHandlerBuffer();
-            try
+            var response1 = await RequestAccount($"{AccountDomain}/pass/serviceLogin?sid={_token.Sid}&_json=true");
+            if (response1 == null) return (false, "Request pass token failed.");
+            if (response1.Value<int>("code") == 0) return await RequestServiceToken(response1);
+            var response2 = await RequestVerifyToken(response1, userId, password);
+            var location = response2.Value<string>("location");
+            if (!string.IsNullOrEmpty(location)) return await RequestServiceToken(response2);
+            var verifyUrl = response2.Value<string>("notificationUrl");
+            if (string.IsNullOrEmpty(verifyUrl)) return (false, response2.ToString());
+            if (!verifyUrl.StartsWith("http")) verifyUrl = $"{AccountDomain}{verifyUrl}";
+            return (false, verifyUrl);
+        }
+
+        public async UniTask<(bool, string)> Verify(string url, string ticket)
+        {
+            var (success, data, options) = await RequestIdentityList(url);
+            if (!success) return (false, data);
+            string location = null;
+            string error = null;
+            foreach (var flag in options)
             {
-                await request.SendWebRequest();
-            }
-            catch (Exception ex)
-            {
-                return (false, $"HTTP Request Error: {url}\n{ex}");
+                var verifyUrl = VerifyUrlMap.GetValueOrDefault(flag);
+                if (string.IsNullOrEmpty(url)) continue;
+                var response = await RequestAccount(
+                    $"{AccountDomain}{verifyUrl}?_dc={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}",
+                    new Dictionary<string, string>
+                    {
+                        { "flag", flag.ToString() },
+                        { "ticket", ticket },
+                        { "trust", "true" },
+                        { "_json", "true" }
+                    }, new Dictionary<string, string>
+                    {
+                        { "identity_session", data }
+                    });
+                if (response.Value<int>("code") == 0)
+                {
+                    location = response.Value<string>("location");
+                    break;
+                }
+
+                error = response.ToString();
             }
 
-            var jsonResponse = request.downloadHandler.text;
-            if (request.result != UnityWebRequest.Result.Success) return (false, jsonResponse);
-            var root = JObject.Parse(jsonResponse[11..]);
-            if (!root.TryGetValue("code", out var jCode))
-                return (false, $"Error when request {url}: missing 'code' in response.");
-            var code = jCode.Value<int>();
-            if (code != 0) return (false, $"Error when request {url}: code: {code}");
-            _token.UserId = root["userId"]!.Value<string>();
-            _token.PassToken = root["passToken"]!.Value<string>();
-            _token.Ssecurity = root["ssecurity"]!.Value<string>();
-            var location = root["location"]!.Value<string>();
-            var nonce = root["nonce"]!.Value<string>();
+            if (string.IsNullOrEmpty(location)) return (false, error);
+            await RequestAccount(location);
+            return (true, null);
+        }
+
+        private async UniTask<(bool, string, int[])> RequestIdentityList(string url, string path = "identity/authStart")
+        {
+            url = url.Replace(path, "identity/list");
+            var cookies = new Dictionary<string, string>();
+            var response1 = await RequestAccount(url, null, cookies);
+            if (!cookies.TryGetValue("identity_session", out var identitySession))
+                return (false, $"Error when request {url}: missing identity_session in cookie.", null);
+            var flag = response1.Value<int>("flag");
+            if (flag == 0) flag = 4;
+            var options = response1.Value<JArray>("options").Values<int>().ToArray();
+            if (options.Length == 0) options = new[] { flag };
+            return (true, identitySession, options);
+        }
+
+        private async UniTask<(bool, string)> RequestServiceToken(JObject json)
+        {
+            _token.UserId = json["userId"]!.Value<string>();
+            _token.PassToken = json["passToken"]!.Value<string>();
+            _token.Ssecurity = json["ssecurity"]!.Value<string>();
+            var location = json["location"]!.Value<string>();
+            var nonce = json["nonce"]!.Value<string>();
             var nsec = $"nonce={nonce}&{_token.Ssecurity}";
             var clientSign = Convert.ToBase64String(SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(nsec)));
-            url = $"{location}&clientSign={Uri.EscapeDataString(clientSign)}";
-            using var secondRequest = new UnityWebRequest(url, UnityWebRequest.kHttpVerbGET);
+            location += $"&clientSign={Uri.EscapeDataString(clientSign)}";
+            using var secondRequest = new UnityWebRequest(location, UnityWebRequest.kHttpVerbGET);
             secondRequest.downloadHandler = new DownloadHandlerBuffer();
             try
             {
@@ -151,21 +196,86 @@ namespace XiaoZhi.Unity.MIOT
             }
             catch (Exception ex)
             {
-                return (false, $"HTTP Request Error: {url}\n{ex}");
+                return (false, $"HTTP Request Error: {location}\n{ex}");
             }
 
-            jsonResponse = secondRequest.downloadHandler.text;
+            var jsonResponse = secondRequest.downloadHandler.text;
             Debug.Log($"response code: {secondRequest.responseCode}");
             Debug.Log("response: " + jsonResponse);
             if (secondRequest.result != UnityWebRequest.Result.Success) return (false, jsonResponse);
             var cookies = secondRequest.GetResponseHeader("Set-Cookie");
-            if (string.IsNullOrEmpty(cookies)) return (false, $"Error when request {url}: missing set-cookie.");
-            var serviceTokenMatch = System.Text.RegularExpressions.Regex.Match(cookies, "serviceToken=([^;]+)");
+            if (string.IsNullOrEmpty(cookies)) return (false, $"Error when request {location}: missing set-cookie.");
+            var serviceTokenMatch = Regex.Match(cookies, "serviceToken=([^;]+)");
             if (!serviceTokenMatch.Success)
-                return (false, $"Error when request {url}: missing serviceToken in cookie.");
+                return (false, $"Error when request {location}: missing serviceToken in cookie.");
             _token.ServiceToken = serviceTokenMatch.Groups[1].Value;
             SaveToken(_token);
             return (true, _token.UserId);
+        }
+
+        private async UniTask<JObject> RequestVerifyToken(JObject json, string userId, string password)
+        {
+            using var md5 = MD5.Create();
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
+            var passwordMd5 = BitConverter.ToString(hash).Replace("-", "").ToUpper();
+            var data = new Dictionary<string, string>
+            {
+                { "_json", "true" },
+                { "sid", json.Value<string>("sid") },
+                { "user", userId },
+                { "hash", passwordMd5 },
+                { "qs", json.Value<string>("qs") },
+                { "_sign", json.Value<string>("_sign") },
+                { "callback", json.Value<string>("callback") }
+            };
+            return await RequestAccount($"{AccountDomain}/pass/serviceLoginAuth2", data);
+        }
+
+        private async UniTask<JObject> RequestAccount(string url, Dictionary<string, string> data = null,
+            Dictionary<string, string> cookies = null)
+        {
+            using var request = new UnityWebRequest(url,
+                data != null ? UnityWebRequest.kHttpVerbPOST : UnityWebRequest.kHttpVerbGET);
+            request.SetRequestHeader("User-Agent",
+                "APP/com.xiaomi.mihome APPV/6.0.103 iosPassportSDK/3.9.0 iOS/14.4 miHSTS");
+            var cookie = "sdkVersion=3.9;";
+            if (cookies != null)
+                cookie = cookies.Aggregate(cookie, (current, one) => current + $"{one.Key}={one.Value};");
+            request.SetRequestHeader("Cookie", cookie);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            if (data != null)
+            {
+                request.uploadHandler = new UploadHandlerRaw(UnityWebRequest.SerializeSimpleForm(data));
+                request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            }
+
+            try
+            {
+                await request.SendWebRequest();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"HTTP Request Error: {url}\n{ex}");
+                return null;
+            }
+
+            if (cookies != null)
+            {
+                var setCookie = request.GetResponseHeader("Set-Cookie");
+                if (!string.IsNullOrEmpty(setCookie))
+                {
+                    var matches = Regex.Matches(setCookie, "([^;]+)=([^;]+)");
+                    foreach (Match match in matches)
+                    {
+                        var key = match.Groups[1].Value;
+                        var value = match.Groups[2].Value;
+                        cookies[key] = value;
+                    }
+                }
+            }
+
+            var text = request.downloadHandler.text;
+            return text.Length > 11 ? JObject.Parse(text[11..]) : null;
         }
 
         public void Logout()
@@ -184,7 +294,7 @@ namespace XiaoZhi.Unity.MIOT
             var settings = new Settings("miot");
             var tokenStr = settings.GetString(sid);
             return string.IsNullOrEmpty(tokenStr)
-                ? new Token { Sid = sid, Region = "cn" }
+                ? new Token { Sid = sid, Region = DefaultCloudServer.ToString() }
                 : JsonConvert.DeserializeObject<Token>(tokenStr);
         }
 

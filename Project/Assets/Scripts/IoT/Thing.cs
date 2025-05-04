@@ -360,7 +360,7 @@ namespace XiaoZhi.Unity.IoT
         }
     }
 
-    public abstract class Thing
+    public abstract class Thing : IDisposable
     {
         protected readonly PropertyList _properties;
         protected readonly MethodList _methods;
@@ -427,7 +427,7 @@ namespace XiaoZhi.Unity.IoT
                     Debug.LogError($"Method not found: {methodName}");
                     return;
                 }
-                
+
                 foreach (var param in method.Parameters)
                 {
                     var inputParam = inputParams?[param.Name];
@@ -449,6 +449,10 @@ namespace XiaoZhi.Unity.IoT
             {
                 Debug.LogError($"Method invocation failed: {ex}");
             }
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 }

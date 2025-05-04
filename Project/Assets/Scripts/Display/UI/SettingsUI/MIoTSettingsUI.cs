@@ -1,9 +1,10 @@
 using Cysharp.Threading.Tasks;
-using MIoT;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using XiaoZhi.Unity.IoT;
+using XiaoZhi.Unity.MIoT;
+using Application = UnityEngine.Device.Application;
 
 namespace XiaoZhi.Unity
 {
@@ -11,14 +12,20 @@ namespace XiaoZhi.Unity
     {
         private GameObject _goLogin;
         private TMP_InputField _inputUserId;
-        private TMP_InputField _inputPassToken;
+        private TMP_InputField _inputPassword;
         private XButton _btnLogin;
+
+        private GameObject _goVerify;
+        private HyperlinkText _inputVerifyLink;
+        private TMP_InputField _inputVerifyCode;
+        private XButton _btnVerify;
+        private XButton _btnReturn;
 
         private GameObject _goList;
         private Transform _listHome;
         private Transform _listRoom;
         private Transform _listDevice;
-        private ThingMiot _thingMIoT;
+        private ThingMIoT _thingMIoT;
         private XButton _btnRefresh;
 
         private MiotHome[] _homes;
@@ -26,6 +33,8 @@ namespace XiaoZhi.Unity
         private MiotRoom[] _rooms;
         private int _roomIndex;
         private MiotDevice[] _devices;
+
+        private string _verifyUrl;
 
         public override string GetResourcePath()
         {
@@ -38,9 +47,17 @@ namespace XiaoZhi.Unity
             _goLogin = GetGo(content, "LoginUI");
             var trLogin = _goLogin.transform;
             _inputUserId = GetComponent<TMP_InputField>(trLogin, "UserId/InputField");
-            _inputPassToken = GetComponent<TMP_InputField>(trLogin, "PassToken/InputField");
+            _inputPassword = GetComponent<TMP_InputField>(trLogin, "Password/InputField");
             _btnLogin = GetComponent<XButton>(trLogin, "Login/Button");
             _btnLogin.onClick.AddListener(() => OnClickLogin().Forget());
+            _goVerify = GetGo(content, "VerifyUI");
+            var trVerify = _goVerify.transform;
+            _inputVerifyCode = GetComponent<TMP_InputField>(trVerify, "Code/InputField");
+            _inputVerifyLink = GetComponent<HyperlinkText>(trVerify, "Code/Tips_Help/Text");
+            _btnVerify = GetComponent<XButton>(trVerify, "Buttons/Verify");
+            _btnVerify.onClick.AddListener(() => OnClickVerify().Forget());
+            _btnReturn = GetComponent<XButton>(trVerify, "Buttons/Return");
+            _btnReturn.onClick.AddListener(OnClickReturn);
             _goList = GetGo(content, "ListUI");
             var trList = _goList.transform;
             _listHome = trList.Find("HomeList/List");
@@ -54,9 +71,8 @@ namespace XiaoZhi.Unity
 
         protected override async UniTask OnShow(BaseUIData data = null)
         {
-            _thingMIoT = Context.ThingManager.GetThing<ThingMiot>();
-            _btnLogin.interactable = true;
-            _btnRefresh.interactable = true;
+            _thingMIoT = Context.ThingManager.GetThing<ThingMIoT>();
+            _verifyUrl = null;
             OnLoginStateUpdate();
             await UniTask.CompletedTask;
         }
@@ -64,32 +80,33 @@ namespace XiaoZhi.Unity
         private void OnLoginStateUpdate()
         {
             var isLogin = _thingMIoT.IsLogin;
-            _goLogin.SetActive(!isLogin);
+            _goLogin.SetActive(!isLogin && string.IsNullOrEmpty(_verifyUrl));
+            _goVerify.SetActive(!isLogin && !string.IsNullOrEmpty(_verifyUrl));
             _goList.SetActive(isLogin);
-            if (!isLogin) UpdateLoginUI();
-            else UpdateListUI();
+            if (isLogin) UpdateListUI();
+            else if (string.IsNullOrEmpty(_verifyUrl)) UpdateLoginUI();
+            else UpdateVerifyUI();
         }
 
         private void UpdateLoginUI()
         {
-            UpdateUserId();
-            UpdatePassToken();
+            _inputUserId.text = _thingMIoT.UserId;
+            _inputPassword.text = "";
             _btnLogin.interactable = true;
+        }
+
+        private void UpdateVerifyUI()
+        {
+            _inputVerifyCode.text = "";
+            _inputVerifyLink.OnClickLink.RemoveAllListeners();
+            _inputVerifyLink.OnClickLink.AddListener(_ => Application.OpenURL(_verifyUrl));
+            _btnVerify.interactable = true;
         }
 
         private void UpdateListUI()
         {
             UpdateHomes();
-        }
-
-        private void UpdateUserId()
-        {
-            _inputUserId.text = _thingMIoT.UserId;
-        }
-
-        private void UpdatePassToken()
-        {
-            _inputPassToken.text = _thingMIoT.PassToken;
+            _btnRefresh.interactable = true;
         }
 
         private void UpdateHomes()
@@ -106,7 +123,7 @@ namespace XiaoZhi.Unity
                 toggle.isOn = i == _homeIndex;
                 AddUniqueListener(toggle, i, OnToggleHome);
             }
-            
+
             SelectHome(_homeIndex, true);
         }
 
@@ -136,7 +153,7 @@ namespace XiaoZhi.Unity
                 toggle.isOn = i == _roomIndex;
                 AddUniqueListener(toggle, i, OnToggleRoom);
             }
-            
+
             SelectRoom(_roomIndex, true);
         }
 
@@ -191,22 +208,63 @@ namespace XiaoZhi.Unity
                 return;
             }
 
-            var passToken = _inputPassToken.text;
+            var passToken = _inputPassword.text;
             if (string.IsNullOrEmpty(passToken))
             {
-                await Context.UIManager.ShowNotificationUI((_inputPassToken.placeholder as TMP_Text)!.text);
+                await Context.UIManager.ShowNotificationUI((_inputPassword.placeholder as TMP_Text)!.text);
                 return;
             }
 
             _btnLogin.interactable = false;
-            var success = await _thingMIoT.Login("cn", _inputUserId.text, _inputPassToken.text);
-            await ShowNotificationUI(Lang.GetRef(success ? "MIoT_LoginSuccess" : "MIoT_LoginFailed"));
-            _btnLogin.interactable = true;
+            var (success, error) = await _thingMIoT.Login(userId, passToken);
             if (success)
+            {
+                await ShowNotificationUI(Lang.GetRef("MIoT_LoginSuccess"));
+            }
+            else if (error.StartsWith("http"))
+            {
+                _verifyUrl = error;
+            }
+            else
+            {
+                await ShowNotificationUI(error);
+            }
+
+            _btnLogin.interactable = true;
+            if (_thingMIoT.IsLogin)
             {
                 await _thingMIoT.LoadDevices();
                 OnLoginStateUpdate();
             }
+            else if (!string.IsNullOrEmpty(_verifyUrl))
+            {
+                OnLoginStateUpdate();
+            }
+        }
+
+        private async UniTask OnClickVerify()
+        {
+            var code = _inputVerifyCode.text;
+            if (string.IsNullOrEmpty(code))
+            {
+                await Context.UIManager.ShowNotificationUI((_inputVerifyCode.placeholder as TMP_Text)!.text);
+                return;
+            }
+
+            var (success, error) = await _thingMIoT.Verify(_verifyUrl, code);
+            if (!success)
+            {
+                await ShowNotificationUI(error);
+                return;
+            }
+
+            await _thingMIoT.Login(null, null);
+        }
+
+        private void OnClickReturn()
+        {
+            _verifyUrl = null;
+            OnLoginStateUpdate();
         }
 
         private void OnClickLogout()
@@ -227,6 +285,7 @@ namespace XiaoZhi.Unity
             await _thingMIoT.LoadDevices();
             UpdateListUI();
             _btnRefresh.interactable = true;
+            await ShowNotificationUI(Lang.GetRef("MIoT_RefreshSuccess"));
         }
     }
 }

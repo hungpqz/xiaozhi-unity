@@ -14,6 +14,7 @@ namespace XiaoZhi.Unity
         private RectTransform _trSet;
         private Button _btnSet;
         private GameObject _goLoading;
+        private RectTransform _trStatus;
         private TextMeshProUGUI _textStatus;
         private LocalizeStringEvent _localizeStatus;
 
@@ -39,7 +40,8 @@ namespace XiaoZhi.Unity
             _trSet = GetComponent<RectTransform>(Tr, "BtnSet");
             _trSet.GetComponent<XButton>().onClick.AddListener(() => { ShowModuleUI<SettingsUI>().Forget(); });
             GetComponent<XButton>(Tr, "ClickRole").onClick.AddListener(() => Context.App.ToggleChatState().Forget());
-            _textStatus = GetComponent<TextMeshProUGUI>(Tr, "Status/Text");
+            _trStatus = GetComponent<RectTransform>(Tr, "Status");
+            _textStatus = GetComponent<TextMeshProUGUI>(_trStatus, "Text");
             _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
         }
 
@@ -126,19 +128,23 @@ namespace XiaoZhi.Unity
         private void UpdateCompVisible(bool visible, bool instant = false)
         {
             var trSetPosY = visible ? -100 : 100;
+            var trStatusPosY = visible? 45 : -145;
             if (instant)
             {
                 _trSet.SetAnchorPosY(trSetPosY);
+                _trStatus.SetAnchorPosY(trStatusPosY);
             }
             else
             {
                 _trSet.DOAnchorPosY(trSetPosY, AnimationDuration).SetEase(Ease.InOutSine);
+                _trStatus.DOAnchorPosY(trStatusPosY, AnimationDuration).SetEase(Ease.InOutSine);
             }
         }
 
         private void KillCompVisibleAnim()
         {
             _trSet.DOKill();
+            _trStatus.DOKill();
         }
     }
 }
