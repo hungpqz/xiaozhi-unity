@@ -45,7 +45,9 @@ namespace XiaoZhi.Unity
         {
             var parent = ui.Tr.parent.transform;
             if (Tr.parent != parent) Tr.SetParent(parent, false);
-            Tr.SetSiblingIndex(ui.Tr.GetSiblingIndex() - 1);
+            var index = ui.Tr.GetSiblingIndex() - 1;
+            if (index < 0) Tr.SetAsFirstSibling();
+            else Tr.SetSiblingIndex(index);
         }
     }
 }

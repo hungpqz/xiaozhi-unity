@@ -15,18 +15,20 @@ namespace XiaoZhi.Unity
     public class BaseUI : IUIService
     {
         public const float AnimationDuration = 0.25f;
-        
+
         public GameObject Go { get; private set; }
 
         public RectTransform Tr { get; private set; }
 
         public bool IsVisible { get; private set; }
-        
+
         public UILayer Layer { get; set; }
 
         private IUIService _uiService;
 
-        private readonly Dictionary<long, UnityAction<bool>> _toggleListeners = new();
+        private readonly Dictionary<long, UnityAction> _uniqueListeners = new();
+
+        private readonly Dictionary<long, UnityAction<bool>> _boolUniqueListeners = new();
 
         public void RegisterUIService(IUIService uiService)
         {
@@ -81,7 +83,6 @@ namespace XiaoZhi.Unity
 
         protected virtual void OnDestroy()
         {
-            
         }
 
         protected virtual async UniTask OnShow(BaseUIData data = null)
@@ -131,20 +132,20 @@ namespace XiaoZhi.Unity
         {
             return !tr ? null : GetComponent<T>(tr.Find(path));
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected T GetComponent<T>(Transform tr) where T : Component
         {
             return !tr ? null : tr.GetComponent<T>();
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected T GetComponent<T>(Component comp, string path) where T : Component
         {
             var tr = comp?.transform;
             return GetComponent<T>(tr, path);
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected T GetComponent<T>(Component comp) where T : Component
         {
@@ -162,9 +163,10 @@ namespace XiaoZhi.Unity
         protected void AddUniqueListener(Toggle toggle, int index, Action<Toggle, int, bool> action, int id = 0)
         {
             var uniqueId = BuildUniqueId(toggle, id);
-            if (_toggleListeners.ContainsKey(uniqueId)) return;
+            if (_boolUniqueListeners.TryGetValue(uniqueId, out var listener))
+                toggle.onValueChanged.RemoveListener(listener);
             UnityAction<bool> unityAction = value => action(toggle, index, value);
-            _toggleListeners.Add(uniqueId, unityAction);
+            _boolUniqueListeners[uniqueId] = unityAction;
             toggle.onValueChanged.AddListener(unityAction);
         }
 
@@ -172,9 +174,29 @@ namespace XiaoZhi.Unity
         protected void RemoveUniqueListener(Toggle toggle, int id = 0)
         {
             var uniqueId = BuildUniqueId(toggle, id);
-            if (!_toggleListeners.TryGetValue(uniqueId, out var listener)) return;
+            if (!_boolUniqueListeners.TryGetValue(uniqueId, out var listener)) return;
             toggle.onValueChanged.RemoveListener(listener);
-            _toggleListeners.Remove(uniqueId);
+            _boolUniqueListeners.Remove(uniqueId);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void AddUniqueListener(Button button, Action action, int id = 0)
+        {
+            var uniqueId = BuildUniqueId(button, id);
+            if (_uniqueListeners.TryGetValue(uniqueId, out var listener))
+                button.onClick.RemoveListener(listener);
+            UnityAction unityAction = () => action();
+            _uniqueListeners[uniqueId] = unityAction;
+            button.onClick.AddListener(unityAction);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void RemoveUniqueListener(Button button, int id = 0)
+        {
+            var uniqueId = BuildUniqueId(button, id);
+            if (!_uniqueListeners.TryGetValue(uniqueId, out var listener)) return;
+            button.onClick.RemoveListener(listener);
+            _uniqueListeners.Remove(uniqueId);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -234,7 +256,7 @@ namespace XiaoZhi.Unity
         {
             await _uiService.ShowNotificationUI(message, duration);
         }
-        
+
         public async UniTask ShowNotificationUI(LocalizedString message, float duration = 3)
         {
             await _uiService.ShowNotificationUI(message, duration);
@@ -268,6 +290,5 @@ namespace XiaoZhi.Unity
 
     public abstract class BaseUIData
     {
-        
     }
 }

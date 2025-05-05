@@ -6,9 +6,13 @@
   <img src="Docs/Emoji.gif" width="360" />
   <img src="Docs/VRM.gif" width="360" />
 </div>
+<div style="display: flex; justify-content: space-between;">
+  <img src="Docs/MIoT.png" width="360" />
+</div>
 
 ## 主要功能
 
+- 集成MIoT，语音控制米家设备
 - 小智语音聊天
 - 表现模式：
   - Emoji表情
@@ -51,3 +55,5 @@
 - [uLipSync](https://github.com/hecomi/uLipSync)
 - [UniVRM](https://github.com/vrm-c/UniVRM)
 - [模型资源](https://hub.vroid.com/en/characters/1245908975744054638/models/2140572620978697176)
+- [MiService](https://github.com/Yonsm/MiService)
+- [hass-xiaomi-miot](https://github.com/al-one/hass-xiaomi-miot)

@@ -231,7 +231,7 @@ namespace XiaoZhi.Unity
         {
             if (!string.IsNullOrEmpty(_currentPopup))
             {
-                await CloseUI(FindUI(_currentPopup));
+                await CloseUI(FindUI(_currentPopup)); 
                 return true;
             }
 

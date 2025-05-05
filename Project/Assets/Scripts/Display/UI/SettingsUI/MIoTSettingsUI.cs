@@ -175,15 +175,19 @@ namespace XiaoZhi.Unity
             Tools.EnsureChildren(_listDevice, _devices.Length);
             for (var i = 0; i < _devices.Length; i++)
             {
+                var device = _devices[i];
                 var go = _listDevice.GetChild(i).gameObject;
                 go.SetActive(true);
-                GetComponent<TMP_Text>(go.transform, "Text").text = _devices[i].Name;
-                GetComponent<XSpriteChanger>(go.transform, "Icon").ChangeTo(_devices[i].IsOnline ? 0 : 1);
+                GetComponent<TMP_Text>(go.transform, "Text").text = device.Name;
+                GetComponent<XSpriteChanger>(go.transform, "Icon").ChangeTo(device.IsOnline ? 0 : 1);
                 var toggle = go.GetComponent<XToggle>();
                 RemoveUniqueListener(toggle);
-                toggle.isOn = _devices[i].IsOnline && _thingMIoT.IsWatchDevice(_devices[i].Did);
-                toggle.interactable = _devices[i].IsOnline;
+                toggle.isOn = device.IsOnline && _thingMIoT.IsWatchDevice(device.Did);
+                toggle.interactable = device.IsOnline;
                 AddUniqueListener(toggle, i, OnToggleDevice);
+                var btnInfo = GetComponent<XButton>(go.transform, "BtnInfo");
+                AddUniqueListener(btnInfo,
+                    () => { ShowPopupUI<MIoTDeviceInfo>(new MIoTDeviceInfo.Data { Device = device }).Forget(); });
             }
         }
 

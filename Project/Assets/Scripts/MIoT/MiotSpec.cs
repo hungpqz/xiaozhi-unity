@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Networking;
+using UnityEngine.Rendering;
 
 namespace XiaoZhi.Unity.MIoT
 {
@@ -252,8 +253,8 @@ namespace XiaoZhi.Unity.MIoT
         protected static string GetSpecLangKey(long siid, long piid = 0, long aiid = 0, long viid = -1)
         {
             var key = $"service:{siid:D3}";
-            if (piid > 0) return $"{key}:property:{piid:D3}";
             if (aiid > 0) return $"{key}:action:{aiid:D3}";
+            if (piid > 0) key = $"{key}:property:{piid:D3}";
             return viid >= 0 ? $"{key}:valuelist:{viid:D3}" : key;
         }
 
@@ -368,6 +369,11 @@ namespace XiaoZhi.Unity.MIoT
         public virtual string FriendlyName => $"{Name}";
 
         public virtual string FriendlyDesc => GetTranslation(!string.IsNullOrEmpty(Description) ? Description : Name);
+
+        public override string ToString()
+        {
+            return $"iid: {Iid}\nname: {Name}\ndescription: {FriendlyDesc}\n";
+        }
     }
 
     public class MiotProperty : MiotObject
@@ -480,6 +486,20 @@ namespace XiaoZhi.Unity.MIoT
         }
 
         public virtual string ExtendDesc => JsonConvert.SerializeObject(new { name = FriendlyDesc, format = Format });
+
+        public override string ToString()
+        {
+            var list = ListPool<string>.Get();
+            if (Access.HasFlag(AccessType.Read)) list.Add("read");
+            if (Access.HasFlag(AccessType.Write)) list.Add("write");
+            if (Access.HasFlag(AccessType.Notify)) list.Add("notify");
+            var access = list.Count > 0 ? string.Join(", ", list) : null;
+            ListPool<string>.Release(list);
+            return base.ToString() +
+                   $"format: {Format}\n" +
+                   (!string.IsNullOrEmpty(Unit) ? $"unit: {Unit}\n" : "") +
+                   (!string.IsNullOrEmpty(access) ? $"access: {access}\n" : "");
+        }
     }
 
     public class MiotProperty<T> : MiotProperty where T : IComparable, IComparable<T>, IEquatable<T>
@@ -522,6 +542,12 @@ namespace XiaoZhi.Unity.MIoT
                     step = Step
                 }
             });
+
+        public override string ToString()
+        {
+            return base.ToString() +
+                   $"value-range: min({Min}), max({Max}), step({Step})\n";
+        }
     }
 
     public class EnumMiotProperty<T> : MiotProperty where T : IEquatable<T>
@@ -564,6 +590,18 @@ namespace XiaoZhi.Unity.MIoT
                     };
                 })
             });
+
+        public override string ToString()
+        {
+            var list = Enums.Select((i, index) =>
+            {
+                var desc = GetSpecTranslation(index);
+                if (string.IsNullOrEmpty(desc)) desc = i.Item2;
+                return $"{desc}({i.Item1})";
+            });
+            return base.ToString() +
+                   $"value-list: {string.Join(", ", list)}\n";
+        }
     }
 
     public class MiotAction : MiotObject
@@ -616,6 +654,13 @@ namespace XiaoZhi.Unity.MIoT
                 var pde = GetSpecTranslation();
                 return !string.IsNullOrEmpty(pde) ? pde : sde;
             }
+        }
+
+        public override string ToString()
+        {
+            return base.ToString() +
+                   $"in: ({string.Join(", ", In.Select(i => i.Iid))})\n" +
+                   $"out: ({string.Join(", ", Out.Select(i => i.Iid))})\n";
         }
     }
 
@@ -673,6 +718,15 @@ namespace XiaoZhi.Unity.MIoT
                 return !string.IsNullOrEmpty(pde) ? pde : sde;
             }
         }
+
+        public override string ToString()
+        {
+            return $"<b>{Iid}: {FriendlyDesc}</b>\n" +
+                   (Properties.Length > 0
+                       ? $"<b>properties</b>:\n{string.Join("", Properties.Select(i => i.ToString()))}"
+                       : "") +
+                   (Actions.Length > 0 ? $"<b>actions</b>:\n{string.Join("", Actions.Select(i => i.ToString()))}" : "");
+        }
     }
 
     public class MiotSpec : MiotObject
@@ -714,6 +768,13 @@ namespace XiaoZhi.Unity.MIoT
             if (lang == null) return string.Empty;
             var key = GetSpecLangKey(siid, piid, aiid, viid);
             return lang.Map.GetValueOrDefault(key) ?? "";
+        }
+
+        public override string ToString()
+        {
+            return "<b>spec:</b>\n" +
+                   base.ToString() +
+                   $"{string.Join("", Services.Select(i => i.ToString()))}";
         }
     }
 
@@ -766,6 +827,14 @@ namespace XiaoZhi.Unity.MIoT
             OrderTime = data.Value<int>("order_time");
             SplitParentId = data["extra"]?["split"]?.Value<string>("parentId");
             SplitModuleId = data["extra"]?["split"]?.Value<string>("moduleId");
+        }
+
+        public override string ToString()
+        {
+            return $"did: {Did}\n" +
+                   $"name: {Name}\n" +
+                   $"model: {Model}\n" +
+                   $"type: {Type}\n";
         }
     }
 
