@@ -96,7 +96,7 @@ namespace XiaoZhi.Unity
                 case FileType.Addressable:
                     var asset1 = Addressables.LoadAssetAsync<TextAsset>(relativePath).WaitForCompletion();
                     var text1 = asset1?.text;
-                    Resources.UnloadAsset(asset1);
+                    Addressables.Release(asset1);
                     return text1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -133,7 +133,7 @@ namespace XiaoZhi.Unity
                 case FileType.Addressable:
                     var asset1 = await Addressables.LoadAssetAsync<TextAsset>(relativePath);
                     var text1 = asset1?.text;
-                    Resources.UnloadAsset(asset1);
+                    Addressables.Release(asset1);
                     return text1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -171,7 +171,7 @@ namespace XiaoZhi.Unity
                 case FileType.Addressable:
                     var asset1 = Addressables.LoadAssetAsync<TextAsset>(relativePath).WaitForCompletion();
                     var bytes1 = asset1?.bytes;
-                    Resources.UnloadAsset(asset1);
+                    Addressables.Release(asset1);
                     return bytes1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -208,7 +208,7 @@ namespace XiaoZhi.Unity
                 case FileType.Addressable:
                     var asset1 = await Addressables.LoadAssetAsync<TextAsset>(relativePath);
                     var bytes1 = asset1?.bytes;
-                    Resources.UnloadAsset(asset1);
+                    Addressables.Release(asset1);
                     return bytes1;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
@@ -219,12 +219,14 @@ namespace XiaoZhi.Unity
         /// 将StreamingAssets目录下的资源复制到PersistentDataPath
         /// </summary>
         /// <param name="relativePath">相对路径</param>
+        /// <param name="force">是否强制复制</param>
         /// <param name="cancellationToken"></param>
         /// <returns>复制是否成功</returns>
-        public static async UniTask<bool> CopyStreamingAssetsToDataPath(string relativePath,
+        public static async UniTask<bool> CopyStreamingAssetsToDataPath(string relativePath, bool force = false,
             CancellationToken cancellationToken = default)
         {
             var targetPath = GetFullPath(FileType.DataPath, relativePath);
+            if (!force && FileExists(FileType.DataPath, targetPath)) return true;
             EnsureDirectoryExists(targetPath);
             var request =
                 UnityEngine.Networking.UnityWebRequest.Get(GetFullPath(FileType.StreamingAssets, relativePath));

@@ -115,17 +115,6 @@ namespace XiaoZhi.Unity
             OnOutputVolumeUpdate?.Invoke(_outputVolume);
         }
 
-        public bool IsFirstEnter()
-        {
-            return !HasKey("i_have_played_with_xiaozhi");
-        }
-
-        public void MarkAsNotFirstEnter()
-        {
-            SetInt("i_have_played_with_xiaozhi", 1);
-            Save();
-        }
-
         public string GetWebSocketUrl()
         {
             _webSocketUrl ??= GetString("web_socket_url", AppPresets.Instance.WebSocketUrl);

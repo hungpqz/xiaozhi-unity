@@ -17,6 +17,8 @@ namespace XiaoZhi.Unity
         {
             _buildPresets = buildPresets;
             _buildTarget = buildTarget;
+            if (!EditorUserBuildSettings.SwitchActiveBuildTarget(BuildPipeline.GetBuildTargetGroup(_buildTarget),
+                    _buildTarget)) return null;
             if (_buildTarget == BuildTarget.Android) SetAndroidKeystore();
             var buildOptions = BuildOptions.None;
             if (buildPresets.Debug)

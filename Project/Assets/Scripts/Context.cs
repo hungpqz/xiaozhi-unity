@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -34,6 +35,7 @@ namespace XiaoZhi.Unity
             App.Dispose();
             DOTween.KillAll();
             AppUtility.Clear();
+            GC.Collect();
             Resources.UnloadUnusedAssets();
         }
 
@@ -48,7 +50,7 @@ namespace XiaoZhi.Unity
             Restarting = true;
             await UniTask.Delay(delayMs);
             Dispose();
-            await UniTask.Delay(1000);
+            await UniTask.Delay(250);
             Init();
             Start();
             Restarting = false;

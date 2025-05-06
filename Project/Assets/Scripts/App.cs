@@ -162,7 +162,6 @@ namespace XiaoZhi.Unity
 
         private async UniTask PrepareResource(CancellationToken cancellationToken)
         {
-            if (!AppSettings.Instance.IsFirstEnter()) return;
 #if UNITY_ANDROID && !UNITY_EDITOR
             var streamingAssets = new[]
             {
@@ -180,9 +179,8 @@ namespace XiaoZhi.Unity
             };
 #endif
             await UniTask.WhenAll(streamingAssets.Select(i =>
-                FileUtility.CopyStreamingAssetsToDataPath(i, cancellationToken)));
+                FileUtility.CopyStreamingAssetsToDataPath(i, false, cancellationToken)));
             await UniTask.SwitchToMainThread(cancellationToken);
-            AppSettings.Instance.MarkAsNotFirstEnter();
         }
 
         private void SetDeviceState(DeviceState state)
