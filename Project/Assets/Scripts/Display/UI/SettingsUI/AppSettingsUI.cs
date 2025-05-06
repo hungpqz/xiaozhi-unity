@@ -22,7 +22,6 @@ namespace XiaoZhi.Unity
         private Transform _listBreakMode;
         private GameObject _goKeywords;
         private TMP_InputField _inputKeywords;
-        private HyperlinkText _inputKeywordsLink;
         private XSlider _sliderVolume;
         private XButton _btnTheme;
         private XRadio _radioAutoHide;

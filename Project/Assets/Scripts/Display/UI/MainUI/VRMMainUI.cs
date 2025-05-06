@@ -17,7 +17,6 @@ namespace XiaoZhi.Unity
         private RectTransform _trStatus;
         private TextMeshProUGUI _textStatus;
         private LocalizeStringEvent _localizeStatus;
-
         private CancellationTokenSource _autoHideCts;
 
         public override string GetResourcePath()
@@ -43,6 +42,7 @@ namespace XiaoZhi.Unity
             _trStatus = GetComponent<RectTransform>(Tr, "Status");
             _textStatus = GetComponent<TextMeshProUGUI>(_trStatus, "Text");
             _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
+            GetComponent<HyperlinkText>(_textStatus, "").OnClickLink.AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
@@ -84,7 +84,7 @@ namespace XiaoZhi.Unity
         
         public void SetActivateLink(string content)
         {
-            SetStatus($"<u><link=\"{AppPresets.Instance.ActivationURL}\">{content}</link></u>");
+            SetStatus($"<u><link=\"0\">{content}</link></u>");
         }
 
         private void OnDeviceStateUpdate(DeviceState state)
@@ -128,23 +128,19 @@ namespace XiaoZhi.Unity
         private void UpdateCompVisible(bool visible, bool instant = false)
         {
             var trSetPosY = visible ? -100 : 100;
-            var trStatusPosY = visible? 45 : -145;
             if (instant)
             {
                 _trSet.SetAnchorPosY(trSetPosY);
-                _trStatus.SetAnchorPosY(trStatusPosY);
             }
             else
             {
                 _trSet.DOAnchorPosY(trSetPosY, AnimationDuration).SetEase(Ease.InOutSine);
-                _trStatus.DOAnchorPosY(trStatusPosY, AnimationDuration).SetEase(Ease.InOutSine);
             }
         }
 
         private void KillCompVisibleAnim()
         {
             _trSet.DOKill();
-            _trStatus.DOKill();
         }
     }
 }

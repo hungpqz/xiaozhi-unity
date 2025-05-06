@@ -26,7 +26,7 @@ MonoBehaviour:
   m_Metadata:
     m_Items:
     - rid: 8193056261008261146
-    - rid: 8193056395712528387
+    - rid: 6566248393832398848
   m_ProjectLocaleIdentifier:
     m_Code: zh-Hans
   m_PreloadBehavior: 1
@@ -36,6 +36,18 @@ MonoBehaviour:
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
+    - rid: 6566248393832398848
+      type: {class: AppInfo, ns: UnityEngine.Localization.Platform.Android, asm: Unity.Localization}
+      data:
+        m_DisplayName:
+          m_TableReference:
+            m_TableCollectionName: GUID:a7b2e24c04810a64480b1c3fd755abb3
+          m_TableEntryReference:
+            m_KeyId: 2160154335207424
+            m_Key: 
+          m_FallbackState: 0
+          m_WaitForCompletion: 0
+          m_LocalVariables: []
     - rid: 8193056261008261120
       type: {class: CommandLineLocaleSelector, ns: UnityEngine.Localization.Settings,
         asm: Unity.Localization}
@@ -291,15 +303,3 @@ MonoBehaviour:
         asm: Unity.Localization}
       data:
         m_PlayerPreferenceKey: selected-locale
-    - rid: 8193056395712528387
-      type: {class: AppInfo, ns: UnityEngine.Localization.Platform.Android, asm: Unity.Localization}
-      data:
-        m_DisplayName:
-          m_TableReference:
-            m_TableCollectionName: GUID:a7b2e24c04810a64480b1c3fd755abb3
-          m_TableEntryReference:
-            m_KeyId: 2160154335207424
-            m_Key: 
-          m_FallbackState: 0
-          m_WaitForCompletion: 0
-          m_LocalVariables: []

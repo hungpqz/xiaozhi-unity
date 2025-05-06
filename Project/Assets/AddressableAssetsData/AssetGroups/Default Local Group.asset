@@ -77,6 +77,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a7c69ad5873ec544380c19896353eaf9
+    m_Address: Assets/Res/UI/SettingsUI/MIoTDeviceInfo.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c8db7ec5a466bbd4991ad3399b64c66c
     m_Address: Assets/Settings/AppPresets.asset
     m_ReadOnly: 0

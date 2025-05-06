@@ -262,7 +262,21 @@ namespace XiaoZhi.Unity
                 return;
             }
 
-            await _thingMIoT.Login(null, null);
+            (success, error) = await _thingMIoT.Login(null, null);
+            if (success) 
+            {
+                await ShowNotificationUI(Lang.GetRef("MIoT_LoginSuccess"));
+            }
+            else 
+            {
+                await ShowNotificationUI(error);
+            }
+
+            if (_thingMIoT.IsLogin)
+            {
+                await _thingMIoT.LoadDevices();
+                OnLoginStateUpdate();
+            }
         }
 
         private void OnClickReturn()

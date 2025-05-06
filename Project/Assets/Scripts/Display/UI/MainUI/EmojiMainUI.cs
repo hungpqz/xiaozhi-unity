@@ -67,6 +67,7 @@ namespace XiaoZhi.Unity
             _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
             _textChat = Tr.Find("Chat").GetComponent<TextMeshProUGUI>();
             _localizeChat = GetComponent<LocalizeStringEvent>(_textChat, "");
+            GetComponent<HyperlinkText>(_textChat, "").OnClickLink.AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
             _trEmotion = Tr.Find("Emotion");
             _textEmotion = _trEmotion.GetComponent<TextMeshProUGUI>();
             GetComponent<XButton>(_textEmotion).onClick.AddListener(() => Context.App.ToggleChatState().Forget());
@@ -142,7 +143,7 @@ namespace XiaoZhi.Unity
             _localizeChat.StringReference = null;
             if (_textEmotion.text == "🤖")
             {
-                _textChat.text = $"<u><link=\"{AppPresets.Instance.ActivationURL}\">{content}</link></u>";
+                _textChat.text = $"<u><link=\"0\">{content}</link></u>";
                 return;
             }
 
