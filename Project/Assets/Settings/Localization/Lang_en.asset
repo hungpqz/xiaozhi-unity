@@ -306,6 +306,10 @@ MonoBehaviour:
     m_Localized: Refresh Successful
     m_Metadata:
       m_Items: []
+  - m_Id: 8675432594366464
+    m_Localized: Connection was closed
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

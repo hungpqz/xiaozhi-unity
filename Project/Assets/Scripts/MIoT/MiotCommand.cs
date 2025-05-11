@@ -78,10 +78,13 @@ namespace XiaoZhi.Unity.MIoT
             
             var map = DictionaryPool<string, string>.Get();
             var list = JObject.Parse(data).Value<JArray>("result");
-            foreach (var i in list)
+            if (list != null)
             {
-                var propKey = $"{i.Value<string>("did")}.{i.Value<string>("siid")}.{i.Value<string>("piid")}";
-                map[propKey] = i.Value<string>("value");
+                foreach (var i in list)
+                {
+                    var propKey = $"{i.Value<string>("did")}.{i.Value<string>("siid")}.{i.Value<string>("piid")}";
+                    map[propKey] = i.Value<string>("value");
+                }
             }
             
             var result = iids.Select(i => map[$"{i.Item1}.{i.Item2}.{i.Item3}"]).ToArray();

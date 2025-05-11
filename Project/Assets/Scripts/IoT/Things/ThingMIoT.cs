@@ -225,6 +225,7 @@ namespace XiaoZhi.Unity.IoT
 
         private async UniTask RegisterGetters(List<(MiotDevice, MiotProperty)> props)
         {
+            if (props.Count == 0) return;
             var values = await _command.GetProps(props.Select(i => (i.Item1.Did, i.Item2.Service.Iid, i.Item2.Iid)));
             for (var index = 0; index < props.Count; index++)
             {
