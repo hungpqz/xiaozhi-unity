@@ -3,7 +3,6 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine;
 
 namespace XiaoZhi.Unity
 {
@@ -38,7 +37,7 @@ namespace XiaoZhi.Unity
         public event OnNetworkErrorOccurred OnNetworkError;
 
         public int ServerSampleRate { get; protected set; }
-        public int SessionId { get; protected set; }
+        public string SessionId { get; protected set; }
 
         public abstract void Start();
         public abstract void Dispose();

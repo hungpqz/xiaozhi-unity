@@ -180,6 +180,7 @@ namespace XiaoZhi.Unity
 
             var audioParams = message["audio_params"];
             if (audioParams != null) ServerSampleRate = audioParams["sample_rate"]?.Value<int>() ?? 16000;
+            SessionId = message.Value<string>("session_id");
             _isAudioChannelOpen = true;
             InvokeOnChannelOpened();
             _helloTaskCompletionSource.SetResult(true);
