@@ -144,16 +144,14 @@ namespace XiaoZhi.Unity.IoT
 
         public void GetDescriptorJson(JsonWriter writer)
         {
-            writer.WriteStartArray();
+            writer.WriteStartObject();
             foreach (var parameter in _parameters.Values)
             {
-                writer.WriteStartObject();
                 writer.WritePropertyName(parameter.Name);
                 parameter.GetDescriptorJson(writer);
-                writer.WriteEndObject();
             }
 
-            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
 
         public IEnumerator<IParameter> GetEnumerator()
@@ -254,30 +252,26 @@ namespace XiaoZhi.Unity.IoT
 
         public void GetDescriptorJson(JsonWriter writer)
         {
-            writer.WriteStartArray();
+            writer.WriteStartObject();
             foreach (var property in _properties.Values)
             {
-                writer.WriteStartObject();
                 writer.WritePropertyName(property.Name);
                 property.GetDescriptorJson(writer);
-                writer.WriteEndObject();
             }
 
-            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
 
         public void GetStateJson(JsonWriter writer)
         {
-            writer.WriteStartArray();
+            writer.WriteStartObject();
             foreach (var property in _properties.Values)
             {
-                writer.WriteStartObject();
                 writer.WritePropertyName(property.Name);
                 property.GetStateJson(writer);
-                writer.WriteEndObject();
             }
 
-            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
     }
 
@@ -349,14 +343,14 @@ namespace XiaoZhi.Unity.IoT
 
         public void GetDescriptorJson(JsonWriter writer)
         {
-            writer.WriteStartArray();
+            writer.WriteStartObject();
             foreach (var method in _methods.Values)
             {
-                writer.WriteStartObject();
                 writer.WritePropertyName(method.Name);
                 method.GetDescriptorJson(writer);
-                writer.WriteEndObject();
             }
+
+            writer.WriteEndObject();
         }
     }
 
