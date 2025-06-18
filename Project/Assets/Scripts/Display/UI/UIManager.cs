@@ -12,6 +12,7 @@ namespace XiaoZhi.Unity
 {
     public class UIManager : IUIService
     {
+        private const string CameraName = "MainCamera";
         private Dictionary<UILayer, GameObject> _canvasMap;
         private readonly Stack<SceneStackData> _stack = new();
         private readonly Queue<Tuple<Type, NotificationUIData>> _notificationQueue = new();
@@ -23,7 +24,7 @@ namespace XiaoZhi.Unity
         public UIManager()
         {
             _canvasMap = Enum.GetNames(typeof(UILayer))
-                .ToDictionary(Enum.Parse<UILayer>, i => GameObject.Find($"UICamera/Canvas{i}"));
+                .ToDictionary(Enum.Parse<UILayer>, i => GameObject.Find($"{CameraName}/Canvas{i}"));
         }
 
         public void Inject(Context context)

@@ -29,7 +29,7 @@ MonoBehaviour:
   _vadModelConfig: sherpa-onnx/silero_vad.onnx
   _activationURL: https://xiaozhi.me
   _vrmCharacterModels:
-  - _name: Ao with combat uniform
-    _path: Assets/Res/VRM/Ao/CombatUniform/prefab.prefab
-  - _name: Ao's Brother
-    _path: Assets/Res/VRM/Ao/Brother/prefab.prefab
+  - _name: Girl
+    _path: Assets/Res/VRM/Girl/prefab.prefab
+  - _name: Boy
+    _path: Assets/Res/VRM/Boy/prefab.prefab

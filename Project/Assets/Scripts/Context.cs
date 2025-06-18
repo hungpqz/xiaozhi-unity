@@ -27,6 +27,9 @@ namespace XiaoZhi.Unity
             App = new App();
             App.Inject(this);
             Application.runInBackground = true;
+#if !UNITY_EDITOR
+            Application.targetFrameRate = 60;
+#endif
         }
 
         public void Dispose()

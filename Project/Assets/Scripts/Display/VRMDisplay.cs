@@ -18,7 +18,9 @@ namespace XiaoZhi.Unity
         private GameObject _character;
         private uLipSync.uLipSync _lipSync;
         private ULipSyncAudioProxy _lipSyncAudioProxy;
+        private Vrm10Instance _vrmInstance;
         private FaceAnimation _faceAnim;
+        private VRMEyeBlinker _eyeBlinker;
         private CancellationTokenSource _loopCts;
         private string _emotion;
 
@@ -57,8 +59,10 @@ namespace XiaoZhi.Unity
         {
             _mainUI = await _context.UIManager.ShowSceneUI<VRMMainUI>();
             _mainCamera = Camera.main;
-            UpdateCameraColor();
-            var modelPath = AppPresets.Instance.VRMCharacterModels[AppSettings.Instance.GetVRMModel()].Path;
+            // UpdateCameraColor();
+            var models = AppPresets.Instance.VRMCharacterModels;
+            var modelIndex = Mathf.Clamp(AppSettings.Instance.GetVRMModel(), 0, models.Length - 1);
+            var modelPath = models[modelIndex].Path;
             _character = await Addressables.InstantiateAsync(modelPath);
             if (!_character)
             {
@@ -66,9 +70,11 @@ namespace XiaoZhi.Unity
                 return false;
             }
 
-            _character.GetComponent<TransformFollower>().SetFollower(_mainCamera!.transform);
+            _character.GetComponent<TransformFollower>().SetFollower(_mainCamera);
             _lipSync = _character.GetComponent<uLipSync.uLipSync>();
-            _faceAnim = new FaceAnimation(_character.GetComponent<Vrm10Instance>(), "loading");
+            _vrmInstance = _character.GetComponent<Vrm10Instance>();
+            _faceAnim = new FaceAnimation(_vrmInstance, "loading");
+            _eyeBlinker = _character.GetComponent<VRMEyeBlinker>();
             return true;
         }
 
@@ -143,13 +149,13 @@ namespace XiaoZhi.Unity
                 { "thinking", new ExpressionKey(ExpressionPreset.custom, "thinking") },
             };
 
-            private const float CrossFadeDuration = 0.5f;
+            private const float CrossFadeDuration = 0.3f;
 
             private readonly Vrm10Instance _instance;
 
             private ExpressionKey _current;
 
-            private List<CrossFader> _faders = new();
+            private readonly List<CrossFader> _faders = new();
 
             public FaceAnimation(Vrm10Instance instance, string initialExpression)
             {

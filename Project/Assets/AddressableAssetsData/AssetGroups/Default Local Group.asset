@@ -27,13 +27,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3ef66b151a374a64b7a04beb381b201d
-    m_Address: Assets/Settings/OTAPostData.json
+  - m_GUID: 322d2359206821244a865111c1e49f7d
+    m_Address: Assets/Res/VRM/Girl/prefab.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 415a1c2821865dd45ac338b0bd5ec413
-    m_Address: Assets/Res/VRM/Ao/CombatUniform/prefab.prefab
+  - m_GUID: 3ef66b151a374a64b7a04beb381b201d
+    m_Address: Assets/Settings/OTAPostData.json
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -72,11 +72,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9ab0c9952c8f9444187a67af3852c9e8
-    m_Address: Assets/Res/VRM/Ao/Brother/prefab.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a7c69ad5873ec544380c19896353eaf9
     m_Address: Assets/Res/UI/SettingsUI/MIoTDeviceInfo.prefab
     m_ReadOnly: 0
@@ -99,6 +94,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da26442f4c66f0442bfd1210ec74a733
     m_Address: Assets/Settings/ThemeSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e88d029d979a98649a89e19a530cd14a
+    m_Address: Assets/Res/VRM/Boy/prefab.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

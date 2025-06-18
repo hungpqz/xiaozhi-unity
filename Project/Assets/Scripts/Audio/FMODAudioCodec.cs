@@ -4,7 +4,6 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using FMOD;
 using FMODUnity;
-using UnityEngine;
 using Channel = FMOD.Channel;
 using Debug = UnityEngine.Debug;
 
@@ -12,6 +11,13 @@ namespace XiaoZhi.Unity
 {
     public class FMODAudioCodec : AudioCodec
     {
+        [Flags]
+        private enum PlayerPauseFlag
+        {
+            Enabled = 1,
+            Overflow = 2
+        }
+
         private const int RecorderBufferSec = 2;
         private const int InputBufferSec = 8;
         private const int PlayerBufferSec = 8;
@@ -28,7 +34,6 @@ namespace XiaoZhi.Unity
         private Channel _playerChannel;
         private int _playerLength;
         private int _writePosition;
-        private float _playEndTime;
         private Memory<short> _shortBuffer1;
         private Memory<short> _shortBuffer2;
         private DSP _fftDsp;
@@ -40,6 +45,8 @@ namespace XiaoZhi.Unity
 
         private FMODAudioProcessor _aps;
         private int _apsCapturePos;
+
+        private PlayerPauseFlag _playerPauseFlag;
 
         public FMODAudioCodec(int inputSampleRate, int inputChannels, int outputSampleRate, int outputChannels)
         {
@@ -104,56 +111,58 @@ namespace XiaoZhi.Unity
         private void DetectIfPlayToEnd()
         {
             if (!outputEnabled) return;
-            _playerChannel.getMute(out var mute);
-            if (mute) return;
-            var nowTime = Time.time;
-            if (nowTime >= _playEndTime)
+            _playerChannel.getPaused(out var paused);
+            if (paused) return;
+            _playerChannel.getPosition(out var pos, TIMEUNIT.PCM);
+            var playerPos = (int)pos;
+            if (playerPos >= _writePosition &&
+                playerPos - _writePosition <= _playerLength / 2)
             {
+                SetPlayerPause(PlayerPauseFlag.Overflow, true);
                 FMODHelper.ClearPCM16(_player, 0, _playerLength);
-                _playerChannel.setMute(true);
-            }
-            else if (_playEndTime - nowTime < Time.deltaTime)
-            {
-                FMODHelper.ClearPCM16(_player, _writePosition, (int)(Time.deltaTime * 2 * outputSampleRate));
             }
         }
 
         private void ProcessAudio()
         {
-            if (!outputEnabled || !_isRecording) return;
+            if (!_isRecording || !inputEnabled) return;
             var inputFrameSize = inputSampleRate / 100 * inputChannels;
             _system.getRecordPosition(_recorderId, out var pos);
             var recorderPos = (int)pos;
             var numFrames = Tools.Repeat(recorderPos - _apsCapturePos, _recorderLength) / inputFrameSize;
             if (numFrames <= 0) return;
-            var outputFrameSize = outputSampleRate / 100 * outputChannels;
-            _playerChannel.getPosition(out pos, TIMEUNIT.PCM);
-            var playerPos = (int)pos;
-            var apsReversePos =
-                Tools.Repeat((playerPos / outputFrameSize - numFrames) * outputFrameSize, _playerLength);
-            var reverseSamples = numFrames * outputFrameSize;
-            var reverseSpan = Tools.EnsureMemory(ref _shortBuffer1, reverseSamples);
-            FMODHelper.ReadPCM16(_player, apsReversePos, reverseSpan);
             var captureSamples = numFrames * inputFrameSize;
             var captureSpan = Tools.EnsureMemory(ref _shortBuffer2, captureSamples);
             FMODHelper.ReadPCM16(_recorder, _apsCapturePos, captureSpan);
-            for (var i = 0; i < numFrames; i++)
+            _playerChannel.getPaused(out var playerPaused);
+            if (!playerPaused)
             {
-                var span1 = reverseSpan.Slice(i * outputFrameSize, outputFrameSize);
-                var result1 = _aps.ProcessReverseStream(span1, span1);
-                if (result1 != 0)
+                var outputFrameSize = outputSampleRate / 100 * outputChannels;
+                _playerChannel.getPosition(out pos, TIMEUNIT.PCM);
+                var playerPos = (int)pos;
+                var apsReversePos =
+                    Tools.Repeat((playerPos / outputFrameSize - numFrames) * outputFrameSize, _playerLength);
+                var reverseSamples = numFrames * outputFrameSize;
+                var reverseSpan = Tools.EnsureMemory(ref _shortBuffer1, reverseSamples);
+                FMODHelper.ReadPCM16(_player, apsReversePos, reverseSpan);
+                for (var i = 0; i < numFrames; i++)
                 {
-                    Debug.LogError($"ProcessReverseStream error: {result1}");
-                    return;
-                }
+                    var span1 = reverseSpan.Slice(i * outputFrameSize, outputFrameSize);
+                    var result1 = _aps.ProcessReverseStream(span1, span1);
+                    if (result1 != 0)
+                    {
+                        Debug.LogError($"ProcessReverseStream error: {result1}");
+                        return;
+                    }
 
-                _aps.SetStreamDelayMs(0);
-                var span2 = captureSpan.Slice(i * inputFrameSize, inputFrameSize);
-                var result2 = _aps.ProcessStream(span2, span2);
-                if (result2 != 0)
-                {
-                    Debug.LogError($"ProcessStream error: {result2}");
-                    return;
+                    _aps.SetStreamDelayMs(0);
+                    var span2 = captureSpan.Slice(i * inputFrameSize, inputFrameSize);
+                    var result2 = _aps.ProcessStream(span2, span2);
+                    if (result2 != 0)
+                    {
+                        Debug.LogError($"ProcessStream error: {result2}");
+                        return;
+                    }
                 }
             }
 
@@ -162,7 +171,7 @@ namespace XiaoZhi.Unity
         }
 
         // -------------------------------- output ------------------------------- //
-        
+
         public override bool GetOutputSpectrum(bool fft, out ReadOnlySpan<float> spectrum)
         {
             if (!outputEnabled || (fft && !_fftDsp.hasHandle()))
@@ -201,7 +210,7 @@ namespace XiaoZhi.Unity
                 Tools.PCM16Short2Float(shortSpan, floatSpan);
                 spectrum = floatSpan;
             }
-            
+
             return true;
         }
 
@@ -215,28 +224,27 @@ namespace XiaoZhi.Unity
         {
             if (outputEnabled == enable) return;
             base.EnableOutput(enable);
+            SetPlayerPause(PlayerPauseFlag.Enabled, !outputEnabled);
+        }
+        
+        private void SetPlayerPause(PlayerPauseFlag flag, bool pause)
+        {
+            if (pause) _playerPauseFlag |= flag;
+            else _playerPauseFlag &= ~flag;
             _playerChannel.getPaused(out var current);
-            if (current != !outputEnabled) _playerChannel.setPaused(!outputEnabled);
+            if (current != _playerPauseFlag > 0)
+            {
+                _playerChannel.setPaused(_playerPauseFlag > 0);
+                _playerChannel.setFrequency(_playerPauseFlag > 0 ? 0 : outputSampleRate);
+            }
         }
 
         protected override int Write(ReadOnlySpan<short> data)
         {
             if (!outputEnabled) return 0;
-            _playerChannel.getPosition(out var pos, TIMEUNIT.PCM);
-            var playerPos = (int)pos;
-            _playerChannel.getMute(out var mute);
-            if (mute)
-            {
-                _playerChannel.setMute(false);
-                _writePosition = playerPos;
-            }
-
             var writeLen = FMODHelper.WritePCM16(_player, _writePosition, data);
-            _player.getLength(out var length, TIMEUNIT.PCM);
-            var playerLen = (int)length;
-            _writePosition = Tools.Repeat(_writePosition + writeLen, playerLen);
-            var sampleDist = Tools.Repeat(_writePosition - playerPos, playerLen);
-            _playEndTime = Time.time + (float)sampleDist / outputSampleRate;
+            _writePosition = Tools.Repeat(_writePosition + writeLen, _playerLength);
+            SetPlayerPause(PlayerPauseFlag.Overflow, false);
             return writeLen;
         }
 
@@ -257,7 +265,7 @@ namespace XiaoZhi.Unity
                 out _player);
             system.playSound(_player, default, true, out _playerChannel);
             _playerChannel.setVolume(outputVolume / 100f);
-            _playerChannel.setMute(true);
+            SetPlayerPause(PlayerPauseFlag.Overflow, true);
             system.createDSPByType(DSP_TYPE.FFT, out _fftDsp);
             _fftDsp.setParameterInt((int)DSP_FFT.WINDOW, (int)DSP_FFT_WINDOW_TYPE.HANNING);
             _fftDsp.setParameterInt((int)DSP_FFT.WINDOWSIZE, SpectrumWindowSize);
@@ -308,7 +316,7 @@ namespace XiaoZhi.Unity
                 spectrum = floatSpan;
                 return true;
             }
-            
+
             return _spectrumAnalyzer.Analyze(shortSpan, out spectrum);
         }
 
@@ -333,7 +341,11 @@ namespace XiaoZhi.Unity
             {
                 _system.getRecordDriverInfo(i, out var deviceName, 64, out _, out var systemRate,
                     out var speakerMode, out var speakerModeChannels, out var state);
+#if !UNITY_EDITOR && UNITY_ANDROID
+                if (state.HasFlag(DRIVER_STATE.CONNECTED) && deviceName.Contains("(Voice)"))
+#else
                 if (state.HasFlag(DRIVER_STATE.CONNECTED) && state.HasFlag(DRIVER_STATE.DEFAULT))
+#endif
                 {
                     device = new InputDevice
                     {
@@ -389,7 +401,7 @@ namespace XiaoZhi.Unity
                 _system.recordStop(_recorderId);
                 _isRecording = false;
             }
-            
+
             _recorderId = recorderId;
             if (!_isRecording && _recorderId >= 0)
             {
