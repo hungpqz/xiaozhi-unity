@@ -59,7 +59,7 @@ namespace XiaoZhi.Unity
         {
             _mainUI = await _context.UIManager.ShowSceneUI<VRMMainUI>();
             _mainCamera = Camera.main;
-            // UpdateCameraColor();
+            UpdateCameraColor();
             var models = AppPresets.Instance.VRMCharacterModels;
             var modelIndex = Mathf.Clamp(AppSettings.Instance.GetVRMModel(), 0, models.Length - 1);
             var modelPath = models[modelIndex].Path;
