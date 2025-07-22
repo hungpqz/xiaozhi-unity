@@ -46,6 +46,10 @@
 - 集成VRM1.0
 - 使用uLipSync实现口型同步
 
+## 如何构建
+
+选中Assets/Settings/BuildPresets.asset，在EditorView中即可看到构建界面
+
 ## Reference
 
 - [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32)
