@@ -20,12 +20,21 @@ MonoBehaviour:
   _serverInputSampleRate: 16000
   _enableWakeService: 1
   _otaVersionUrl: https://api.tenclass.net/xiaozhi/ota/
-  _keyWordSpotterModelConfigTransducerEncoder: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/encoder-epoch-12-avg-2-chunk-16-left-64.int8.onnx
-  _keyWordSpotterModelConfigTransducerDecoder: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/decoder-epoch-12-avg-2-chunk-16-left-64.int8.onnx
-  _keyWordSpotterModelConfigTransducerJoiner: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/joiner-epoch-12-avg-2-chunk-16-left-64.int8.onnx
-  _keyWordSpotterModelConfigToken: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/tokens.txt
-  _keyWordSpotterModelConfigNumThreads: 1
-  _keyWordSpotterKeyWordsFile: sherpa-onnx/keywords.txt
+  _keyWords:
+  - _localeCode: zh-Hans
+    _spotterModelConfigTransducerEncoder: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/encoder-epoch-12-avg-2-chunk-16-left-64.int8.onnx
+    _spotterModelConfigTransducerDecoder: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/decoder-epoch-12-avg-2-chunk-16-left-64.int8.onnx
+    _spotterModelConfigTransducerJoiner: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/joiner-epoch-12-avg-2-chunk-16-left-64.int8.onnx
+    _spotterModelConfigToken: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/tokens.txt
+    _spotterKeyWordsFile: sherpa-onnx/sherpa-onnx-kws-zipformer-wenetspeech-3.3M-2024-01-01/keywords.txt
+    _spotterModelConfigNumThreads: 2
+  - _localeCode: en
+    _spotterModelConfigTransducerEncoder: sherpa-onnx/sherpa-onnx-kws-zipformer-gigaspeech-3.3M-2024-01-01/encoder-epoch-12-avg-2-chunk-16-left-64.int8.onnx
+    _spotterModelConfigTransducerDecoder: sherpa-onnx/sherpa-onnx-kws-zipformer-gigaspeech-3.3M-2024-01-01/decoder-epoch-12-avg-2-chunk-16-left-64.int8.onnx
+    _spotterModelConfigTransducerJoiner: sherpa-onnx/sherpa-onnx-kws-zipformer-gigaspeech-3.3M-2024-01-01/joiner-epoch-12-avg-2-chunk-16-left-64.int8.onnx
+    _spotterModelConfigToken: sherpa-onnx/sherpa-onnx-kws-zipformer-gigaspeech-3.3M-2024-01-01/tokens.txt
+    _spotterKeyWordsFile: sherpa-onnx/sherpa-onnx-kws-zipformer-gigaspeech-3.3M-2024-01-01/keywords.txt
+    _spotterModelConfigNumThreads: 2
   _vadModelConfig: sherpa-onnx/silero_vad.onnx
   _activationURL: https://xiaozhi.me
   _vrmCharacterModels:
@@ -33,3 +42,5 @@ MonoBehaviour:
     _path: Assets/Res/VRM/Girl/prefab.prefab
   - _name: Boy
     _path: Assets/Res/VRM/Boy/prefab.prefab
+  - _name: Man
+    _path: Assets/Res/VRM/Man/prefab.prefab

@@ -162,20 +162,21 @@ namespace XiaoZhi.Unity
 
         private async UniTask PrepareResource(CancellationToken cancellationToken)
         {
+            var keyword = AppPresets.Instance.GetKeyword(Lang.Code);
 #if UNITY_ANDROID && !UNITY_EDITOR
             var streamingAssets = new[]
             {
-                AppPresets.Instance.KeyWordSpotterModelConfigTransducerEncoder,
-                AppPresets.Instance.KeyWordSpotterModelConfigTransducerDecoder,
-                AppPresets.Instance.KeyWordSpotterModelConfigTransducerJoiner,
-                AppPresets.Instance.KeyWordSpotterModelConfigToken,
-                AppPresets.Instance.KeyWordSpotterKeyWordsFile,
+                keyword.SpotterModelConfigTransducerEncoder,
+                keyword.SpotterModelConfigTransducerDecoder,
+                keyword.SpotterModelConfigTransducerJoiner,
+                keyword.SpotterModelConfigToken,
+                keyword.SpotterKeyWordsFile,
                 AppPresets.Instance.VadModelConfig
             };
 #else
             var streamingAssets = new[]
             {
-                AppPresets.Instance.KeyWordSpotterKeyWordsFile
+                keyword.SpotterKeyWordsFile
             };
 #endif
             await UniTask.WhenAll(streamingAssets.Select(i =>

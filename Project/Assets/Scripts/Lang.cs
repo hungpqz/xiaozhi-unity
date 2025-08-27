@@ -13,6 +13,8 @@ namespace XiaoZhi.Unity
 
         private static StringTable _tableRef;
 
+        public static string Code => LocalizationSettings.SelectedLocale.Identifier.Code;
+
         public static async UniTask LoadLocale(Locale locale = null)
         {
             locale ??= await LocalizationSettings.SelectedLocaleAsync;

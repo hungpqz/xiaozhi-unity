@@ -42,7 +42,12 @@ namespace XiaoZhi.Unity.IoT
         public override async UniTask Load()
         {
             if (!IsLogin) return;
-            await LoadDevices();
+            if (!await LoadDevices())
+            {
+                Logout();
+                return;
+            }
+
             await RegisterDevices();
             UniTask.Void(MainLoop, _mainCts.Token);
         }
@@ -134,10 +139,10 @@ namespace XiaoZhi.Unity.IoT
             _command.Logout();
         }
 
-        public async UniTask LoadDevices()
+        public async UniTask<bool> LoadDevices()
         {
             var homes = await _command.ListHome();
-            if (homes == null) return;
+            if (homes == null) return false;
             _homeMap = homes.ToDictionary(h => h.Id);
             _roomMap = homes.SelectMany(h => h.Rooms).ToDictionary(r => r.Id);
             foreach (var home in homes)
@@ -163,6 +168,8 @@ namespace XiaoZhi.Unity.IoT
                     _deviceMap.TryGetValue(device.SplitParentId, out var parent))
                     parent.IsVisible = false;
             }
+
+            return true;
         }
 
         public async UniTask RegisterGetters()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 
@@ -18,6 +19,27 @@ namespace XiaoZhi.Unity
             public string Name => _name;
             public string Path => _path;
         }
+
+        [Serializable]
+        public class Keyword
+        {
+            [SerializeField] private string _localeCode;
+            [SerializeField] private string _spotterModelConfigTransducerEncoder;
+            [SerializeField] private string _spotterModelConfigTransducerDecoder;
+            [SerializeField] private string _spotterModelConfigTransducerJoiner;
+            [SerializeField] private string _spotterModelConfigToken;
+            [SerializeField] private string _spotterKeyWordsFile;
+            [SerializeField] private int _spotterModelConfigNumThreads;
+
+            public string Name => _localeCode;
+            public string LocaleCode => _localeCode;
+            public string SpotterModelConfigTransducerEncoder => _spotterModelConfigTransducerEncoder;
+            public string SpotterModelConfigTransducerDecoder => _spotterModelConfigTransducerDecoder;
+            public string SpotterModelConfigTransducerJoiner => _spotterModelConfigTransducerJoiner;
+            public string SpotterModelConfigToken => _spotterModelConfigToken;
+            public string SpotterKeyWordsFile => _spotterKeyWordsFile;
+            public int SpotterModelConfigNumThreads => _spotterModelConfigNumThreads;
+        }
         
         [SerializeField] private string _webSocketUrl;
         [SerializeField] private string _webSocketAccessToken;
@@ -27,12 +49,7 @@ namespace XiaoZhi.Unity
         [SerializeField] private int _serverInputSampleRate;
         [SerializeField] private bool _enableWakeService;
         [SerializeField] private string _otaVersionUrl;
-        [SerializeField] private string _keyWordSpotterModelConfigTransducerEncoder;
-        [SerializeField] private string _keyWordSpotterModelConfigTransducerDecoder;
-        [SerializeField] private string _keyWordSpotterModelConfigTransducerJoiner;
-        [SerializeField] private string _keyWordSpotterModelConfigToken;
-        [SerializeField] private int _keyWordSpotterModelConfigNumThreads;
-        [SerializeField] private string _keyWordSpotterKeyWordsFile;
+        [SerializeField] private Keyword[] _keyWords;
         [SerializeField] private string _vadModelConfig;
         [SerializeField] private string _activationURL;
         [SerializeField] private VRMModel[] _vrmCharacterModels;
@@ -45,15 +62,10 @@ namespace XiaoZhi.Unity
         public int ServerInputSampleRate => _serverInputSampleRate;
         public bool EnableWakeService => _enableWakeService;
         public string OtaVersionUrl => _otaVersionUrl;
-        public string KeyWordSpotterModelConfigTransducerEncoder => _keyWordSpotterModelConfigTransducerEncoder;
-        public string KeyWordSpotterModelConfigTransducerDecoder => _keyWordSpotterModelConfigTransducerDecoder;
-        public string KeyWordSpotterModelConfigTransducerJoiner => _keyWordSpotterModelConfigTransducerJoiner;
-        public string KeyWordSpotterModelConfigToken => _keyWordSpotterModelConfigToken;
-        public int KeyWordSpotterModelConfigNumThreads => _keyWordSpotterModelConfigNumThreads;
-        public string KeyWordSpotterKeyWordsFile => _keyWordSpotterKeyWordsFile;
         public string VadModelConfig => _vadModelConfig;
         public string ActivationURL => _activationURL;
         public VRMModel[] VRMCharacterModels => _vrmCharacterModels;
+        public Keyword GetKeyword(string localeCode) => _keyWords.FirstOrDefault(k => k.LocaleCode == localeCode);
         
         public static AppPresets Instance { get; private set; }
         

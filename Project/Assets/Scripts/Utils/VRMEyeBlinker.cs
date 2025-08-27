@@ -10,9 +10,9 @@ namespace XiaoZhi.Unity
     public class VRMEyeBlinker : MonoBehaviour
     {
         public Vector2 BlinkInterval = new(2.0f, 8.0f);
-        public float BlinkEyeCloseDuration = 0.06f;
+        public float BlinkEyeCloseDuration = 0.03f;
         public float BlinkOpeningSeconds = 0.03f;
-        public float BlinkClosingSeconds = 0.1f;
+        public float BlinkClosingSeconds = 0.01f;
 
         private Vrm10RuntimeExpression _expression;
         private CancellationTokenSource _loopCts;
@@ -24,6 +24,7 @@ namespace XiaoZhi.Unity
 
         private void OnEnable()
         {
+            if (_loopCts != null) return;
             _loopCts = new CancellationTokenSource();
             UniTask.Void(LoopUpdate, _loopCts.Token);
         }

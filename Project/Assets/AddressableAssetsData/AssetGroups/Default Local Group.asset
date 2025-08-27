@@ -57,6 +57,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80aa5a4c44294f04e8619fc13220d627
+    m_Address: Assets/Res/VRM/Man/prefab.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 869e36edff778a7488df32b3c34e7c10
     m_Address: Assets/Res/UI/MIoTUI/LoginUI.prefab
     m_ReadOnly: 0

@@ -28,19 +28,20 @@ namespace XiaoZhi.Unity
             _kwsConfig = new KeywordSpotterConfig();
             _kwsConfig.FeatConfig.SampleRate = sampleRate;
             _kwsConfig.FeatConfig.FeatureDim = 80;
+            var keyword = AppPresets.Instance.GetKeyword(Lang.Code);
             _kwsConfig.ModelConfig.Transducer.Encoder = FileUtility.GetFullPath(resourceType,
-                AppPresets.Instance.KeyWordSpotterModelConfigTransducerEncoder);
+                keyword.SpotterModelConfigTransducerEncoder);
             _kwsConfig.ModelConfig.Transducer.Decoder = FileUtility.GetFullPath(resourceType,
-                AppPresets.Instance.KeyWordSpotterModelConfigTransducerDecoder);
+                keyword.SpotterModelConfigTransducerDecoder);
             _kwsConfig.ModelConfig.Transducer.Joiner = FileUtility.GetFullPath(resourceType,
-                AppPresets.Instance.KeyWordSpotterModelConfigTransducerJoiner);
+                keyword.SpotterModelConfigTransducerJoiner);
             _kwsConfig.ModelConfig.Tokens =
-                FileUtility.GetFullPath(resourceType, AppPresets.Instance.KeyWordSpotterModelConfigToken);
+                FileUtility.GetFullPath(resourceType, keyword.SpotterModelConfigToken);
             _kwsConfig.ModelConfig.Provider = "cpu";
-            _kwsConfig.ModelConfig.NumThreads = AppPresets.Instance.KeyWordSpotterModelConfigNumThreads;
+            _kwsConfig.ModelConfig.NumThreads = keyword.SpotterModelConfigNumThreads;
             _kwsConfig.ModelConfig.Debug = 0;
             _kwsConfig.KeywordsFile =
-                FileUtility.GetFullPath(FileUtility.FileType.DataPath, AppPresets.Instance.KeyWordSpotterKeyWordsFile);
+                FileUtility.GetFullPath(FileUtility.FileType.DataPath, keyword.SpotterKeyWordsFile);
             _vadConfig = new VadModelConfig
             {
                 SampleRate = sampleRate

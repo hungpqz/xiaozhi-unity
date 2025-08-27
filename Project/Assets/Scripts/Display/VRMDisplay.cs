@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Localization;
+using UnityEngine.LowLevel;
 using UniVRM10;
 using Object = UnityEngine.Object;
 
@@ -12,6 +13,8 @@ namespace XiaoZhi.Unity
 {
     public class VRMDisplay : IDisplay
     {
+        private static readonly int AnimTalkingHash = Animator.StringToHash("talking");
+        
         private readonly Context _context;
         private VRMMainUI _mainUI;
         private Camera _mainCamera;
@@ -20,7 +23,7 @@ namespace XiaoZhi.Unity
         private ULipSyncAudioProxy _lipSyncAudioProxy;
         private Vrm10Instance _vrmInstance;
         private FaceAnimation _faceAnim;
-        private VRMEyeBlinker _eyeBlinker;
+        private Animator _animator;
         private CancellationTokenSource _loopCts;
         private string _emotion;
 
@@ -74,7 +77,7 @@ namespace XiaoZhi.Unity
             _lipSync = _character.GetComponent<uLipSync.uLipSync>();
             _vrmInstance = _character.GetComponent<Vrm10Instance>();
             _faceAnim = new FaceAnimation(_vrmInstance, "loading");
-            _eyeBlinker = _character.GetComponent<VRMEyeBlinker>();
+            _animator = _character.GetComponent<Animator>();
             return true;
         }
 
@@ -84,6 +87,8 @@ namespace XiaoZhi.Unity
             _lipSyncAudioProxy.Start();
             _loopCts = new CancellationTokenSource();
             UniTask.Void(LoopUpdate, _loopCts.Token);
+            _context.App.OnDeviceStateUpdate -= OnDeviceStateUpdate;
+            _context.App.OnDeviceStateUpdate += OnDeviceStateUpdate;
         }
 
         public void SetStatus(string status)
@@ -132,6 +137,11 @@ namespace XiaoZhi.Unity
                 await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
                 _faceAnim.Update(Time.deltaTime);
             }
+        }
+        
+        private void OnDeviceStateUpdate(DeviceState state)
+        {
+            _animator.SetBool(AnimTalkingHash, state == DeviceState.Speaking);
         }
 
         private class FaceAnimation

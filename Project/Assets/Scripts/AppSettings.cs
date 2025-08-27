@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace XiaoZhi.Unity
 {
@@ -13,7 +12,7 @@ namespace XiaoZhi.Unity
         {
             _instance = new AppSettings();
         }
-        
+
         private DisplayMode _displayMode;
 
         private int _vrmModel;
@@ -25,7 +24,7 @@ namespace XiaoZhi.Unity
         private string _keywords;
 
         private int _outputVolume;
-        
+
         private string _webSocketUrl;
 
         private string _webSocketAccessToken;
@@ -43,7 +42,7 @@ namespace XiaoZhi.Unity
             _outputVolume = GetInt("output_volume", 50);
             _vrmModel = GetInt("vrm_model");
         }
-        
+
         public DisplayMode GetDisplayMode() => _displayMode;
 
         public void SetDisplayMode(DisplayMode displayMode)
@@ -53,9 +52,9 @@ namespace XiaoZhi.Unity
             SetInt("display_mode", (int)displayMode);
             Save();
         }
-        
+
         public int GetVRMModel() => _vrmModel;
-        
+
         public void SetVRMModel(int vrmModel)
         {
             if (_vrmModel == vrmModel) return;
@@ -77,7 +76,9 @@ namespace XiaoZhi.Unity
         public string GetKeywords()
         {
             _keywords ??=
-                FileUtility.ReadAllText(FileUtility.FileType.DataPath, AppPresets.Instance.KeyWordSpotterKeyWordsFile);
+                FileUtility.ReadAllText(FileUtility.FileType.DataPath,
+                    AppPresets.Instance.GetKeyword(Lang.Code)
+                        .SpotterKeyWordsFile);
             return _keywords;
         }
 
@@ -85,7 +86,9 @@ namespace XiaoZhi.Unity
         {
             if (_keywords.Equals(keywords)) return;
             _keywords = keywords;
-            FileUtility.WriteAllText(AppPresets.Instance.KeyWordSpotterKeyWordsFile, _keywords);
+            FileUtility.WriteAllText(
+                AppPresets.Instance.GetKeyword(Lang.Code).SpotterKeyWordsFile,
+                _keywords);
         }
 
         public bool IsAutoHideUI()
