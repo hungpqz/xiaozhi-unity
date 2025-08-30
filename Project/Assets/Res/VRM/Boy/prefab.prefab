@@ -100,6 +100,11 @@ PrefabInstance:
       propertyPath: m_AABB.m_Extent.z
       value: 0.19117704
       objectReference: {fileID: 0}
+    - target: {fileID: -4297446187249348513, guid: 93881df7d54cd8c4f9cf727aa6b2a96f,
+        type: 3}
+      propertyPath: UpdateType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: -1728013695380148634, guid: 93881df7d54cd8c4f9cf727aa6b2a96f,
         type: 3}
       propertyPath: m_Name
@@ -308,8 +313,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cd69f7cc8584f54a7b603f7dee0a579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _position: {x: 0, y: 0.98, z: 1}
-  _rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  _bounds:
+    m_Center: {x: 0, y: 0.8769582, z: -0.01725617}
+    m_Extent: {x: 0.8059484, y: 0.88544816, z: 0.19117704}
+  _topGap: 0.1
+  _bottomGap: 0
 --- !u!114 &4788464275927241839
 MonoBehaviour:
   m_ObjectHideFlags: 0

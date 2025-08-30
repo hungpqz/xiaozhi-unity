@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.IO.Compression;
 
-namespace XiaoZhi.Unity
+namespace XiaoZhi.Unity.Editor
 {
     public static partial class Builder
     {

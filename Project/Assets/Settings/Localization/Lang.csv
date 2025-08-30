@@ -71,3 +71,8 @@ Key,Id,zh-Hans,en
 "ACTIVATION",3314955647,"激活设备","Activate Device"
 "MIoT_Password",7900086924173312,"密码","Password"
 "MIoT_RefreshSuccess",7957408966991872,"刷新成功","Refresh Successful"
+"CONNECTION_CLOSED_TIPS",8675432594366464,"连接已断开","Connection was closed"
+"SettingsUI_ZoomMode_LongShot",49667773039599616,"全身","LongShot"
+"SettingsUI_ZoomMode_MediumShot",49667893739085824,"半身","MediumShot"
+"SettingsUI_ZoomMode_CloseUp",49667904732356608,"特写","CloseUp"
+"SettingsUI_ZoomMode",49668220370509824,"镜头","Lens"

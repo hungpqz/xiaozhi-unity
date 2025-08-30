@@ -307,6 +307,30 @@ MonoBehaviour:
     m_Key: CONNECTION_CLOSED_TIPS
     m_Metadata:
       m_Items: []
+  - m_Id: 49667773039599616
+    m_Key: SettingsUI_ZoomMode_LongShot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49667893739085824
+    m_Key: SettingsUI_ZoomMode_MediumShot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49667904732356608
+    m_Key: SettingsUI_ZoomMode_CloseUp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49668220370509824
+    m_Key: SettingsUI_ZoomMode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49669933450092544
+    m_Key: Connect_Failed_Tips
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50563706090643456
+    m_Key: SettingsUI_Background
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

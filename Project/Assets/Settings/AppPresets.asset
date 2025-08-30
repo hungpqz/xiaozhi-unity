@@ -42,5 +42,13 @@ MonoBehaviour:
     _path: Assets/Res/VRM/Girl/prefab.prefab
   - _name: Boy
     _path: Assets/Res/VRM/Boy/prefab.prefab
-  - _name: Man
-    _path: Assets/Res/VRM/Man/prefab.prefab
+  _videos:
+  - _name: Star Field
+    _path: Assets/Res/Video/star_field.mp4
+  _wallpapers:
+  - _type: 0
+    _name: Default
+    _path: 
+  - _type: 2
+    _name: Star Field
+    _path: Assets/Res/Video/star_field.mp4

@@ -1,10 +1,10 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace XiaoZhi.Unity
+namespace XiaoZhi.Unity.Editor
 {
     [CustomEditor(typeof(ThemeSettings))]
-    public class ThemeSettingsEditor : Editor
+    public class ThemeSettingsEditor : UnityEditor.Editor
     {
         private SerializedProperty spotSettingsProperty;
         private SerializedProperty actionSettingsProperty;

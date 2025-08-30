@@ -31,6 +31,14 @@ namespace XiaoZhi.Unity.IoT
                     new Parameter<string>("lang", "语言, 简体中文 或 English")
                 }),
                 SetLang);
+            
+            _properties.AddProperty("zoom", "镜头远近", GetZoom);
+            _methods.AddMethod("SetZoom", "设置镜头远近",
+                new ParameterList(new[]
+                {
+                    new Parameter<string>("zoom", "镜头远近, " + string.Join(" 或 ", Enum.GetNames(typeof(ZoomMode))))
+                }),
+                SetZoom);
         }
         
         private string GetTheme()
@@ -63,6 +71,16 @@ namespace XiaoZhi.Unity.IoT
             var lang = parameters.GetValue<string>("lang");
             var locale = LocalizationSettings.AvailableLocales.Locales.FirstOrDefault(i => i.LocaleName == lang);
             if (locale) LocalizationSettings.SelectedLocale = locale;
+        }
+        
+        private string GetZoom()
+        {
+            return AppSettings.Instance.GetZoomMode().ToString();
+        }
+        
+        private void SetZoom(ParameterList parameters)
+        {
+            AppSettings.Instance.SetZoomMode(Enum.Parse<ZoomMode>(parameters.GetValue<string>("zoom")));
         }
     }
 }

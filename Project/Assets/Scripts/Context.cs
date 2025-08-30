@@ -24,6 +24,7 @@ namespace XiaoZhi.Unity
             ThingManager.Inject(this);
             ThingManager.AddThing(new ThingAppSettings());
             ThingManager.AddThing(new ThingMIoT());
+            ThingManager.AddThing(new ThingVideoPlayer());
             App = new App();
             App.Inject(this);
             Application.runInBackground = true;
@@ -34,8 +35,9 @@ namespace XiaoZhi.Unity
 
         public void Dispose()
         {
-            UIManager.Dispose();
             App.Dispose();
+            UIManager.Dispose();
+            ThingManager.Dispose();
             DOTween.KillAll();
             AppUtility.Clear();
             GC.Collect();

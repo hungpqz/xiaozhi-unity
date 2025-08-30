@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 
 namespace XiaoZhi.Unity
 {
@@ -17,11 +18,15 @@ namespace XiaoZhi.Unity
 
         private int _vrmModel;
 
+        private ZoomMode _zoomMode;
+
         private BreakMode _breakMode;
-
-        private bool _autoHideUI;
-
+        
         private string _keywords;
+
+        private string _wallpaper;
+        
+        private bool _autoHideUI;
 
         private int _outputVolume;
 
@@ -34,13 +39,19 @@ namespace XiaoZhi.Unity
         public event Action<bool> OnAutoHideUIUpdate;
         public event Action<int> OnOutputVolumeUpdate;
 
+        public event Action<ZoomMode> OnZoomModeUpdate;
+
+        public event Action<string> OnWallPaperUpdate;
+
         private AppSettings() : base("app")
         {
             _displayMode = (DisplayMode)GetInt("display_mode");
             _breakMode = (BreakMode)GetInt("break_mode", (int)BreakMode.Keyword);
-            _autoHideUI = GetInt("auto_hide_ui") == 1;
+            _autoHideUI = GetInt("auto_hide_ui", 1) == 1;
             _outputVolume = GetInt("output_volume", 50);
             _vrmModel = GetInt("vrm_model");
+            _zoomMode = (ZoomMode)GetInt("zoom_mode");
+            _wallpaper = GetString("wallpaper", "Default");
         }
 
         public DisplayMode GetDisplayMode() => _displayMode;
@@ -63,6 +74,17 @@ namespace XiaoZhi.Unity
             Save();
         }
 
+        public ZoomMode GetZoomMode() => _zoomMode;
+
+        public void SetZoomMode(ZoomMode zoomMode)
+        {
+            if (_zoomMode == zoomMode) return;
+            _zoomMode = zoomMode;
+            SetInt("zoom_mode", (int)zoomMode);
+            Save();
+            OnZoomModeUpdate?.Invoke(_zoomMode);
+        }
+
         public BreakMode GetBreakMode() => _breakMode;
 
         public void SetBreakMode(BreakMode breakMode)
@@ -71,6 +93,17 @@ namespace XiaoZhi.Unity
             _breakMode = breakMode;
             SetInt("break_mode", (int)breakMode);
             Save();
+        }
+        
+        public string GetWallpaper() => _wallpaper;
+
+        public void SetWallpaper(string wallpaper)
+        {
+            if (_wallpaper == wallpaper) return;
+            _wallpaper = wallpaper;
+            SetString("wallpaper", _wallpaper);
+            Save();
+            OnWallPaperUpdate?.Invoke(_wallpaper);
         }
 
         public string GetKeywords()

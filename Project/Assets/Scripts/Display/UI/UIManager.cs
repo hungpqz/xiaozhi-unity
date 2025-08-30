@@ -13,7 +13,7 @@ namespace XiaoZhi.Unity
     public class UIManager : IUIService
     {
         private const string CameraName = "MainCamera";
-        private Dictionary<UILayer, GameObject> _canvasMap;
+        private readonly Dictionary<UILayer, GameObject> _canvasMap;
         private readonly Stack<SceneStackData> _stack = new();
         private readonly Queue<Tuple<Type, NotificationUIData>> _notificationQueue = new();
         private readonly Dictionary<string, BaseUI> _uiMap = new();
@@ -163,6 +163,11 @@ namespace XiaoZhi.Unity
             go.SetActive(false);
             ui.Init(go);
             return ui;
+        }
+        
+        public async UniTask<T> ShowBgUI<T>(BaseUIData data = null) where T : BaseUI, new()
+        {
+            return await ShowStackUI<T>(data, UILayer.Bg);
         }
 
         public async UniTask<T> ShowSceneUI<T>(BaseUIData data = null) where T : BaseUI, new()

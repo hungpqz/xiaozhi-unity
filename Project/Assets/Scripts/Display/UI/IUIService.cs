@@ -19,6 +19,8 @@ namespace XiaoZhi.Unity
         
         UniTask<T> LoadUI<T>(Type type = null, Transform parent = null) where T : BaseUI, new();
 
+        UniTask<T> ShowBgUI<T>(BaseUIData data = null) where T : BaseUI, new();
+        
         UniTask<T> ShowSceneUI<T>(BaseUIData data = null) where T : BaseUI, new();
 
         UniTask<T> ShowModuleUI<T>(BaseUIData data = null) where T : BaseUI, new();

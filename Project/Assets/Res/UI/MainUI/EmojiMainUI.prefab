@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.26666668, g: 0.2784314, b: 0.27450982, a: 1}
+  m_Color: {r: 0.76862746, g: 0.78039217, b: 0.77254903, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -158,7 +158,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4291151812
-  m_fontColor: {r: 0.26666668, g: 0.2784314, b: 0.27450982, a: 1}
+  m_fontColor: {r: 0.76862746, g: 0.78039217, b: 0.77254903, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -286,9 +286,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6136638896499954249}
   - component: {fileID: 960836649136216295}
-  - component: {fileID: 3209275742354950661}
-  - component: {fileID: 2542709632195506531}
   - component: {fileID: 5413801934849325600}
+  - component: {fileID: 8257083885994536438}
   m_Layer: 5
   m_Name: EmojiMainUI
   m_TagString: Untagged
@@ -329,50 +328,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3856076105194595342}
   m_CullTransparentMesh: 1
---- !u!114 &3209275742354950661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3856076105194595342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a9aa8db4ea3254cacfc3112979a217, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.972549, g: 0.98039216, b: 0.99215686, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!114 &2542709632195506531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3856076105194595342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 194c0269152749669caf6f795219a647, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _background: 0
-  _alpha: 1
 --- !u!114 &5413801934849325600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,11 +368,27 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 3209275742354950661}
+  m_TargetGraphic: {fileID: 0}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
   _reactModifiers: []
+--- !u!114 &8257083885994536438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856076105194595342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d17c1b2a2b550f4dbc14ea0b83ceb7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &4447607101068763230
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,8 +466,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282795844
-  m_fontColor: {r: 0.26666668, g: 0.2784314, b: 0.27450982, a: 1}
+    rgba: 4291151812
+  m_fontColor: {r: 0.76862746, g: 0.78039217, b: 0.77254903, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -669,7 +640,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.26666668, g: 0.2784314, b: 0.27450982, a: 1}
+  m_Color: {r: 0.76862746, g: 0.78039217, b: 0.77254903, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -795,8 +766,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282795844
-  m_fontColor: {r: 0.26666668, g: 0.2784314, b: 0.27450982, a: 1}
+    rgba: 4291151812
+  m_fontColor: {r: 0.76862746, g: 0.78039217, b: 0.77254903, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -881,6 +852,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2762684aa9813cc45a60279431fc94b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnClickLink:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5675416056523690565
 MonoBehaviour:
   m_ObjectHideFlags: 0

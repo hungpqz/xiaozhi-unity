@@ -19,9 +19,12 @@ namespace XiaoZhi.Unity
         private Transform _listDisplayMode;
         private GameObject _goCharacter;
         private Transform _listCharacter;
+        private GameObject _goZoomMode;
+        private Transform _listZoomMode;
         private Transform _listBreakMode;
         private GameObject _goKeywords;
         private TMP_InputField _inputKeywords;
+        private Transform _listWallpaper;
         private XSlider _sliderVolume;
         private XButton _btnTheme;
         private XRadio _radioAutoHide;
@@ -47,11 +50,14 @@ namespace XiaoZhi.Unity
             _listDisplayMode = content.Find("DisplayMode/List");
             _goCharacter = content.Find("Character").gameObject;
             _listCharacter = content.Find("Character/List");
+            _goZoomMode = content.Find("ZoomMode").gameObject;
+            _listZoomMode = content.Find("ZoomMode/List");
             _listBreakMode = content.Find("BreakMode/List");
             _inputKeywords = GetComponent<TMP_InputField>(content, "Keywords/InputField");
             _inputKeywords.onDeselect.AddListener(OnChangeKeywords);
             GetComponent<HyperlinkText>(content, "Keywords/Tips_Help/Text").OnClickLink
                 .AddListener(_ => Application.OpenURL(KeywordsHelpUrl));
+            _listWallpaper = content.Find("Wallpaper/List");
             _sliderVolume = GetComponent<XSlider>(content, "Volume/Slider");
             _iconVolume = GetComponent<XSpriteChanger>(content, "Volume/Title/Icon");
             _sliderVolume.onValueChanged.AddListener(value =>
@@ -82,8 +88,10 @@ namespace XiaoZhi.Unity
             UpdateCustomMacAddress();
             UpdateDisplayMode();
             UpdateCharacter();
+            UpdateZoomMode();
             UpdateBreakMode();
             UpdateKeywords();
+            UpdateWallpaper();
             UpdateVolume();
             UpdateIconVolume();
             UpdateAutoHide();
@@ -118,6 +126,7 @@ namespace XiaoZhi.Unity
                 AppSettings.Instance.SetDisplayMode(displayMode);
                 ShowNotificationUI(Lang.GetRef("SettingsUI_Modify_Tips")).Forget();
                 UpdateCharacter();
+                UpdateZoomMode();
             }
         }
 
@@ -126,6 +135,7 @@ namespace XiaoZhi.Unity
             var displayMode = AppSettings.Instance.GetDisplayMode();
             var showCharacter = displayMode == DisplayMode.VRM;
             _goCharacter.SetActive(showCharacter);
+            _goZoomMode.SetActive(showCharacter);
             if (!showCharacter) return;
             switch (displayMode)
             {
@@ -163,6 +173,28 @@ namespace XiaoZhi.Unity
             }
         }
 
+        private void UpdateZoomMode()
+        {
+            var values = Enum.GetValues(typeof(ZoomMode));
+            Tools.EnsureChildren(_listZoomMode, values.Length);
+            for (var i = 0; i < values.Length; i++)
+            {
+                var go = _listZoomMode.GetChild(i).gameObject;
+                go.SetActive(true);
+                GetComponent<LocalizeStringEvent>(go.transform, "Text").StringReference =
+                    Lang.GetRef($"SettingsUI_ZoomMode_{Enum.GetName(typeof(ZoomMode), i)}");
+                var toggle = go.GetComponent<XToggle>();
+                RemoveUniqueListener(toggle);
+                toggle.isOn = (ZoomMode)values.GetValue(i) == AppSettings.Instance.GetZoomMode();
+                AddUniqueListener(toggle, i, OnToggleZoomMode);
+            }
+        }
+
+        private void OnToggleZoomMode(Toggle toggle, int index, bool isOn)
+        {
+            if (isOn) AppSettings.Instance.SetZoomMode((ZoomMode)Enum.GetValues(typeof(ZoomMode)).GetValue(index));
+        }
+
         private void UpdateBreakMode()
         {
             var values = Enum.GetValues(typeof(BreakMode));
@@ -195,6 +227,27 @@ namespace XiaoZhi.Unity
             if (AppSettings.Instance.GetKeywords().Equals(text)) return;
             AppSettings.Instance.SetKeywords(text);
             ShowNotificationUI(Lang.GetRef("SettingsUI_Modify_Tips")).Forget();
+        }
+
+        private void UpdateWallpaper()
+        {
+            var wallpapers = AppPresets.Instance.Wallpapers;
+            Tools.EnsureChildren(_listWallpaper, wallpapers.Length);
+            for (var i = 0; i < wallpapers.Length; i++)
+            {
+                var go = _listWallpaper.GetChild(i).gameObject;
+                go.SetActive(true);
+                GetComponent<TextMeshProUGUI>(go.transform, "Text").text = wallpapers[i].Name;
+                var toggle = go.GetComponent<XToggle>();
+                RemoveUniqueListener(toggle);
+                toggle.isOn = wallpapers[i].Name == AppSettings.Instance.GetWallpaper();
+                AddUniqueListener(toggle, i, OnToggleWallpaper);
+            }
+        }
+
+        private void OnToggleWallpaper(Toggle toggle, int index, bool isOn)
+        {
+            if (isOn) AppSettings.Instance.SetWallpaper(AppPresets.Instance.Wallpapers[index].Name);
         }
 
         private void UpdateVolume()

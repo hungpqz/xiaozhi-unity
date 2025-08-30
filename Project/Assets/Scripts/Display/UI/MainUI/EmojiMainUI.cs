@@ -15,7 +15,6 @@ namespace XiaoZhi.Unity
     {
         private static readonly Dictionary<string, string> Emojis = new()
         {
-            { "yawn", "🥱" },
             { "sleep", "😴" },
             { "happy", "😄" },
             { "funny", "" },
@@ -36,7 +35,6 @@ namespace XiaoZhi.Unity
         private TextMeshProUGUI _textEmotion;
         private RectTransform _trSet;
         private Button _btnSet;
-        private Button _btnChat;
         private XInputWave _xInputWave;
         private GameObject _goLoading;
 
@@ -64,12 +62,18 @@ namespace XiaoZhi.Unity
                 }
             });
             _textStatus = Tr.Find("Status").GetComponent<TextMeshProUGUI>();
+            _textStatus.text = "";
             _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
+            _localizeStatus.StringReference = null;
             _textChat = Tr.Find("Chat").GetComponent<TextMeshProUGUI>();
+            _textChat.text = "";
             _localizeChat = GetComponent<LocalizeStringEvent>(_textChat, "");
-            GetComponent<HyperlinkText>(_textChat, "").OnClickLink.AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
+            _localizeChat.StringReference = null;
+            GetComponent<HyperlinkText>(_textChat, "").OnClickLink
+                .AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
             _trEmotion = Tr.Find("Emotion");
             _textEmotion = _trEmotion.GetComponent<TextMeshProUGUI>();
+            _textEmotion.text = "";
             GetComponent<XButton>(_textEmotion).onClick.AddListener(() => Context.App.ToggleChatState().Forget());
             _goLoading = Tr.Find("Loading").gameObject;
             _trSet = GetComponent<RectTransform>(Tr, "BtnSet");
@@ -79,11 +83,6 @@ namespace XiaoZhi.Unity
 
         protected override async UniTask OnShow(BaseUIData data = null)
         {
-            _textEmotion.text = "";
-            _localizeStatus.StringReference = null;
-            _textStatus.text = "";
-            _localizeChat.StringReference = null;
-            _textChat.text = "";
             _loopCts = new CancellationTokenSource();
             UniTask.Void(LoopUpdate, _loopCts.Token);
             Context.App.OnDeviceStateUpdate -= OnDeviceStateUpdate;

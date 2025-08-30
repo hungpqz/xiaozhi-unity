@@ -257,11 +257,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7052185847160832
-    m_Localized: Login Successful
+    m_Localized: Login successful
     m_Metadata:
       m_Items: []
   - m_Id: 7052351807381504
-    m_Localized: Login Failed
+    m_Localized: Login failed
     m_Metadata:
       m_Items: []
   - m_Id: 7052790267338752
@@ -274,7 +274,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7053570470797312
-    m_Localized: Clear Selection
+    m_Localized: Clear selection
     m_Metadata:
       m_Items: []
   - m_Id: 7053948998344704
@@ -308,6 +308,30 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 8675432594366464
     m_Localized: Connection was closed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49667773039599616
+    m_Localized: LongShot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49667893739085824
+    m_Localized: MediumShot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49667904732356608
+    m_Localized: CloseUp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49668220370509824
+    m_Localized: Lens
+    m_Metadata:
+      m_Items: []
+  - m_Id: 49669933450092544
+    m_Localized: Connection failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50563706090643456
+    m_Localized: Wallpaper
     m_Metadata:
       m_Items: []
   references:

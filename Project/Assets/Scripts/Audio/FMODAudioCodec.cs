@@ -226,7 +226,7 @@ namespace XiaoZhi.Unity
             base.EnableOutput(enable);
             SetPlayerPause(PlayerPauseFlag.Enabled, !outputEnabled);
         }
-        
+
         private void SetPlayerPause(PlayerPauseFlag flag, bool pause)
         {
             if (pause) _playerPauseFlag |= flag;

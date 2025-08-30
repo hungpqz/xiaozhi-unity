@@ -1,11 +1,9 @@
-using System;
 using System.Threading;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace XiaoZhi.Unity
 {
-    public class ULipSyncAudioProxy : IDisposable
+    public class ULipSyncAudioProxy
     {
         private readonly uLipSync.uLipSync _uLipSync;
 
@@ -27,32 +25,7 @@ namespace XiaoZhi.Unity
             _buffer = new float[_uLipSync.profile.sampleCount];
         }
 
-        public void Start()
-        {
-            _updateCts = new CancellationTokenSource();
-            UniTask.Void(Update, _updateCts.Token);
-        }
-
-        public void Dispose()
-        {
-            if (_updateCts != null)
-            {
-                _updateCts.Cancel();
-                _updateCts.Dispose();
-                _updateCts = null;
-            }
-        }
-
-        private async UniTaskVoid Update(CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
-                UpdateULipSync();
-            }
-        }
-
-        private void UpdateULipSync()
+        public void Update()
         {
             if (!_codec.GetOutputSpectrum(false, out var data)) return;
             data.CopyTo(_buffer);

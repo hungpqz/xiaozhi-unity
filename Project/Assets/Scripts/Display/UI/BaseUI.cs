@@ -232,6 +232,11 @@ namespace XiaoZhi.Unity
             return await _uiService.LoadUI<T>(type, parent);
         }
 
+        public async UniTask<T> ShowBgUI<T>(BaseUIData data = null) where T : BaseUI, new()
+        {
+            return await _uiService.ShowBgUI<T>(data);
+        }
+
         public async UniTask<T> ShowSceneUI<T>(BaseUIData data = null) where T : BaseUI, new()
         {
             return await _uiService.ShowSceneUI<T>(data);
@@ -284,7 +289,7 @@ namespace XiaoZhi.Unity
 
         public void Dispose()
         {
-            _uiService.Dispose();
+            DestroyUI(this).Forget();
         }
     }
 

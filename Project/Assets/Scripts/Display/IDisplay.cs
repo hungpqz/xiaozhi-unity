@@ -19,5 +19,9 @@ namespace XiaoZhi.Unity
         void SetChatMessage(ChatRole role, string content);
         
         void SetChatMessage(ChatRole role, LocalizedString content);
+
+        UniTask Show();
+        
+        UniTask Hide();
     }
 }

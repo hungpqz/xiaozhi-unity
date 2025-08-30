@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 
-namespace XiaoZhi.Unity
+namespace XiaoZhi.Unity.Editor
 {
     public static partial class Builder
     {

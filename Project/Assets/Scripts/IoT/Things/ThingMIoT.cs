@@ -234,6 +234,7 @@ namespace XiaoZhi.Unity.IoT
         {
             if (props.Count == 0) return;
             var values = await _command.GetProps(props.Select(i => (i.Item1.Did, i.Item2.Service.Iid, i.Item2.Iid)));
+            if (values == null || values.Length != props.Count) return;
             for (var index = 0; index < props.Count; index++)
             {
                 var (device, prop) = props[index];

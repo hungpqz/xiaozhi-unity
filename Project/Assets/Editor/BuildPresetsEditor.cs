@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace XiaoZhi.Unity
+namespace XiaoZhi.Unity.Editor
 {
     [CustomEditor(typeof(BuildPresets))]
     public class BuildPresetsEditor : UnityEditor.Editor

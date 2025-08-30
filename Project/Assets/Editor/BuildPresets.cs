@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-namespace XiaoZhi.Unity
+namespace XiaoZhi.Unity.Editor
 {
     [Serializable]
     public class AndroidBuildPreset

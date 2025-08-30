@@ -17,8 +17,10 @@ namespace XiaoZhi.Unity
         private RectTransform _trStatus;
         private TextMeshProUGUI _textStatus;
         private LocalizeStringEvent _localizeStatus;
+        private TextMeshProUGUI _textChat;
+        private LocalizeStringEvent _localizeChat;
         private CancellationTokenSource _autoHideCts;
-
+        
         public override string GetResourcePath()
         {
             return "Assets/Res/UI/MainUI/VRMMainUI.prefab";
@@ -41,14 +43,20 @@ namespace XiaoZhi.Unity
             GetComponent<XButton>(Tr, "ClickRole").onClick.AddListener(() => Context.App.ToggleChatState().Forget());
             _trStatus = GetComponent<RectTransform>(Tr, "Status");
             _textStatus = GetComponent<TextMeshProUGUI>(_trStatus, "Text");
+            _textStatus.text = "";
             _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
+            _localizeStatus.StringReference = null;
+            _textChat = Tr.Find("Chat").GetComponent<TextMeshProUGUI>();
+            _textChat.text = "";
+            _localizeChat = GetComponent<LocalizeStringEvent>(_textChat, "");
+            _localizeChat.StringReference = null;
+            GetComponent<HyperlinkText>(_textChat, "").OnClickLink
+                .AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
             GetComponent<HyperlinkText>(_textStatus, "").OnClickLink.AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
         {
-            _localizeStatus.StringReference = null;
-            _textStatus.text = "";
             Context.App.OnDeviceStateUpdate -= OnDeviceStateUpdate;
             Context.App.OnDeviceStateUpdate += OnDeviceStateUpdate;
             AppSettings.Instance.OnAutoHideUIUpdate -= OnAutoHideUIUpdate;
@@ -82,9 +90,21 @@ namespace XiaoZhi.Unity
             _localizeStatus.StringReference = status;
         }
         
+        public void SetChatMessage(ChatRole role, string content)
+        {
+            _localizeChat.StringReference = null;
+            _textChat.text = content;
+        }
+
+        public void SetChatMessage(ChatRole role, LocalizedString content)
+        {
+            _localizeChat.StringReference = content;
+        }
+        
         public void SetActivateLink(string content)
         {
-            SetStatus($"<u><link=\"0\">{content}</link></u>");
+            _localizeChat.StringReference = null;
+            _textChat.text = $"<u><link=\"0\">{content}</link></u>";
         }
 
         private void OnDeviceStateUpdate(DeviceState state)

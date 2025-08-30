@@ -35,6 +35,20 @@ namespace XiaoZhi.Unity
         VRM
     }
 
+    public enum ZoomMode
+    {
+        LongShot,
+        MediumShot,
+        CloseUp
+    }
+    
+    public enum WallpaperType
+    {
+        Default,
+        Texture,
+        Video
+    }
+
     public class App : IDisposable
     {
         private Context _context;
@@ -58,6 +72,7 @@ namespace XiaoZhi.Unity
         private OTA _ota;
         private readonly CancellationTokenSource _cts = new();
         private IDisplay _display;
+        public IDisplay GetDisplay() => _display;
         private AudioCodec _codec;
         public AudioCodec GetCodec() => _codec;
         private DateTime _vadAbortedSilenceTime;
@@ -101,7 +116,7 @@ namespace XiaoZhi.Unity
                 _display.SetStatus(Lang.GetRef("LOADING_MODEL"));
                 await InitializeWakeService();
             }
-            
+
             InitializeAudio();
             if (!_codec.GetInputDevice(out _))
             {
@@ -188,7 +203,7 @@ namespace XiaoZhi.Unity
         {
             if (_deviceState == state) return;
             _deviceState = state;
-            Debug.Log("设备状态改变: " + _deviceState);
+            Debug.Log("App state: " + _deviceState);
             switch (state)
             {
                 case DeviceState.Unknown:
@@ -200,14 +215,12 @@ namespace XiaoZhi.Unity
                 case DeviceState.Connecting:
                     _display.SetStatus(Lang.GetRef("STATE_CONNECTING"));
                     _display.SetChatMessage(ChatRole.System, "");
-                    _display.SetEmotion("yawn");
                     break;
 
                 case DeviceState.Listening:
                     _display.SetStatus(Lang.GetRef("STATE_LISTENING"));
                     _display.SetEmotion("neutral");
-                    if (_context.ThingManager.GetStatesJson(out var json, true))
-                        _protocol.SendIotStates(json).Forget();
+                    UpdateIotStates().Forget();
                     _protocol.SendStartListening(_listeningMode).Forget();
                     _opusDecoder.ResetState();
                     _opusEncoder.ResetState();
@@ -234,6 +247,12 @@ namespace XiaoZhi.Unity
             }
 
             OnDeviceStateUpdate?.Invoke(_deviceState);
+        }
+
+        public async UniTask UpdateIotStates()
+        {
+            if (_context.ThingManager.GetStatesJson(out var json, true))
+                await _protocol.SendIotStates(json);
         }
 
         private async UniTask AbortSpeaking(AbortReason reason)
@@ -462,9 +481,11 @@ namespace XiaoZhi.Unity
                         $"Server sample rate {_protocol.ServerSampleRate} does not match device output sample rate {_codec.OutputSampleRate}, resampling may cause distortion");
                 SetDecodeSampleRate(_protocol.ServerSampleRate);
                 var json = _context.ThingManager.GetDescriptorsJson();
-                    _protocol.SendIotDescriptors(json).Forget();
-                if (_context.ThingManager.GetStatesJson(out json))
-                    _protocol.SendIotStates(json).Forget();
+                UniTask.Void(async () =>
+                {
+                    await _protocol.SendIotDescriptors(json);
+                    await UpdateIotStates();
+                });
             };
             _protocol.OnChannelClosed += () =>
             {
