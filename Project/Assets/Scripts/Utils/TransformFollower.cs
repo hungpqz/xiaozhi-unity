@@ -11,7 +11,7 @@ namespace XiaoZhi.Unity
         [SerializeField] [Range(0, 1)] private float _bottomGap;
 
         private Camera _camera;
-        private float _extraBottomGap;
+        private float _zoomGap;
         private bool _isInit;
 
         private void Start()
@@ -24,9 +24,9 @@ namespace XiaoZhi.Unity
             _camera = cam;
         }
 
-        public void SetExtraBottomGap(float gap)
+        public void SetZoomGap(float gap)
         {
-            _extraBottomGap = gap;
+            _zoomGap = gap;
         }
 
         private void LateUpdate()
@@ -36,10 +36,11 @@ namespace XiaoZhi.Unity
             {
                 var cameraTrans = _camera.transform;
                 cameraTrans.forward = -transform.forward;
-                var bottomGap = _bottomGap + _extraBottomGap;
-                var trueSize = new Vector3(_bounds.size.x, _bounds.size.y * (1 + _topGap + bottomGap), _bounds.size.z);
+                var bottomGap = _bottomGap + (_zoomGap < 0 ? _zoomGap : 0);
+                var topGap = _topGap + (_zoomGap > 0 ? _zoomGap : 0);
+                var trueSize = new Vector3(_bounds.size.x, _bounds.size.y * (1 + topGap + bottomGap), _bounds.size.z);
                 var trueCenter = new Vector3(_bounds.center.x,
-                    _bounds.center.y + _bounds.size.y * 0.5f * (_topGap - bottomGap), _bounds.center.z);
+                    _bounds.center.y + _bounds.size.y * 0.5f * (topGap - bottomGap), _bounds.center.z);
                 var targetPos = transform.position + trueCenter + transform.forward * trueSize.z;
                 var targetSize = trueSize.y * 0.5f;
                 targetPos = !_isInit ? targetPos : Vector3.Lerp(cameraTrans.position, targetPos, Time.deltaTime * ZoomSpeed);

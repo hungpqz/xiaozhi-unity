@@ -15,10 +15,10 @@ namespace XiaoZhi.Unity
         private Button _btnSet;
         private GameObject _goLoading;
         private RectTransform _trStatus;
-        private TextMeshProUGUI _textStatus;
         private LocalizeStringEvent _localizeStatus;
+        private LocalizeStringEvent _localizeInfo;
+        private TextMeshProUGUI _textInfo;
         private TextMeshProUGUI _textChat;
-        private LocalizeStringEvent _localizeChat;
         private CancellationTokenSource _autoHideCts;
         
         public override string GetResourcePath()
@@ -30,7 +30,7 @@ namespace XiaoZhi.Unity
         {
             Tr.GetComponent<XButton>().onClick.AddListener(() =>
             {
-                if (Context.App.IsDeviceReady() && AppSettings.Instance.IsAutoHideUI())
+                if (Context.App.Talk.IsReady() && AppSettings.Instance.IsAutoHideUI())
                 {
                     ClearAutoHideCts();
                     UpdateCompVisible(true);
@@ -42,23 +42,25 @@ namespace XiaoZhi.Unity
             _trSet.GetComponent<XButton>().onClick.AddListener(() => { ShowModuleUI<SettingsUI>().Forget(); });
             GetComponent<XButton>(Tr, "ClickRole").onClick.AddListener(() => Context.App.ToggleChatState().Forget());
             _trStatus = GetComponent<RectTransform>(Tr, "Status");
-            _textStatus = GetComponent<TextMeshProUGUI>(_trStatus, "Text");
-            _textStatus.text = "";
-            _localizeStatus = GetComponent<LocalizeStringEvent>(_textStatus, "");
+            _localizeStatus = GetComponent<LocalizeStringEvent>(_trStatus, "Stat");
             _localizeStatus.StringReference = null;
+            _localizeInfo = GetComponent<LocalizeStringEvent>(_trStatus, "Info");
+            _localizeInfo.StringReference = null;
+            _textInfo = GetComponent<TextMeshProUGUI>(_localizeInfo, "");
             _textChat = Tr.Find("Chat").GetComponent<TextMeshProUGUI>();
             _textChat.text = "";
-            _localizeChat = GetComponent<LocalizeStringEvent>(_textChat, "");
-            _localizeChat.StringReference = null;
             GetComponent<HyperlinkText>(_textChat, "").OnClickLink
                 .AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
-            GetComponent<HyperlinkText>(_textStatus, "").OnClickLink.AddListener(_ => Application.OpenURL(AppPresets.Instance.ActivationURL));
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
         {
-            Context.App.OnDeviceStateUpdate -= OnDeviceStateUpdate;
-            Context.App.OnDeviceStateUpdate += OnDeviceStateUpdate;
+            Context.App.Talk.OnStateUpdate -= OnTalkStateUpdate;
+            Context.App.Talk.OnStateUpdate += OnTalkStateUpdate;
+            Context.App.Talk.OnInfoUpdate -= OnTalkInfoUpdate;
+            Context.App.Talk.OnInfoUpdate += OnTalkInfoUpdate;
+            Context.App.Talk.OnChatUpdate -= OnTalkChatUpdate;
+            Context.App.Talk.OnChatUpdate += OnTalkChatUpdate;
             AppSettings.Instance.OnAutoHideUIUpdate -= OnAutoHideUIUpdate;
             AppSettings.Instance.OnAutoHideUIUpdate += OnAutoHideUIUpdate;
             DetectCompVisible(true);
@@ -67,50 +69,34 @@ namespace XiaoZhi.Unity
 
         protected override async UniTask OnHide()
         {
+            Context.App.Talk.OnStateUpdate -= OnTalkStateUpdate;
+            Context.App.Talk.OnInfoUpdate -= OnTalkInfoUpdate;
+            Context.App.Talk.OnChatUpdate -= OnTalkChatUpdate;
+            AppSettings.Instance.OnAutoHideUIUpdate -= OnAutoHideUIUpdate;
             ClearAutoHideCts();
             KillCompVisibleAnim();
-            Context.App.OnDeviceStateUpdate -= OnDeviceStateUpdate;
-            AppSettings.Instance.OnAutoHideUIUpdate -= OnAutoHideUIUpdate;
             await UniTask.CompletedTask;
         }
-
-        public void ShowLoading(bool show)
-        {
-            _goLoading.SetActive(show);
-        }
-
-        public void SetStatus(string status)
-        {
-            _localizeStatus.StringReference = null;
-            _textStatus.text = status;
-        }
-
-        public void SetStatus(LocalizedString status)
-        {
-            _localizeStatus.StringReference = status;
-        }
         
-        public void SetChatMessage(ChatRole role, string content)
-        {
-            _localizeChat.StringReference = null;
-            _textChat.text = content;
-        }
-
-        public void SetChatMessage(ChatRole role, LocalizedString content)
-        {
-            _localizeChat.StringReference = content;
-        }
-        
-        public void SetActivateLink(string content)
-        {
-            _localizeChat.StringReference = null;
-            _textChat.text = $"<u><link=\"0\">{content}</link></u>";
-        }
-
-        private void OnDeviceStateUpdate(DeviceState state)
+        private void OnTalkStateUpdate(Talk.State state)
         {
             ClearAutoHideCts();
             DetectCompVisible();
+            UpdateLoadingState();
+            _localizeStatus.StringReference = Lang.GetRef(Talk.State2LocalizedKey(state));
+        }
+
+        private void OnTalkChatUpdate(string content)
+        {
+            _textChat.text = Context.App.Talk.Stat == Talk.State.Activating
+                ? $"<u><link=\"0\">{content}</link></u>"
+                : content;
+        }
+
+        private void OnTalkInfoUpdate(LocalizedString info)
+        {
+            _localizeInfo.StringReference = info;
+            if (info == null) _textInfo.text = "";
         }
 
         private void OnAutoHideUIUpdate(bool autoHide)
@@ -142,7 +128,7 @@ namespace XiaoZhi.Unity
 
         private void DetectCompVisible(bool instant = false)
         {
-            UpdateCompVisible(Context.App.IsDeviceReady() && !AppSettings.Instance.IsAutoHideUI(), instant);
+            UpdateCompVisible(Context.App.Talk.IsReady() && !AppSettings.Instance.IsAutoHideUI(), instant);
         }
 
         private void UpdateCompVisible(bool visible, bool instant = false)
@@ -161,6 +147,11 @@ namespace XiaoZhi.Unity
         private void KillCompVisibleAnim()
         {
             _trSet.DOKill();
+        }
+        
+        private void UpdateLoadingState()
+        {
+            _goLoading.SetActive(Context.App.Talk.Stat is Talk.State.Starting);
         }
     }
 }

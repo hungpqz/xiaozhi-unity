@@ -25,6 +25,7 @@ namespace XiaoZhi.Unity
             ThingManager.AddThing(new ThingAppSettings());
             ThingManager.AddThing(new ThingMIoT());
             ThingManager.AddThing(new ThingVideoPlayer());
+            ThingManager.AddThing(new ThingAnimation());
             App = new App();
             App.Inject(this);
             Application.runInBackground = true;

@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Localization;
 using UniVRM10;
 using Object = UnityEngine.Object;
 
@@ -12,16 +10,15 @@ namespace XiaoZhi.Unity
 {
     public class VRMDisplay : IDisplay
     {
-        private static readonly int AnimTalkingHash = Animator.StringToHash("talking");
-        
         private static float ZoomMode2Gap(ZoomMode d) => d switch
         {
-            ZoomMode.LongShot => 0,
-            ZoomMode.MediumShot => -0.5f,
+            ZoomMode.MediumShot => 0,
+            ZoomMode.LongShot => 0.5f,
+            ZoomMode.CloseShot => -0.5f,
             ZoomMode.CloseUp => -0.7f,
             _ => 0
         };
-        
+
         private readonly Context _context;
         private WallpaperUI _wallpaperUI;
         private VRMMainUI _mainUI;
@@ -31,9 +28,8 @@ namespace XiaoZhi.Unity
         private ULipSyncAudioProxy _lipSyncAudioProxy;
         private Vrm10Instance _vrmInstance;
         private FaceAnimation _faceAnim;
-        private Animator _animator;
+        private AnimationCtrl _animCtrl;
         private CancellationTokenSource _loopCts;
-        private string _emotion;
         private TransformFollower _follower;
         private bool _visible = true;
 
@@ -45,6 +41,8 @@ namespace XiaoZhi.Unity
 
         public void Dispose()
         {
+            _context.App.Talk.OnEmotionUpdate -= OnEmotionUpdate;
+            AppSettings.Instance.OnZoomModeUpdate -= OnZoomModeUpdate;
             ThemeManager.OnThemeChanged.RemoveListener(OnThemeChanged);
             if (_loopCts != null)
             {
@@ -85,8 +83,9 @@ namespace XiaoZhi.Unity
             OnZoomModeUpdate(AppSettings.Instance.GetZoomMode());
             _lipSync = _character.GetComponent<uLipSync.uLipSync>();
             _vrmInstance = _character.GetComponent<Vrm10Instance>();
-            _faceAnim = new FaceAnimation(_vrmInstance, "loading");
-            _animator = _character.GetComponent<Animator>();
+            _faceAnim = new FaceAnimation(_vrmInstance, "sleep");
+            _animCtrl = new AnimationCtrl(_character.GetComponent<Animator>(), AppPresets.Instance.GetAnimationLib(),
+                _context.App.Talk);
             return true;
         }
 
@@ -95,38 +94,10 @@ namespace XiaoZhi.Unity
             _lipSyncAudioProxy = new ULipSyncAudioProxy(_lipSync, _context.App.GetCodec());
             _loopCts = new CancellationTokenSource();
             UniTask.Void(LoopUpdate, _loopCts.Token);
-            _context.App.OnDeviceStateUpdate -= OnDeviceStateUpdate;
-            _context.App.OnDeviceStateUpdate += OnDeviceStateUpdate;
+            _context.App.Talk.OnEmotionUpdate -= OnEmotionUpdate;
+            _context.App.Talk.OnEmotionUpdate += OnEmotionUpdate;
             AppSettings.Instance.OnZoomModeUpdate -= OnZoomModeUpdate;
             AppSettings.Instance.OnZoomModeUpdate += OnZoomModeUpdate;
-        }
-
-        public void SetStatus(string status)
-        {
-            _mainUI.SetStatus(status);
-        }
-
-        public void SetStatus(LocalizedString status)
-        {
-            _mainUI.SetStatus(status);
-        }
-
-        public void SetEmotion(string emotion)
-        {
-            _emotion = emotion;
-            _mainUI.ShowLoading(_emotion == "loading");
-            _faceAnim.SetExpression(_emotion);
-        }
-
-        public void SetChatMessage(ChatRole role, string content)
-        {
-            if (_emotion == "activation") _mainUI.SetActivateLink(content);
-            else _mainUI.SetChatMessage(role, content);
-        }
-
-        public void SetChatMessage(ChatRole role, LocalizedString content)
-        {
-            _mainUI.SetChatMessage(role, content);
         }
 
         public async UniTask Show()
@@ -143,6 +114,11 @@ namespace XiaoZhi.Unity
             _character.SetActive(false);
             await _mainUI.Hide();
             await _wallpaperUI.Hide();
+        }
+
+        public void Animate(params string[] labels)
+        {
+            _animCtrl.Animate(labels);
         }
 
         private void OnThemeChanged(ThemeSettings.Theme theme)
@@ -168,23 +144,21 @@ namespace XiaoZhi.Unity
             }
         }
         
-        private void OnDeviceStateUpdate(DeviceState state)
+        private void OnEmotionUpdate(string emotion)
         {
-            _animator.SetBool(AnimTalkingHash, state == DeviceState.Speaking);
+            _faceAnim.SetExpression(emotion);
         }
-        
+
         private void OnZoomModeUpdate(ZoomMode mode)
         {
-            _follower.SetExtraBottomGap(ZoomMode2Gap(mode));
+            _follower.SetZoomGap(ZoomMode2Gap(mode));
         }
 
         private class FaceAnimation
         {
             private static readonly Dictionary<string, ExpressionKey> ExpressionMap = new()
             {
-                { "loading", new ExpressionKey(ExpressionPreset.custom, "sleeping") },
                 { "sleep", new ExpressionKey(ExpressionPreset.custom, "sleeping") },
-                { "activation", new ExpressionKey(ExpressionPreset.custom, "sleeping") },
                 { "neutral", new ExpressionKey(ExpressionPreset.neutral) },
                 { "happy", new ExpressionKey(ExpressionPreset.relaxed) },
                 { "funny", new ExpressionKey(ExpressionPreset.relaxed) },

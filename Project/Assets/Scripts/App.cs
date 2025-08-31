@@ -9,18 +9,6 @@ using Debug = UnityEngine.Debug;
 
 namespace XiaoZhi.Unity
 {
-    public enum DeviceState
-    {
-        Unknown,
-        Starting,
-        Idle,
-        Connecting,
-        Listening,
-        Speaking,
-        Activating,
-        Error
-    }
-
     public enum BreakMode
     {
         None,
@@ -37,11 +25,12 @@ namespace XiaoZhi.Unity
 
     public enum ZoomMode
     {
-        LongShot,
         MediumShot,
-        CloseUp
+        LongShot,
+        CloseShot,
+        CloseUp,
     }
-    
+
     public enum WallpaperType
     {
         Default,
@@ -53,11 +42,8 @@ namespace XiaoZhi.Unity
     {
         private Context _context;
         private Protocol _protocol;
-        private DeviceState _deviceState = DeviceState.Unknown;
-        public DeviceState GetDeviceState() => _deviceState;
-
-        public bool IsDeviceReady() => _deviceState is DeviceState.Idle or DeviceState.Connecting
-            or DeviceState.Speaking or DeviceState.Listening;
+        private Talk _talk;
+        public Talk Talk => _talk;
 
         private bool _voiceDetected;
         public bool VoiceDetected => _voiceDetected;
@@ -78,8 +64,6 @@ namespace XiaoZhi.Unity
         private DateTime _vadAbortedSilenceTime;
         private DynamicBuffer<short> _freeBuffer;
 
-        public event Action<DeviceState> OnDeviceStateUpdate;
-
         public void Inject(Context context)
         {
             _context = context;
@@ -87,49 +71,49 @@ namespace XiaoZhi.Unity
 
         public async UniTaskVoid Start()
         {
+            _talk = new Talk();
+            _talk.OnStateUpdate += OnTalkStateUpdate;
             AppSettings.Load();
             await AppPresets.Load();
             await InitDisplay();
             await Lang.LoadLocale();
-            SetDeviceState(DeviceState.Starting);
+            _talk.Stat = Talk.State.Starting;
             if (!await CheckRequestPermission())
             {
-                SetDeviceState(DeviceState.Error);
-                _display.SetChatMessage(ChatRole.System, Lang.GetRef("Permission_Request_Failed"));
+                _talk.Stat = Talk.State.Error;
+                _talk.Info = Lang.GetRef("Permission_Request_Failed");
                 return;
             }
 
             await CheckInternetReachability();
             if (!await CheckNewVersion(_cts.Token))
             {
-                SetDeviceState(DeviceState.Error);
-                _display.SetChatMessage(ChatRole.System, Lang.GetRef("ACTIVATION_FAILED_TIPS"));
+                _talk.Stat = Talk.State.Error;
+                _talk.Info = Lang.GetRef("ACTIVATION_FAILED_TIPS");
                 return;
             }
 
-            SetDeviceState(DeviceState.Starting);
-            _display.SetChatMessage(ChatRole.System, "");
             if (AppPresets.Instance.EnableWakeService)
             {
-                _display.SetStatus(Lang.GetRef("LOADING_RESOURCES"));
+                _talk.Info = Lang.GetRef("LOADING_RESOURCES");
                 await PrepareResource(_cts.Token);
-                _display.SetStatus(Lang.GetRef("LOADING_MODEL"));
+                _talk.Info = Lang.GetRef("LOADING_MODEL");
                 await InitializeWakeService();
             }
 
             InitializeAudio();
             if (!_codec.GetInputDevice(out _))
             {
-                SetDeviceState(DeviceState.Error);
-                _display.SetStatus(Lang.GetRef("STATE_MIC_NOT_FOUND"));
+                _talk.Stat = Talk.State.Error;
+                _talk.Info = Lang.GetRef("STATE_MIC_NOT_FOUND");
                 return;
             }
 
-            _display.SetStatus(Lang.GetRef("LOADING_THINGS"));
+            _talk.Info = Lang.GetRef("LOADING_THINGS");
             await _context.ThingManager.Load();
             InitializeProtocol();
             StartDisplay();
-            SetDeviceState(DeviceState.Idle);
+            _talk.Stat = Talk.State.Idle;
             UniTask.Void(MainLoop, _cts.Token);
         }
 
@@ -199,54 +183,23 @@ namespace XiaoZhi.Unity
             await UniTask.SwitchToMainThread(cancellationToken);
         }
 
-        private void SetDeviceState(DeviceState state)
+        private void OnTalkStateUpdate(Talk.State state)
         {
-            if (_deviceState == state) return;
-            _deviceState = state;
-            Debug.Log("App state: " + _deviceState);
+            Debug.Log("Talk state: " + state);
             switch (state)
             {
-                case DeviceState.Unknown:
-                case DeviceState.Idle:
-                    _display.SetStatus(Lang.GetRef("STATE_STANDBY"));
-                    _display.SetEmotion("sleep");
-                    break;
-
-                case DeviceState.Connecting:
-                    _display.SetStatus(Lang.GetRef("STATE_CONNECTING"));
-                    _display.SetChatMessage(ChatRole.System, "");
-                    break;
-
-                case DeviceState.Listening:
-                    _display.SetStatus(Lang.GetRef("STATE_LISTENING"));
-                    _display.SetEmotion("neutral");
+                case Talk.State.Listening:
                     UpdateIotStates().Forget();
                     _protocol.SendStartListening(_listeningMode).Forget();
                     _opusDecoder.ResetState();
                     _opusEncoder.ResetState();
                     break;
-
-                case DeviceState.Speaking:
-                    _display.SetStatus(Lang.GetRef("STATE_SPEAKING"));
+                case Talk.State.Speaking:
                     _opusDecoder.ResetState();
                     if (_wakeService is { IsRunning: true })
                         _wakeService.ClearVadBuffer();
                     break;
-                case DeviceState.Starting:
-                    _display.SetStatus(Lang.GetRef("STATE_STARTING"));
-                    _display.SetEmotion("loading");
-                    break;
-                case DeviceState.Activating:
-                    _display.SetStatus(Lang.GetRef("ACTIVATION"));
-                    _display.SetEmotion("activation");
-                    break;
-                case DeviceState.Error:
-                    _display.SetStatus(Lang.GetRef("STATE_ERROR"));
-                    _display.SetEmotion("error");
-                    break;
             }
-
-            OnDeviceStateUpdate?.Invoke(_deviceState);
         }
 
         public async UniTask UpdateIotStates()
@@ -266,16 +219,16 @@ namespace XiaoZhi.Unity
         private void SetListeningMode(ListeningMode mode)
         {
             _listeningMode = mode;
-            SetDeviceState(DeviceState.Listening);
+            _talk.Stat = Talk.State.Listening;
         }
 
         private async UniTask<bool> OpenAudioChannel()
         {
             if (_protocol.IsAudioChannelOpened()) return true;
-            SetDeviceState(DeviceState.Connecting);
+            _talk.Stat = Talk.State.Connecting;
             if (!await _protocol.OpenAudioChannel())
             {
-                SetDeviceState(DeviceState.Idle);
+                _talk.Stat = Talk.State.Idle;
                 _context.UIManager.ShowNotificationUI(Lang.GetRef("Connect_Failed_Tips")).Forget();
                 return false;
             }
@@ -285,27 +238,27 @@ namespace XiaoZhi.Unity
 
         public async UniTaskVoid ToggleChatState()
         {
-            switch (_deviceState)
+            switch (_talk.Stat)
             {
-                case DeviceState.Idle:
+                case Talk.State.Idle:
                     if (!await OpenAudioChannel()) return;
                     SetListeningMode(ListeningMode.AutoStop);
                     break;
-                case DeviceState.Speaking:
+                case Talk.State.Speaking:
                     await AbortSpeaking(AbortReason.None);
                     break;
-                case DeviceState.Listening:
+                case Talk.State.Listening:
                     await _protocol.CloseAudioChannel();
-                    SetDeviceState(DeviceState.Idle);
+                    _talk.Stat = Talk.State.Idle;
                     break;
             }
         }
 
         public async UniTask StartListening()
         {
-            if (_deviceState == DeviceState.Activating)
+            if (_talk.Stat == Talk.State.Activating)
             {
-                SetDeviceState(DeviceState.Idle);
+                _talk.Stat = Talk.State.Idle;
                 return;
             }
 
@@ -315,15 +268,15 @@ namespace XiaoZhi.Unity
                 return;
             }
 
-            switch (_deviceState)
+            switch (_talk.Stat)
             {
-                case DeviceState.Idle:
+                case Talk.State.Idle:
                 {
                     if (!await OpenAudioChannel()) return;
                     SetListeningMode(ListeningMode.ManualStop);
                     break;
                 }
-                case DeviceState.Speaking:
+                case Talk.State.Speaking:
                     await AbortSpeaking(AbortReason.None);
                     SetListeningMode(ListeningMode.ManualStop);
                     break;
@@ -332,10 +285,10 @@ namespace XiaoZhi.Unity
 
         public async UniTask StopListening()
         {
-            if (_deviceState == DeviceState.Listening)
+            if (_talk.Stat == Talk.State.Listening)
             {
                 await _protocol.SendStopListening();
-                SetDeviceState(DeviceState.Idle);
+                _talk.Stat = Talk.State.Idle;
             }
         }
 
@@ -354,7 +307,7 @@ namespace XiaoZhi.Unity
                     continue;
                 }
 
-                if (_deviceState is DeviceState.Listening)
+                if (_talk.Stat is Talk.State.Listening)
                     _opusEncoder.Encode(data, opus => { _protocol.SendAudio(opus).Forget(); });
                 if (_wakeService is { IsRunning: true }) _wakeService.Feed(data);
             }
@@ -362,7 +315,7 @@ namespace XiaoZhi.Unity
 
         private void OutputAudio(ReadOnlySpan<byte> opus)
         {
-            if (_deviceState == DeviceState.Listening) return;
+            if (_talk.Stat == Talk.State.Listening) return;
             if (_aborted) return;
             if (!_opusDecoder.Decode(opus, out var pcm)) return;
             if (_opusDecodeSampleRate != _codec.OutputSampleRate) _outputResampler.Process(pcm, out pcm);
@@ -402,7 +355,7 @@ namespace XiaoZhi.Unity
             {
                 if (_voiceDetected == speaking) return;
                 _voiceDetected = speaking;
-                if (_voiceDetected && _deviceState == DeviceState.Speaking)
+                if (_voiceDetected && _talk.Stat == Talk.State.Speaking)
                 {
                     switch (AppSettings.Instance.GetBreakMode())
                     {
@@ -428,16 +381,16 @@ namespace XiaoZhi.Unity
                 UniTask.Void(async () =>
                 {
                     await UniTask.SwitchToMainThread();
-                    switch (_deviceState)
+                    switch (_talk.Stat)
                     {
-                        case DeviceState.Idle:
+                        case Talk.State.Idle:
                         {
                             if (!await OpenAudioChannel()) return;
                             await _protocol.SendWakeWordDetected(wakeWord);
                             SetListeningMode(ListeningMode.AutoStop);
                             break;
                         }
-                        case DeviceState.Speaking:
+                        case Talk.State.Speaking:
                             if (AppSettings.Instance.GetBreakMode() == BreakMode.Keyword)
                             {
                                 Debug.Log("Break by keyword.");
@@ -489,8 +442,8 @@ namespace XiaoZhi.Unity
             };
             _protocol.OnChannelClosed += () =>
             {
-                _display.SetChatMessage(ChatRole.System, "");
-                SetDeviceState(DeviceState.Idle);
+                _talk.Chat = "";
+                _talk.Stat = Talk.State.Idle;
             };
             _protocol.OnIncomingJson += message =>
             {
@@ -509,23 +462,20 @@ namespace XiaoZhi.Unity
                             case "start":
                             {
                                 _aborted = false;
-                                if (_deviceState is DeviceState.Idle or DeviceState.Listening)
-                                {
-                                    SetDeviceState(DeviceState.Speaking);
-                                }
-
+                                if (_talk.Stat is Talk.State.Idle or Talk.State.Listening)
+                                    _talk.Stat = Talk.State.Speaking;
                                 break;
                             }
                             case "stop":
                             {
-                                if (_deviceState != DeviceState.Speaking) return;
+                                if (_talk.Stat != Talk.State.Speaking) return;
                                 if (_listeningMode == ListeningMode.ManualStop)
                                 {
-                                    SetDeviceState(DeviceState.Idle);
+                                    _talk.Stat = Talk.State.Idle;
                                 }
                                 else
                                 {
-                                    SetDeviceState(DeviceState.Listening);
+                                    _talk.Stat = Talk.State.Listening;
                                     if (_aborted && _freeBuffer.Count > 0)
                                     {
                                         SendAudio(_freeBuffer.Read());
@@ -538,7 +488,7 @@ namespace XiaoZhi.Unity
                             case "sentence_start":
                             {
                                 var text = message["text"].ToString();
-                                if (!string.IsNullOrEmpty(text)) _display.SetChatMessage(ChatRole.Assistant, text);
+                                if (!string.IsNullOrEmpty(text)) _talk.Chat = text;
                                 break;
                             }
                         }
@@ -548,13 +498,13 @@ namespace XiaoZhi.Unity
                     case "stt":
                     {
                         var text = message["text"].ToString();
-                        if (!string.IsNullOrEmpty(text)) _display.SetChatMessage(ChatRole.User, text);
+                        if (!string.IsNullOrEmpty(text)) _talk.Chat = text;
                         break;
                     }
                     case "llm":
                     {
                         var emotion = message["emotion"].ToString();
-                        if (!string.IsNullOrEmpty(emotion)) _display.SetEmotion(emotion);
+                        if (!string.IsNullOrEmpty(emotion)) _talk.Emotion = emotion;
                         break;
                     }
                     case "iot":
@@ -572,9 +522,8 @@ namespace XiaoZhi.Unity
                         if (!string.IsNullOrEmpty(status) && !string.IsNullOrEmpty(content) &&
                             !string.IsNullOrEmpty(emotion))
                         {
-                            _display.SetEmotion(emotion);
-                            _display.SetStatus(status);
-                            _display.SetChatMessage(ChatRole.System, content);
+                            _talk.Emotion = emotion;
+                            _talk.Chat = $"{status}: {content}";
                         }
 
                         break;
@@ -608,8 +557,8 @@ namespace XiaoZhi.Unity
                         break;
                     }
 
-                    SetDeviceState(DeviceState.Activating);
-                    _display.SetChatMessage(ChatRole.System, _ota.ActivationMessage);
+                    _talk.Stat = Talk.State.Activating;
+                    _talk.Chat = _ota.ActivationMessage;
                     try
                     {
                         GUIUtility.systemCopyBuffer = Regex.Match(_ota.ActivationMessage, @"\d+").Value;
@@ -652,17 +601,17 @@ namespace XiaoZhi.Unity
         private async UniTask CheckInternetReachability()
         {
             if (Application.internetReachability == NetworkReachability.NotReachable)
-                _display.SetStatus(Lang.GetRef("State_Internet_Break"));
+                _talk.Info = Lang.GetRef("State_Internet_Break");
             while (Application.internetReachability == NetworkReachability.NotReachable)
                 await UniTask.Delay(1000);
         }
 
         private void CheckProtocol()
         {
-            if (_deviceState is DeviceState.Listening or DeviceState.Speaking &&
+            if (_talk.Stat is Talk.State.Listening or Talk.State.Speaking &&
                 _protocol?.IsAudioChannelOpened() != true)
             {
-                SetDeviceState(DeviceState.Idle);
+                _talk.Stat = Talk.State.Idle;
                 _context.UIManager.ShowNotificationUI(Lang.GetRef("CONNECTION_CLOSED_TIPS")).Forget();
             }
         }

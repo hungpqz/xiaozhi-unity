@@ -132,10 +132,8 @@ namespace XiaoZhi.Unity.Editor
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(importer.assetPath);
             var prefab = (GameObject)PrefabUtility.InstantiatePrefab(model);
             const string commonAnimatorPath = "Assets/Res/VRM/Common/animator.controller";
-            var targetAnimatorPath = $"{Path.GetDirectoryName(importer.assetPath)}/animator.controller";
-            AssetDatabase.CopyAsset(commonAnimatorPath, targetAnimatorPath);
             prefab.GetComponent<Animator>().runtimeAnimatorController =
-                AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(targetAnimatorPath);
+                AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(commonAnimatorPath);
             var uLipSyncExpressionVRM = prefab.AddComponent<uLipSyncExpressionVRM>();
             uLipSyncExpressionVRM.usePhonemeBlend = true;
             uLipSyncExpressionVRM.AddBlendShape("A", "aa");

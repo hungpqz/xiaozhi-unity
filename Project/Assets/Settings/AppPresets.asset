@@ -52,3 +52,23 @@ MonoBehaviour:
   - _type: 2
     _name: Star Field
     _path: Assets/Res/Video/star_field.mp4
+  _animationLibs:
+  - _name: Default
+    _sets:
+    - _anims:
+      - _name: idle1
+        _weight: 1
+      - _name: idle2
+        _weight: 1
+      _labels:
+      - idle
+    - _anims:
+      - _name: greetings1
+        _weight: 1
+      _labels:
+      - greetings
+    - _anims:
+      - _name: talk1
+        _weight: 1
+      _labels:
+      - talk

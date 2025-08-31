@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
@@ -15,7 +16,7 @@ namespace XiaoZhi.Unity
         {
             [SerializeField] private string _name;
             [SerializeField] private string _path;
-            
+
             public string Name => _name;
             public string Path => _path;
         }
@@ -46,23 +47,78 @@ namespace XiaoZhi.Unity
         {
             [SerializeField] private string _name;
             [SerializeField] private string _path;
-            
+
             public string Name => _name;
             public string Path => _path;
         }
-        
+
         [Serializable]
         public class Wallpaper
         {
             [SerializeField] private WallpaperType _type;
             [SerializeField] private string _name;
             [SerializeField] private string _path;
-            
+
             public WallpaperType Type => _type;
             public string Name => _name;
             public string Path => _path;
         }
-        
+
+        [Serializable]
+        public class AnimationMeta
+        {
+            [SerializeField] private string _name;
+            [SerializeField] private int _weight;
+
+            public string Name => _name;
+            public int Weight => _weight;
+        }
+
+        [Serializable]
+        public class AnimationSet
+        {
+            [SerializeField] private AnimationMeta[] _anims;
+            [SerializeField] private string[] _labels;
+
+            public AnimationMeta[] Anims => _anims;
+            public string[] Labels => _labels;
+        }
+
+        [Serializable]
+        public class AnimationLib
+        {
+            [SerializeField] private string _name;
+            [SerializeField] private AnimationSet[] _sets;
+
+            public string Name => _name;
+            public AnimationSet[] Sets => _sets;
+
+            public AnimationMeta[] MatchAny(IEnumerable<string> labels)
+            {
+                return _sets.Where(k => labels.Any(k.Labels.Contains)).SelectMany(k => k.Anims).ToArray();
+            }
+
+            public AnimationMeta[] MatchAll(IEnumerable<string> labels)
+            {
+                return _sets.Where(k => labels.All(k.Labels.Contains)).SelectMany(k => k.Anims).ToArray();
+            }
+
+            public static AnimationMeta Random(AnimationMeta[] anims)
+            {
+                var totalWeight = anims.Sum(k => k.Weight);
+                var randomWeight = UnityEngine.Random.Range(0.0f, totalWeight);
+                var weight = 0;
+                foreach (var anim in anims)
+                {
+                    weight += anim.Weight;
+                    if (weight >= randomWeight)
+                        return anim;
+                }
+
+                return null;
+            }
+        }
+
         [SerializeField] private string _webSocketUrl;
         [SerializeField] private string _webSocketAccessToken;
         [SerializeField] private int _opusFrameDurationMs;
@@ -77,6 +133,7 @@ namespace XiaoZhi.Unity
         [SerializeField] private VRMModel[] _vrmCharacterModels;
         [SerializeField] private Video[] _videos;
         [SerializeField] private Wallpaper[] _wallpapers;
+        [SerializeField] private AnimationLib[] _animationLibs;
 
         public string WebSocketUrl => _webSocketUrl;
         public string WebSocketAccessToken => _webSocketAccessToken;
@@ -92,10 +149,13 @@ namespace XiaoZhi.Unity
         public Video[] Videos => _videos;
         public Video GetVideo(string videoName) => _videos.FirstOrDefault(k => k.Name == videoName);
         public Wallpaper[] Wallpapers => _wallpapers;
-        public Wallpaper GetWallpaper(string paperName = "Default") => _wallpapers.FirstOrDefault(k => k.Name == paperName);
+        public Wallpaper GetWallpaper(string paperName = "Default") =>
+            _wallpapers.FirstOrDefault(k => k.Name == paperName);
+        public AnimationLib[] AnimationLibs => _animationLibs;
+        public AnimationLib GetAnimationLib(string libName = "Default") => _animationLibs.FirstOrDefault(k => k.Name == libName);
         public Keyword GetKeyword(string localeCode) => _keyWords.FirstOrDefault(k => k.LocaleCode == localeCode);
         public static AppPresets Instance { get; private set; }
-        
+
         public static async UniTask Load()
         {
             const string path = "Assets/Settings/AppPresets.asset";

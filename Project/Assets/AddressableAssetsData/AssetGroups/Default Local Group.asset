@@ -28,7 +28,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1611ec52f2e0c174b96111a22cf1d3f6
-    m_Address: Assets/Res/UI/MainUI/BackgroundUI.prefab
+    m_Address: Assets/Res/UI/MainUI/WallpaperUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -34,31 +34,6 @@ namespace XiaoZhi.Unity
             
         }
 
-        public void SetStatus(string status)
-        {
-            _emojiMainUI.SetStatus(status);
-        }
-
-        public void SetStatus(LocalizedString status)
-        {
-            _emojiMainUI.SetStatus(status);
-        }
-
-        public void SetEmotion(string emotion)
-        {
-            _emojiMainUI.SetEmotion(emotion);
-        }
-
-        public void SetChatMessage(ChatRole role, string content)
-        {
-            _emojiMainUI.SetChatMessage(role, content);
-        }
-
-        public void SetChatMessage(ChatRole role, LocalizedString content)
-        {
-            _emojiMainUI.SetChatMessage(role, content);
-        }
-
         public async UniTask Show()
         {
             await _wallpaperUI.Show();
@@ -69,6 +44,11 @@ namespace XiaoZhi.Unity
         {
             await _emojiMainUI.Hide();
             await _wallpaperUI.Hide();
+        }
+
+        public void Animate(params string[] labels)
+        {
+            
         }
     }
 }
