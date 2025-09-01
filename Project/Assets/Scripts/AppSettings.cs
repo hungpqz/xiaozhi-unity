@@ -1,5 +1,4 @@
 using System;
-using Cysharp.Threading.Tasks;
 
 namespace XiaoZhi.Unity
 {
@@ -21,11 +20,11 @@ namespace XiaoZhi.Unity
         private ZoomMode _zoomMode;
 
         private BreakMode _breakMode;
-        
+
         private string _keywords;
 
         private string _wallpaper;
-        
+
         private bool _autoHideUI;
 
         private int _outputVolume;
@@ -94,7 +93,7 @@ namespace XiaoZhi.Unity
             SetInt("break_mode", (int)breakMode);
             Save();
         }
-        
+
         public string GetWallpaper() => _wallpaper;
 
         public void SetWallpaper(string wallpaper)
@@ -106,8 +105,9 @@ namespace XiaoZhi.Unity
             OnWallPaperUpdate?.Invoke(_wallpaper);
         }
 
-        public string GetKeywords()
+        public string GetKeywords(bool forceUpdate = false)
         {
+            if (forceUpdate) _keywords = null;
             _keywords ??=
                 FileUtility.ReadAllText(FileUtility.FileType.DataPath,
                     AppPresets.Instance.GetKeyword(Lang.Code)

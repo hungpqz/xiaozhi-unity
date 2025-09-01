@@ -12,10 +12,9 @@ namespace XiaoZhi.Unity
     {
         private static float ZoomMode2Gap(ZoomMode d) => d switch
         {
-            ZoomMode.MediumShot => 0,
-            ZoomMode.LongShot => 0.5f,
-            ZoomMode.CloseShot => -0.5f,
-            ZoomMode.CloseUp => -0.7f,
+            ZoomMode.LongShot => 0,
+            ZoomMode.MediumShot => -0.5f,
+            ZoomMode.CloseShot => -0.7f,
             _ => 0
         };
 

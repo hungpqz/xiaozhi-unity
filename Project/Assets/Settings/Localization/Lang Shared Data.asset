@@ -331,6 +331,10 @@ MonoBehaviour:
     m_Key: SettingsUI_Background
     m_Metadata:
       m_Items: []
+  - m_Id: 51076010605674496
+    m_Key: SettingsUI_ZoomMode_CloseShot
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -25,16 +25,15 @@ namespace XiaoZhi.Unity
 
     public enum ZoomMode
     {
-        MediumShot,
         LongShot,
-        CloseShot,
-        CloseUp,
+        MediumShot,
+        CloseShot
     }
 
     public enum WallpaperType
     {
         Default,
-        Texture,
+        Sprite,
         Video
     }
 

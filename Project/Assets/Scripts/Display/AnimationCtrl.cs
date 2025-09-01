@@ -11,7 +11,7 @@ namespace XiaoZhi.Unity
         {
             Idle,
             Stand,
-            Greetings,
+            Greet,
             Talk,
             Dance,
         }
@@ -63,7 +63,7 @@ namespace XiaoZhi.Unity
                     _readyToSpeak = true;
                     break;
                 case Talk.State.Listening:
-                    SetState(_lastTalkState != Talk.State.Speaking ? State.Greetings : State.Idle);
+                    SetState(_lastTalkState != Talk.State.Speaking ? State.Greet : State.Idle);
                     break;
                 case Talk.State.Unknown:
                 case Talk.State.Starting:
@@ -124,7 +124,7 @@ namespace XiaoZhi.Unity
                 case State.Idle:
                     labels.Add("idle");
                     break;
-                case State.Greetings:
+                case State.Greet:
                     labels.Add("greet");
                     break;
                 case State.Talk:
@@ -153,7 +153,7 @@ namespace XiaoZhi.Unity
                 }
                 else if (stateInfo is { loop: false, normalizedTime: >= 0.999f })
                 {
-                    if (_state is State.Greetings or State.Stand) SetState(State.Idle);
+                    if (_state is State.Greet or State.Stand) SetState(State.Idle);
                     else State2Animation();
                 }
                 else if (_state == State.Idle && _talk.Stat == Talk.State.Listening && stateInfo.loop &&

@@ -1,5 +1,4 @@
 using System;
-using TMPro.EditorUtilities;
 using UnityEngine.Localization;
 
 namespace XiaoZhi.Unity

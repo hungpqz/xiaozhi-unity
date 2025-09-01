@@ -2,8 +2,10 @@ using System;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 namespace XiaoZhi.Unity
@@ -97,6 +99,14 @@ namespace XiaoZhi.Unity
             UpdateAutoHide();
             UpdateIconTheme();
             UpdateLangList();
+            LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChanged;
+            LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChanged;
+            await UniTask.CompletedTask;
+        }
+
+        protected override async UniTask OnHide()
+        {
+            LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChanged;
             await UniTask.CompletedTask;
         }
 
@@ -217,9 +227,9 @@ namespace XiaoZhi.Unity
             if (isOn) AppSettings.Instance.SetBreakMode((BreakMode)Enum.GetValues(typeof(BreakMode)).GetValue(index));
         }
 
-        private void UpdateKeywords()
+        private void UpdateKeywords(bool forceUpdate = false)
         {
-            _inputKeywords.text = AppSettings.Instance.GetKeywords();
+            _inputKeywords.text = AppSettings.Instance.GetKeywords(forceUpdate);
         }
 
         private void OnChangeKeywords(string text)
@@ -343,6 +353,11 @@ namespace XiaoZhi.Unity
             }
 
             AppSettings.Instance.SetWebSocketUrl(value);
+        }
+
+        private void OnSelectedLocaleChanged(Locale locale)
+        {
+            UpdateKeywords(true);
         }
     }
 }

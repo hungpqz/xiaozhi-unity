@@ -58,17 +58,43 @@ MonoBehaviour:
     - _anims:
       - _name: idle1
         _weight: 1
-      - _name: idle2
-        _weight: 1
       _labels:
       - idle
     - _anims:
-      - _name: greetings1
+      - _name: greet1
         _weight: 1
       _labels:
-      - greetings
+      - greet
     - _anims:
       - _name: talk1
         _weight: 1
+      - _name: talk2
+        _weight: 1
+      - _name: talk3
+        _weight: 1
+      - _name: talk4
+        _weight: 1
+      - _name: talk5
+        _weight: 1
       _labels:
       - talk
+    - _anims:
+      - _name: stand1
+        _weight: 1
+      - _name: stand2
+        _weight: 1
+      - _name: stand3
+        _weight: 1
+      - _name: stand4
+        _weight: 1
+      - _name: stand5
+        _weight: 1
+      - _name: stand6
+        _weight: 1
+      _labels:
+      - stand
+    - _anims:
+      - _name: dance1
+        _weight: 1
+      _labels:
+      - dance

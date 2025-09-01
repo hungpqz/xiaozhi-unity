@@ -9,7 +9,12 @@ namespace XiaoZhi.Unity
 {
     public class WallpaperUI : BaseUI
     {
-        private RawImage _image;
+        private GameObject _goSprite;
+        private Image _spriteImage;
+        private AspectRatioFitter _spriteAspect;
+
+        private GameObject _goVideo;
+        private RawImage _videoImage;
         private UnityEngine.Video.VideoPlayer _rawVideoPlayer;
         private VideoPlayer _videoPlayer;
 
@@ -20,8 +25,13 @@ namespace XiaoZhi.Unity
 
         protected override void OnInit()
         {
-            _image = GetComponent<RawImage>(Tr);
-            _rawVideoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>(Tr);
+            _goSprite = GetGo(Tr, "Sprite");
+            _spriteImage = GetComponent<Image>(_goSprite.transform);
+            _spriteAspect = GetComponent<AspectRatioFitter>(_goSprite.transform);
+
+            _goVideo = GetGo(Tr, "Video");
+            _videoImage = GetComponent<RawImage>(_goVideo.transform);
+            _rawVideoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>(_goVideo.transform);
             _videoPlayer = new VideoPlayer(_rawVideoPlayer);
         }
 
@@ -58,23 +68,19 @@ namespace XiaoZhi.Unity
         {
             var wallpaper = AppPresets.Instance.GetWallpaper(paperName);
             wallpaper ??= AppPresets.Instance.GetWallpaper();
+            _goSprite.SetActive(wallpaper.Type == WallpaperType.Sprite);
+            _goVideo.SetActive(wallpaper.Type == WallpaperType.Video);
+            if (wallpaper.Type != WallpaperType.Video) _videoPlayer.Stop();
             switch (wallpaper.Type)
             {
-                case WallpaperType.Default:
-                {
-                    _videoPlayer.Stop();
-                    _image.enabled = false;
-                    break;
-                }
-                case WallpaperType.Texture:
+                case WallpaperType.Sprite:
                 {
                     UniTask.Void(async () =>
                     {
-                        _videoPlayer.Stop();
-                        var texture = await Addressables.LoadAssetAsync<Texture>(wallpaper.Path);
-                        if (texture == null) return;
-                        _image.texture = texture;
-                        _image.enabled = true;
+                        var sprite = await Addressables.LoadAssetAsync<Sprite>(wallpaper.Path);
+                        if (sprite == null) return;
+                        _spriteImage.sprite = sprite;
+                        _spriteAspect.aspectRatio = sprite.rect.width / sprite.rect.height;
                     });
                     break;
                 }
@@ -84,21 +90,22 @@ namespace XiaoZhi.Unity
                     {
                         if (!_rawVideoPlayer.targetTexture)
                         {
-                            var rect = _image.rectTransform.rect;
+                            var rect = _videoImage.rectTransform.rect;
                             var rt = new RenderTexture((int)rect.width, (int)rect.height, 0,
                                 RenderTextureFormat.ARGB32);
-                            _image.texture = rt;
+                            _videoImage.texture = rt;
                             _rawVideoPlayer.targetTexture = rt;
                         }
-                        
+
                         _rawVideoPlayer.renderMode = VideoRenderMode.RenderTexture;
                         var video = await Addressables.LoadAssetAsync<VideoClip>(wallpaper.Path);
                         if (video == null) return;
                         _videoPlayer.Play(video, -1).Forget();
-                        _image.enabled = true;
                     });
                     break;
                 }
+                case WallpaperType.Default:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
