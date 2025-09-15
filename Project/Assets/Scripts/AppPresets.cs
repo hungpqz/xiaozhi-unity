@@ -16,9 +16,11 @@ namespace XiaoZhi.Unity
         {
             [SerializeField] private string _name;
             [SerializeField] private string _path;
+            [SerializeField] private Color _color;
 
             public string Name => _name;
             public string Path => _path;
+            public Color Color => _color;
         }
 
         [Serializable]
@@ -68,10 +70,14 @@ namespace XiaoZhi.Unity
         public class AnimationMeta
         {
             [SerializeField] private string _name;
+            [SerializeField] private string _path;
             [SerializeField] private int _weight;
+            [SerializeField] private bool _fadeIn = true;
 
             public string Name => _name;
+            public string Path => _path;
             public int Weight => _weight;
+            public bool FadeIn => _fadeIn;
         }
 
         [Serializable]
@@ -119,6 +125,18 @@ namespace XiaoZhi.Unity
             }
         }
 
+        [Serializable]
+        public class Dance
+        {
+            [SerializeField] private string _name;
+            [SerializeField] private string _animation;
+            [SerializeField] private string _bgm;
+            
+            public string Name => _name;
+            public string Animation => _animation;
+            public string BGM => _bgm;
+        }
+
         [SerializeField] private string _webSocketUrl;
         [SerializeField] private string _webSocketAccessToken;
         [SerializeField] private int _opusFrameDurationMs;
@@ -134,6 +152,7 @@ namespace XiaoZhi.Unity
         [SerializeField] private Video[] _videos;
         [SerializeField] private Wallpaper[] _wallpapers;
         [SerializeField] private AnimationLib[] _animationLibs;
+        [SerializeField] private Dance[] _dances;
 
         public string WebSocketUrl => _webSocketUrl;
         public string WebSocketAccessToken => _webSocketAccessToken;
@@ -154,6 +173,8 @@ namespace XiaoZhi.Unity
         public AnimationLib[] AnimationLibs => _animationLibs;
         public AnimationLib GetAnimationLib(string libName = "Default") => _animationLibs.FirstOrDefault(k => k.Name == libName);
         public Keyword GetKeyword(string localeCode) => _keyWords.FirstOrDefault(k => k.LocaleCode == localeCode);
+        public Dance[] Dances => _dances;
+        public Dance GetDance(string danceName) => _dances.FirstOrDefault(k => k.Name == danceName);
         public static AppPresets Instance { get; private set; }
 
         public static async UniTask Load()

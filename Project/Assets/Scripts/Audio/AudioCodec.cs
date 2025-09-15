@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace XiaoZhi.Unity
@@ -13,15 +15,15 @@ namespace XiaoZhi.Unity
             public string SpeakerMode;
             public int SpeakerModeChannels;
         }
-        
+
         public const int InputFrameSizeMs = 30;
-        
+
         public const int SpectrumWindowSize = 1024;
 
         protected bool inputEnabled;
 
         protected bool outputEnabled;
-        
+
         protected int inputChannels = 1;
         public int InputChannels => inputChannels;
 
@@ -37,7 +39,7 @@ namespace XiaoZhi.Unity
         protected int outputVolume = 50;
 
         public int OutputVolume => outputVolume;
-        
+
         private Settings _settings;
 
         private Memory<short> _frameBuffer;
@@ -50,10 +52,12 @@ namespace XiaoZhi.Unity
 
         public abstract void Dispose();
         
+        public abstract UniTask Update(CancellationToken token);
+
         // --------------------------- output ---------------------------- //
-        
+
         public abstract bool GetOutputSpectrum(bool fft, out ReadOnlySpan<float> spectrum);
-        
+
         public virtual void SetOutputVolume(int volume)
         {
             outputVolume = volume;
@@ -64,6 +68,8 @@ namespace XiaoZhi.Unity
             outputEnabled = enable;
         }
         
+        public abstract int GetOutputLeftBuffer();
+
         public void OutputData(ReadOnlySpan<short> data)
         {
             try
@@ -75,11 +81,11 @@ namespace XiaoZhi.Unity
                 Debug.LogException(e);
             }
         }
-        
+
         protected abstract int Write(ReadOnlySpan<short> data);
-        
+
         // --------------------------- input ---------------------------- //
-        
+
         public abstract bool GetInputDevice(out InputDevice device);
 
         public abstract bool GetInputSpectrum(bool fft, out ReadOnlySpan<float> spectrum);
@@ -88,7 +94,7 @@ namespace XiaoZhi.Unity
         {
             inputEnabled = enable;
         }
-        
+
         public bool InputData(out ReadOnlySpan<short> data)
         {
             var frameSize = inputSampleRate / 1000 * InputFrameSizeMs * inputChannels;

@@ -318,10 +318,6 @@ MonoBehaviour:
     m_Localized: MediumShot
     m_Metadata:
       m_Items: []
-  - m_Id: 49667904732356608
-    m_Localized: CloseUp
-    m_Metadata:
-      m_Items: []
   - m_Id: 49668220370509824
     m_Localized: Lens
     m_Metadata:
@@ -336,6 +332,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 51076010605674496
     m_Localized: CloseShot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56504903709884416
+    m_Localized: Dancing
     m_Metadata:
       m_Items: []
   references:

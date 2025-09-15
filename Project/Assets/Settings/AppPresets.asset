@@ -40,8 +40,10 @@ MonoBehaviour:
   _vrmCharacterModels:
   - _name: Girl
     _path: Assets/Res/VRM/Girl/prefab.prefab
+    _color: {r: 1, g: 0.72641504, b: 0.896139, a: 1}
   - _name: Boy
     _path: Assets/Res/VRM/Boy/prefab.prefab
+    _color: {r: 0.4784366, g: 0.72414917, b: 1, a: 1}
   _videos:
   - _name: Star Field
     _path: Assets/Res/Video/star_field.mp4
@@ -49,52 +51,87 @@ MonoBehaviour:
   - _type: 0
     _name: Default
     _path: 
-  - _type: 2
-    _name: Star Field
-    _path: Assets/Res/Video/star_field.mp4
+  - _type: 1
+    _name: Stage
+    _path: Assets/Res/Background/stage.jpg
+  - _type: 3
+    _name: Nebula
+    _path: Assets/Res/Background/nebula.asset
   _animationLibs:
   - _name: Default
     _sets:
     - _anims:
-      - _name: idle1
+      - _name: idle
+        _path: Assets/Res/VRM/Common/idle.anim
         _weight: 1
+        _fadeIn: 1
       _labels:
       - idle
     - _anims:
       - _name: greet1
+        _path: Assets/Res/VRM/Common/greet1.anim
         _weight: 1
+        _fadeIn: 1
       _labels:
       - greet
     - _anims:
       - _name: talk1
+        _path: Assets/Res/VRM/Common/talk1.anim
         _weight: 1
+        _fadeIn: 1
       - _name: talk2
+        _path: Assets/Res/VRM/Common/talk2.anim
         _weight: 1
+        _fadeIn: 1
       - _name: talk3
+        _path: Assets/Res/VRM/Common/talk3.anim
         _weight: 1
+        _fadeIn: 1
       - _name: talk4
+        _path: Assets/Res/VRM/Common/talk4.anim
         _weight: 1
+        _fadeIn: 1
       - _name: talk5
+        _path: Assets/Res/VRM/Common/talk5.anim
         _weight: 1
+        _fadeIn: 1
       _labels:
       - talk
     - _anims:
       - _name: stand1
+        _path: Assets/Res/VRM/Common/stand1.anim
         _weight: 1
+        _fadeIn: 1
       - _name: stand2
+        _path: Assets/Res/VRM/Common/stand2.anim
         _weight: 1
+        _fadeIn: 1
       - _name: stand3
+        _path: Assets/Res/VRM/Common/stand3.anim
         _weight: 1
+        _fadeIn: 1
       - _name: stand4
+        _path: Assets/Res/VRM/Common/stand4.anim
         _weight: 1
+        _fadeIn: 1
       - _name: stand5
+        _path: Assets/Res/VRM/Common/stand5.anim
         _weight: 1
+        _fadeIn: 1
       - _name: stand6
+        _path: Assets/Res/VRM/Common/stand6.anim
         _weight: 1
+        _fadeIn: 1
       _labels:
       - stand
     - _anims:
-      - _name: dance1
+      - _name: bye1
+        _path: Assets/Res/VRM/Common/bye1.anim
         _weight: 1
+        _fadeIn: 1
       _labels:
-      - dance
+      - bye
+  _dances:
+  - _name: "\u5BC4\u660E\u6708"
+    _animation: Assets/Res/Dance/jimingyue/anim.anim
+    _bgm: Assets/Res/Dance/jimingyue/bgm.mp3

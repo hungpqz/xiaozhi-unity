@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Random = UnityEngine.Random;
+using Object = UnityEngine.Object;
 
 namespace XiaoZhi.Unity
 {
@@ -13,27 +16,55 @@ namespace XiaoZhi.Unity
             Stand,
             Greet,
             Talk,
-            Dance,
+            Bye
         }
 
         private const float StandTickIntervalMin = 10.0f;
-        private const float StandTickIntervalMax = 60.0f;
+        private const float StandTickIntervalMax = 30.0f;
+
+        private const string NameIdle = "idle";
+
+        private static readonly string[] ByeKeywords =
+        {
+            "Bye",
+            "See you",
+            "See ya",
+            "Catch you later",
+            "I'm out",
+            "拜拜",
+            "再见",
+            "回见",
+            "回头见",
+            "下次见",
+            "明天见",
+            "下周见",
+            "晚安"
+        };
 
         private readonly Animator _animator;
+        private readonly AnimatorOverrideController _controller;
+        private readonly Dictionary<string, AnimationClip> _clipMap;
+        private readonly AnimationClip[] _clipSlots;
         private readonly AppPresets.AnimationLib _lib;
         private readonly Talk _talk;
         private readonly AnimatorProxy _animProxy;
 
         private State _state;
         private bool _readyToSpeak;
-        private Talk.State _lastTalkState;
-        private string _currentAnim;
+        private bool _firstTimeSpeaking;
+        private int _currentSlot;
+        private string _currentState;
         private float _nextStandTime = float.MaxValue;
-        private bool _externalAnim;
+        private bool _overrideAnim;
 
         public AnimationCtrl(Animator animator, AppPresets.AnimationLib lib, Talk talk)
         {
             _animator = animator;
+            var clips = _animator.runtimeAnimatorController.animationClips;
+            _clipMap = clips.ToDictionary(i => i.name);
+            _clipSlots = clips.Where(i => i.name != NameIdle).ToArray();
+            _controller = new AnimatorOverrideController(animator.runtimeAnimatorController);
+            _animator.runtimeAnimatorController = _controller;
             _lib = lib;
             _talk = talk;
             _talk.OnStateUpdate += OnTalkStateUpdate;
@@ -44,15 +75,28 @@ namespace XiaoZhi.Unity
 
         public void Dispose()
         {
+            Object.Destroy(_animator.runtimeAnimatorController);
             _animProxy.StateUpdate -= OnAnimStateUpdate;
             _talk.OnStateUpdate -= OnTalkStateUpdate;
             _talk.OnChatUpdate -= OnTalkChatUpdate;
         }
 
-        public void Animate(params string[] labels)
+        public void OverrideAnimate(params string[] labels)
         {
-            _externalAnim = true;
+            _overrideAnim = true;
             Labels2Animation(labels);
+        }
+
+        public void OverrideAnimate(AnimationClip clip)
+        {
+            _overrideAnim = true;
+            SetAnimState(FillSlot(clip), false);
+        }
+
+        public void RevertAnimation()
+        {
+            _overrideAnim = false;
+            State2Animation(false);
         }
 
         private void OnTalkStateUpdate(Talk.State state)
@@ -63,7 +107,9 @@ namespace XiaoZhi.Unity
                     _readyToSpeak = true;
                     break;
                 case Talk.State.Listening:
-                    SetState(_lastTalkState != Talk.State.Speaking ? State.Greet : State.Idle);
+                    if (_state != State.Bye) SetState(State.Idle);
+                    break;
+                case Talk.State.Dancing:
                     break;
                 case Talk.State.Unknown:
                 case Talk.State.Starting:
@@ -72,20 +118,32 @@ namespace XiaoZhi.Unity
                 case Talk.State.Activating:
                 case Talk.State.Error:
                 default:
-                    _externalAnim = false;
-                    SetState(State.Idle);
+                    _overrideAnim = false;
+                    _firstTimeSpeaking = false;
+                    if (_state != State.Bye) SetState(State.Idle);
                     break;
             }
-
-            _lastTalkState = state;
         }
 
         private void OnTalkChatUpdate(string chat)
         {
+            if (chat.StartsWith("% ")) return;
             if (_readyToSpeak)
             {
                 _readyToSpeak = false;
-                SetState(State.Talk);
+                if (ByeKeywords.Any(i => chat.Contains(i, StringComparison.CurrentCultureIgnoreCase)))
+                {
+                    SetState(State.Bye);
+                }
+                else if (!_firstTimeSpeaking)
+                {
+                    _firstTimeSpeaking = true;
+                    SetState(State.Greet);
+                }
+                else
+                {
+                    SetState(State.Talk);
+                }
             }
         }
 
@@ -93,28 +151,61 @@ namespace XiaoZhi.Unity
         {
             if (_state == state) return;
             _state = state;
-            if (!_externalAnim)
+            if (!_overrideAnim)
                 State2Animation();
         }
 
-        private void State2Animation()
+        private void State2Animation(bool? fadeIn = null)
         {
             var labels = UnityEngine.Pool.ListPool<string>.Get();
             State2Labels(labels);
-            Labels2Animation(labels);
+            Labels2Animation(labels, fadeIn);
             UnityEngine.Pool.ListPool<string>.Release(labels);
             if (_state == State.Idle && _talk.Stat == Talk.State.Listening)
                 _nextStandTime = Time.time + Random.Range(StandTickIntervalMin, StandTickIntervalMax);
+            else if (_state != State.Idle)
+                _nextStandTime = float.MaxValue;
         }
 
-        private void Labels2Animation(IEnumerable<string> labels)
+        private void Labels2Animation(IEnumerable<string> labels, bool? fadeIn = null)
         {
+            var state = NameIdle;
             var metas = _lib.MatchAll(labels);
             var meta = AppPresets.AnimationLib.Random(metas);
-            var anim = meta?.Name ?? "idle1";
-            if (_currentAnim != anim) _animator.CrossFadeInFixedTime(anim, 0.7f, 0);
-            else _animator.Play(anim, 0, 0.0f);
-            _currentAnim = anim;
+            if (meta != null && meta.Name != NameIdle)
+            {
+                if (!_clipMap.TryGetValue(meta.Name, out var clip))
+                {
+                    clip = Addressables.LoadAssetAsync<AnimationClip>(meta.Path).WaitForCompletion();
+                    _clipMap[meta.Name] = clip;
+                }
+
+                if (clip)
+                {
+                    state = FillSlot(clip);
+                    fadeIn ??= meta.FadeIn;
+                }
+            }
+
+            SetAnimState(state, fadeIn ?? true);
+        }
+
+        private string FillSlot(AnimationClip clip)
+        {
+            _currentSlot = (_currentSlot + 1) % _clipSlots.Length;
+            var slotClip = _clipSlots[_currentSlot];
+            _controller[slotClip] = clip;
+            return slotClip.name;
+        }
+
+        private void SetAnimState(string state, bool fadeIn)
+        {
+            if (_currentState != state)
+            {
+                if (fadeIn) _animator.CrossFadeInFixedTime(state, 0.7f, 0);
+                else _animator.Play(state, 0, 0);
+                _currentState = state;
+            }
         }
 
         private void State2Labels(List<string> labels)
@@ -133,8 +224,8 @@ namespace XiaoZhi.Unity
                 case State.Stand:
                     labels.Add("stand");
                     break;
-                case State.Dance:
-                    labels.Add("dance");
+                case State.Bye:
+                    labels.Add("bye");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -143,17 +234,18 @@ namespace XiaoZhi.Unity
 
         private void OnAnimStateUpdate(AnimatorStateInfo stateInfo)
         {
-            if (!string.IsNullOrEmpty(_currentAnim) &&
-                stateInfo.IsName(_currentAnim))
+            if (!string.IsNullOrEmpty(_currentState) &&
+                stateInfo.IsName(_currentState))
             {
-                if (_externalAnim && stateInfo.normalizedTime >= 0.999f)
+                const float endTime = 0.999f;
+                if (_overrideAnim && stateInfo.normalizedTime >= endTime)
                 {
-                    _externalAnim = false;
+                    _overrideAnim = false;
                     State2Animation();
                 }
-                else if (stateInfo is { loop: false, normalizedTime: >= 0.999f })
+                else if (stateInfo is { loop: false, normalizedTime: >= endTime })
                 {
-                    if (_state is State.Greet or State.Stand) SetState(State.Idle);
+                    if (_state is State.Greet or State.Stand or State.Bye) SetState(State.Idle);
                     else State2Animation();
                 }
                 else if (_state == State.Idle && _talk.Stat == Talk.State.Listening && stateInfo.loop &&

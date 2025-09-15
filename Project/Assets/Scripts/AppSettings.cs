@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace XiaoZhi.Unity
 {
@@ -63,6 +64,10 @@ namespace XiaoZhi.Unity
             Save();
         }
 
+        public AppPresets.VRMModel GetVRMModelPreset() =>
+            AppPresets.Instance.VRMCharacterModels[
+                Mathf.Clamp(_vrmModel, 0, AppPresets.Instance.VRMCharacterModels.Length - 1)];
+        
         public int GetVRMModel() => _vrmModel;
 
         public void SetVRMModel(int vrmModel)

@@ -14,7 +14,8 @@ namespace XiaoZhi.Unity
             Listening,
             Speaking,
             Activating,
-            Error
+            Error,
+            Dancing,
         }
 
         public static string State2LocalizedKey(State state)
@@ -28,6 +29,7 @@ namespace XiaoZhi.Unity
                 State.Starting => "STATE_STARTING",
                 State.Activating => "ACTIVATION",
                 State.Error => "STATE_ERROR",
+                State.Dancing => "STATE_DANCING",
                 _ => null
             };
         }
@@ -38,9 +40,11 @@ namespace XiaoZhi.Unity
         public event Action<string> OnEmotionUpdate;
 
         public bool IsReady() => _stat is State.Idle or State.Connecting
-            or State.Speaking or State.Listening;
+            or State.Speaking or State.Listening or State.Dancing;
 
         private State _stat;
+
+        private State _bufStat;
 
         public State Stat
         {
@@ -51,6 +55,8 @@ namespace XiaoZhi.Unity
                 _stat = value;
                 if (_stat == State.Listening)
                     Emotion = "neutral";
+                else if (_stat == State.Dancing)
+                    Emotion = "happy";
                 else if (_stat != State.Speaking)
                     Emotion = "sleep";
                 Info = null;

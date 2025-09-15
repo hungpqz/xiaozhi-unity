@@ -41,7 +41,7 @@ namespace XiaoZhi.Unity
 
         private async UniTaskVoid LoopUpdate(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested) 
             {
                 var interval = Random.Range(BlinkInterval.x, BlinkInterval.y);
                 await UniTask.Delay((int)(interval * 1000), cancellationToken: cancellationToken);

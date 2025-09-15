@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine.Localization;
 
 namespace XiaoZhi.Unity
 {
@@ -46,9 +45,8 @@ namespace XiaoZhi.Unity
             await _wallpaperUI.Hide();
         }
 
-        public void Animate(params string[] labels)
+        public void Update(float deltaTime)
         {
-            
         }
     }
 }

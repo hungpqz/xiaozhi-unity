@@ -54,6 +54,7 @@ namespace XiaoZhi.Unity.IoT
             if (_videoPlayer.IsPlaying) await _context.App.UpdateIotStates();
             await playerHandle;
             await StopVideo();
+            Addressables.Release(clip);
         }
 
         private void StopVideo(ParameterList parameters)

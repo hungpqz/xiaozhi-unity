@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using uLipSync;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UniVRM10;
-using Object = UnityEngine.Object;
 
 namespace XiaoZhi.Unity
 {
@@ -23,12 +23,10 @@ namespace XiaoZhi.Unity
         private VRMMainUI _mainUI;
         private Camera _mainCamera;
         private GameObject _character;
-        private uLipSync.uLipSync _lipSync;
         private ULipSyncAudioProxy _lipSyncAudioProxy;
         private Vrm10Instance _vrmInstance;
         private FaceAnimation _faceAnim;
         private AnimationCtrl _animCtrl;
-        private CancellationTokenSource _loopCts;
         private TransformFollower _follower;
         private bool _visible = true;
 
@@ -43,20 +41,15 @@ namespace XiaoZhi.Unity
             _context.App.Talk.OnEmotionUpdate -= OnEmotionUpdate;
             AppSettings.Instance.OnZoomModeUpdate -= OnZoomModeUpdate;
             ThemeManager.OnThemeChanged.RemoveListener(OnThemeChanged);
-            if (_loopCts != null)
-            {
-                _loopCts.Cancel();
-                _loopCts.Dispose();
-                _loopCts = null;
-            }
-
             _mainUI?.Dispose();
             _mainUI = null;
             _wallpaperUI?.Dispose();
             _wallpaperUI = null;
+            _animCtrl?.Dispose();
+            _animCtrl = null;
             if (_character)
             {
-                Object.Destroy(_character);
+                Addressables.ReleaseInstance(_character);
                 _character = null;
             }
         }
@@ -67,9 +60,7 @@ namespace XiaoZhi.Unity
             _mainUI = await _context.UIManager.ShowSceneUI<VRMMainUI>();
             _mainCamera = Camera.main;
             UpdateCameraColor();
-            var models = AppPresets.Instance.VRMCharacterModels;
-            var modelIndex = Mathf.Clamp(AppSettings.Instance.GetVRMModel(), 0, models.Length - 1);
-            var modelPath = models[modelIndex].Path;
+            var modelPath = AppSettings.Instance.GetVRMModelPreset().Path;
             _character = await Addressables.InstantiateAsync(modelPath);
             if (!_character)
             {
@@ -80,7 +71,6 @@ namespace XiaoZhi.Unity
             _follower = _character.GetComponent<TransformFollower>();
             _follower.SetFollower(_mainCamera);
             OnZoomModeUpdate(AppSettings.Instance.GetZoomMode());
-            _lipSync = _character.GetComponent<uLipSync.uLipSync>();
             _vrmInstance = _character.GetComponent<Vrm10Instance>();
             _faceAnim = new FaceAnimation(_vrmInstance, "sleep");
             _animCtrl = new AnimationCtrl(_character.GetComponent<Animator>(), AppPresets.Instance.GetAnimationLib(),
@@ -90,9 +80,9 @@ namespace XiaoZhi.Unity
 
         public void Start()
         {
-            _lipSyncAudioProxy = new ULipSyncAudioProxy(_lipSync, _context.App.GetCodec());
-            _loopCts = new CancellationTokenSource();
-            UniTask.Void(LoopUpdate, _loopCts.Token);
+            _lipSyncAudioProxy =
+                new ULipSyncAudioProxy(_character.GetComponent<uLipSync.uLipSync>(),
+                    _character.GetComponent<uLipSyncExpressionVRM>(), _context.App.GetCodec());
             _context.App.Talk.OnEmotionUpdate -= OnEmotionUpdate;
             _context.App.Talk.OnEmotionUpdate += OnEmotionUpdate;
             AppSettings.Instance.OnZoomModeUpdate -= OnZoomModeUpdate;
@@ -114,10 +104,32 @@ namespace XiaoZhi.Unity
             await _mainUI.Hide();
             await _wallpaperUI.Hide();
         }
+        
+        public void Update(float deltaTime)
+        {
+            if (!_visible) return;
+            _faceAnim.Update(deltaTime);
+            _lipSyncAudioProxy.Update();
+        }
 
         public void Animate(params string[] labels)
         {
-            _animCtrl.Animate(labels);
+            _animCtrl.OverrideAnimate(labels);
+        }
+
+        public void Animate(AnimationClip clip)
+        {
+            _animCtrl.OverrideAnimate(clip);
+        }
+
+        public void RevertAnimation()
+        {
+            _animCtrl.RevertAnimation();
+        }
+
+        public void EnableLipSync(bool enabled)
+        {
+            _lipSyncAudioProxy.Enabled = enabled;
         }
 
         private void OnThemeChanged(ThemeSettings.Theme theme)
@@ -132,17 +144,6 @@ namespace XiaoZhi.Unity
             _mainCamera.backgroundColor = color;
         }
 
-        private async UniTaskVoid LoopUpdate(CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
-                if (!_visible) continue;
-                _faceAnim.Update(Time.deltaTime);
-                _lipSyncAudioProxy.Update();
-            }
-        }
-        
         private void OnEmotionUpdate(string emotion)
         {
             _faceAnim.SetExpression(emotion);

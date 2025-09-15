@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using GifImporter;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
@@ -17,6 +18,11 @@ namespace XiaoZhi.Unity
         private RawImage _videoImage;
         private UnityEngine.Video.VideoPlayer _rawVideoPlayer;
         private VideoPlayer _videoPlayer;
+        private VideoClip _videoClip;
+
+        private GameObject _goGif;
+        private GifPlayer _gifPlayer;
+        private AspectRatioFitter _gifAspect;
 
         public override string GetResourcePath()
         {
@@ -33,6 +39,10 @@ namespace XiaoZhi.Unity
             _videoImage = GetComponent<RawImage>(_goVideo.transform);
             _rawVideoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>(_goVideo.transform);
             _videoPlayer = new VideoPlayer(_rawVideoPlayer);
+
+            _goGif = GetGo(Tr, "Gif");
+            _gifPlayer = GetComponent<GifPlayer>(_goGif.transform);
+            _gifAspect = GetComponent<AspectRatioFitter>(_goGif.transform);
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
@@ -66,49 +76,69 @@ namespace XiaoZhi.Unity
 
         private void OnWallpaperUpdate(string paperName)
         {
+            UpdateWallpaper(paperName).Forget();
+        }
+
+        private async UniTask UpdateWallpaper(string paperName)
+        {
             var wallpaper = AppPresets.Instance.GetWallpaper(paperName);
             wallpaper ??= AppPresets.Instance.GetWallpaper();
-            _goSprite.SetActive(wallpaper.Type == WallpaperType.Sprite);
-            _goVideo.SetActive(wallpaper.Type == WallpaperType.Video);
-            if (wallpaper.Type != WallpaperType.Video) _videoPlayer.Stop();
             switch (wallpaper.Type)
             {
                 case WallpaperType.Sprite:
                 {
-                    UniTask.Void(async () =>
+                    var sprite = await Addressables.LoadAssetAsync<Sprite>(wallpaper.Path);
+                    if (sprite == null) return;
+                    if (_spriteImage.sprite != sprite)
                     {
-                        var sprite = await Addressables.LoadAssetAsync<Sprite>(wallpaper.Path);
-                        if (sprite == null) return;
+                        if (_spriteImage.sprite) Addressables.Release(_spriteImage.sprite);
                         _spriteImage.sprite = sprite;
                         _spriteAspect.aspectRatio = sprite.rect.width / sprite.rect.height;
-                    });
+                    }
+
                     break;
                 }
                 case WallpaperType.Video:
                 {
-                    UniTask.Void(async () =>
+                    if (!_rawVideoPlayer.targetTexture)
                     {
-                        if (!_rawVideoPlayer.targetTexture)
-                        {
-                            var rect = _videoImage.rectTransform.rect;
-                            var rt = new RenderTexture((int)rect.width, (int)rect.height, 0,
-                                RenderTextureFormat.ARGB32);
-                            _videoImage.texture = rt;
-                            _rawVideoPlayer.targetTexture = rt;
-                        }
+                        var rect = _videoImage.rectTransform.rect;
+                        var rt = new RenderTexture((int)rect.width, (int)rect.height, 0,
+                            RenderTextureFormat.ARGB32);
+                        _videoImage.texture = rt;
+                        _rawVideoPlayer.targetTexture = rt;
+                    }
 
-                        _rawVideoPlayer.renderMode = VideoRenderMode.RenderTexture;
-                        var video = await Addressables.LoadAssetAsync<VideoClip>(wallpaper.Path);
-                        if (video == null) return;
-                        _videoPlayer.Play(video, -1).Forget();
-                    });
+                    _rawVideoPlayer.renderMode = VideoRenderMode.RenderTexture;
+                    var video = await Addressables.LoadAssetAsync<VideoClip>(wallpaper.Path);
+                    if (video == null) return;
+                    if (_videoClip && _videoClip != video) Addressables.Release(_videoClip);
+                    _videoPlayer.Play(video, -1).Forget();
+                    _videoClip = video;
                     break;
                 }
+                case WallpaperType.Gif:
+                    var gif = await Addressables.LoadAssetAsync<Gif>(wallpaper.Path);
+                    if (gif == null || gif.Frames.Count == 0) return;
+                    if (_gifPlayer.Gif != gif)
+                    {
+                        if (_gifPlayer.Gif) Addressables.Release(_gifPlayer.Gif);
+                        var sampleSprite = gif.Frames[0].Sprite;
+                        _gifAspect.aspectRatio = sampleSprite.rect.width / sampleSprite.rect.height;
+                        _gifPlayer.Gif = gif;
+                    }
+
+                    break;
                 case WallpaperType.Default:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (wallpaper.Type != WallpaperType.Video) _videoPlayer.Stop();
+            _goSprite.SetActive(wallpaper.Type == WallpaperType.Sprite);
+            _goVideo.SetActive(wallpaper.Type == WallpaperType.Video);
+            _goGif.SetActive(wallpaper.Type == WallpaperType.Gif);
         }
     }
 }

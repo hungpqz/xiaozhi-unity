@@ -13,6 +13,6 @@ namespace XiaoZhi.Unity
         
         UniTask Hide();
 
-        void Animate(params string[] labels);
+        void Update(float deltaTime);
     }
 }

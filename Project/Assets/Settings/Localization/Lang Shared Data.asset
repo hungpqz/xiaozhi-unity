@@ -315,10 +315,6 @@ MonoBehaviour:
     m_Key: SettingsUI_ZoomMode_MediumShot
     m_Metadata:
       m_Items: []
-  - m_Id: 49667904732356608
-    m_Key: SettingsUI_ZoomMode_CloseUp
-    m_Metadata:
-      m_Items: []
   - m_Id: 49668220370509824
     m_Key: SettingsUI_ZoomMode
     m_Metadata:
@@ -333,6 +329,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 51076010605674496
     m_Key: SettingsUI_ZoomMode_CloseShot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 56504903709884416
+    m_Key: STATE_DANCING
     m_Metadata:
       m_Items: []
   m_Metadata:

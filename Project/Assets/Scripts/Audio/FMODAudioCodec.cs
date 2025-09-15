@@ -21,8 +21,7 @@ namespace XiaoZhi.Unity
         private const int RecorderBufferSec = 2;
         private const int InputBufferSec = 8;
         private const int PlayerBufferSec = 8;
-
-        private CancellationTokenSource _updateCts;
+        
         private FMOD.System _system;
         private Sound _recorder;
         private Channel _recorderChannel;
@@ -62,22 +61,8 @@ namespace XiaoZhi.Unity
             InitRecorder();
         }
 
-        public override void Start()
-        {
-            base.Start();
-            _updateCts = new CancellationTokenSource();
-            UniTask.Void(Update, _updateCts.Token);
-        }
-
         public override void Dispose()
         {
-            if (_updateCts != null)
-            {
-                _updateCts.Cancel();
-                _updateCts.Dispose();
-                _updateCts = null;
-            }
-
             ClearAudioProcessor();
             ClearPlayer();
             ClearRecorder();
@@ -97,15 +82,11 @@ namespace XiaoZhi.Unity
             }
         }
 
-        private async UniTaskVoid Update(CancellationToken token)
+        public override async UniTask Update(CancellationToken token)
         {
-            while (!token.IsCancellationRequested)
-            {
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
-                DetectIfPlayToEnd();
-                await UniTask.SwitchToThreadPool();
-                ProcessAudio();
-            }
+            DetectIfPlayToEnd();
+            await UniTask.SwitchToThreadPool();
+            ProcessAudio();
         }
 
         private void DetectIfPlayToEnd()
@@ -120,6 +101,7 @@ namespace XiaoZhi.Unity
             {
                 SetPlayerPause(PlayerPauseFlag.Overflow, true);
                 FMODHelper.ClearPCM16(_player, 0, _playerLength);
+                _writePosition = playerPos;
             }
         }
 
@@ -225,6 +207,14 @@ namespace XiaoZhi.Unity
             if (outputEnabled == enable) return;
             base.EnableOutput(enable);
             SetPlayerPause(PlayerPauseFlag.Enabled, !outputEnabled);
+        }
+
+        public override int GetOutputLeftBuffer()
+        {
+            if ((_playerPauseFlag & PlayerPauseFlag.Overflow) > 0) return 0;
+            _playerChannel.getPosition(out var pos, TIMEUNIT.PCM);
+            var playerPos = (int)pos;
+            return Tools.Repeat(_writePosition - playerPos, _playerLength);
         }
 
         private void SetPlayerPause(PlayerPauseFlag flag, bool pause)
