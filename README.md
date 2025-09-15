@@ -46,9 +46,12 @@
 - 集成VRM1.0
 - 使用uLipSync实现口型同步
 
-## 如何构建
+## 工具
 
-选中Assets/Settings/BuildPresets.asset，在EditorView中即可看到构建界面
+如何构建: 选中Assets/Settings/BuildPresets.asset，在EditorView中即可看到构建界面
+导入VRM: 将VRM模型导入Unity之后，Project窗口右键模型选择菜单VRM10/PreProcess进行预处理，最后在Settings/AppPreset.asset中配置VRM Character Model
+
+*注: Settings/AppPreset.asset基本包含了预设的所有配置*
 
 ## Reference
 
