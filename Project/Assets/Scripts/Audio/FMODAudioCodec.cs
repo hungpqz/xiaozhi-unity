@@ -21,7 +21,7 @@ namespace XiaoZhi.Unity
         private const int RecorderBufferSec = 2;
         private const int InputBufferSec = 8;
         private const int PlayerBufferSec = 8;
-
+        
         private FMOD.System _system;
         private Sound _recorder;
         private Channel _recorderChannel;
@@ -251,21 +251,16 @@ namespace XiaoZhi.Unity
             };
 
             var system = _system;
-            system.createSound(exInfo.userdata, MODE.OPENUSER | MODE.LOOP_NORMAL, ref exInfo, out _player);
+            system.createSound(exInfo.userdata, MODE.OPENUSER | MODE.LOOP_NORMAL, ref exInfo,
+                out _player);
             system.playSound(_player, default, true, out _playerChannel);
             _playerChannel.setVolume(outputVolume / 100f);
             SetPlayerPause(PlayerPauseFlag.Overflow, true);
-
             system.createDSPByType(DSP_TYPE.FFT, out _fftDsp);
-
-            // 🔧 Đã sửa: dùng DSP_FFT_WINDOW thay cho DSP_FFT_WINDOW_TYPE
-            _fftDsp.setParameterInt((int)DSP_FFT.WINDOWTYPE, (int)DSP_FFT_WINDOW.HANNING);
+            _fftDsp.setParameterInt((int)DSP_FFT.WINDOW, (int)DSP_FFT_WINDOW_TYPE.HANNING);
             _fftDsp.setParameterInt((int)DSP_FFT.WINDOWSIZE, SpectrumWindowSize);
-
             _playerChannel.addDSP(CHANNELCONTROL_DSP_INDEX.HEAD, _fftDsp);
         }
-
-
 
         private void ClearPlayer()
         {
@@ -344,9 +339,7 @@ namespace XiaoZhi.Unity
                 {
                     device = new InputDevice
                     {
-                        Id = i,
-                        Name = deviceName,
-                        SystemRate = systemRate,
+                        Id = i, Name = deviceName, SystemRate = systemRate,
                         SpeakerMode = Enum.GetName(typeof(SPEAKERMODE), speakerMode),
                         SpeakerModeChannels = speakerModeChannels
                     };
@@ -419,31 +412,17 @@ namespace XiaoZhi.Unity
         }
     }
 
-    public static class FmodDspExtension
+    public static class fmod_dsp_extension
     {
-        // Buffer tạm, giữ static để tránh GC mỗi frame
-        [ThreadStatic]
-        private static float[] _temp;
-
         public static void getSpectrum(this DSP_PARAMETER_FFT fft, int channel, Span<float> buffer)
         {
-            if (fft.numchannels <= 0 || fft.length <= 0)
-                return;
-
-            if (channel < 0 || channel >= fft.numchannels)
-                throw new ArgumentOutOfRangeException(nameof(channel));
-
-            int len = Math.Min(fft.length, buffer.Length);
-
-            // Đảm bảo mảng tạm đủ dài
-            if (_temp == null || _temp.Length < len)
-                _temp = new float[len];
-
-            // DÙNG API CHÍNH THỨC, không đụng spectrum_internal nữa
-            fft.getSpectrum(channel, ref _temp);
-
-            // Copy sang Span<float> caller đưa vào
-            _temp.AsSpan(0, len).CopyTo(buffer);
+            var bufferLength = Math.Min(fft.length, buffer.Length) * sizeof(float);
+            unsafe
+            {
+                fixed (float* bufferPtr = buffer)
+                    Buffer.MemoryCopy(fft.spectrum_internal[channel].ToPointer(), bufferPtr, bufferLength,
+                        bufferLength);
+            }
         }
     }
 }

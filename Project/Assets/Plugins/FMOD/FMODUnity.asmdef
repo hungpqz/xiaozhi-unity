@@ -5,6 +5,7 @@
         "Unity.Addressables",
         "Unity.ResourceManager",
         "Unity.RenderPipelines.Universal.Runtime"
+
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,7 +13,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_2021_3_OR_NEWER"
+    ],
     "versionDefines": [
         {
             "name": "com.unity.timeline",
@@ -38,11 +41,6 @@
             "name": "com.unity.urp",
             "expression": "1.0.0",
             "define": "UNITY_URP_EXIST"
-        },
-        {
-            "name": "com.unity.ugui",
-            "expression": "1.0.0",
-            "define": "UNITY_UI_EXIST"
         }
     ],
     "noEngineReferences": false

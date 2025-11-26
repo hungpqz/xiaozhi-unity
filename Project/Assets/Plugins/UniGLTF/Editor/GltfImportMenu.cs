@@ -6,18 +6,9 @@ namespace UniGLTF
 {
     public static class GltfImportMenu
     {
-        public const string MENU_NAME = "Import glTF... (*.gltf|*.glb|*.zip)";
         public static void ImportGltfFileToGameObject()
         {
-            var path = EditorUtility.OpenFilePanel(MENU_NAME + ": open glb", "",
-#if UNITY_EDITOR_OSX
-                // https://github.com/vrm-c/UniVRM/issues/1837
-                "glb"
-#else
-                "gltf,glb,zip"
-#endif
-);
-            if (string.IsNullOrEmpty(path))
+            if(!UniGltfEditorDialog.TryOpenFilePanel("", out var path))
             {
                 return;
             }
@@ -42,7 +33,7 @@ namespace UniGLTF
             //
             if (path.StartsWithUnityAssetPath())
             {
-                Debug.LogWarningFormat("disallow import from folder under the Assets");
+                UniGLTFLogger.Warning("disallow import from folder under the Assets");
                 return;
             }
 

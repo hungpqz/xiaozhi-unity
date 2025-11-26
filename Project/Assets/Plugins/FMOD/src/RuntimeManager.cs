@@ -121,7 +121,7 @@ namespace FMODUnity
 
             // Filter out benign expected errors.
             if ((callbackInfo.instancetype == FMOD.ERRORCALLBACK_INSTANCETYPE.CHANNEL || callbackInfo.instancetype == FMOD.ERRORCALLBACK_INSTANCETYPE.CHANNELCONTROL)
-                && (callbackInfo.result == FMOD.RESULT.ERR_INVALID_HANDLE || callbackInfo.result == FMOD.RESULT.ERR_CHANNEL_STOLEN))
+                && callbackInfo.result == FMOD.RESULT.ERR_INVALID_HANDLE)
             {
                 return FMOD.RESULT.OK;
             }
@@ -182,11 +182,6 @@ namespace FMODUnity
                     try
                     {
                         RuntimeUtils.EnforceLibraryOrder();
-
-                        #if UNITY_OPENHARMONY && !UNITY_EDITOR
-                        OpenHarmonyJSObject openHarmonyJSObject = new OpenHarmonyJSObject("ClassFMOD" + FMOD.VERSION.dllSuffix);
-                        openHarmonyJSObject.Call("init");
-                        #endif
 
                         #if UNITY_ANDROID && !UNITY_EDITOR
                         // First, obtain the current activity context
@@ -595,6 +590,7 @@ retry:
             }
         }
 
+        [Obsolete("This overload has been deprecated in favor of passing a GameObject instead of a Transform.", false)]
         public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform, bool nonRigidbodyVelocity = false)
         {
             AttachedInstance attachedInstance = FindOrAddAttachedInstance(instance, transform, RuntimeUtils.To3DAttributes(transform));
@@ -614,6 +610,7 @@ retry:
             attachedInstance.rigidBody = rigidBody;
         }
 
+        [Obsolete("This overload has been deprecated in favor of passing a GameObject instead of a Transform.", false)]
         public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform, Rigidbody rigidBody)
         {
             AttachedInstance attachedInstance = FindOrAddAttachedInstance(instance, transform, RuntimeUtils.To3DAttributes(transform, rigidBody));
@@ -630,6 +627,7 @@ retry:
             attachedInstance.rigidBody2D = rigidBody2D;
         }
 
+        [Obsolete("This overload has been deprecated in favor of passing a GameObject instead of a Transform.", false)]
         public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform, Rigidbody2D rigidBody2D)
         {
             AttachedInstance attachedInstance = FindOrAddAttachedInstance(instance, transform, RuntimeUtils.To3DAttributes(transform, rigidBody2D));
@@ -1010,7 +1008,7 @@ retry:
             else
             {
                 Instance.loadingBanksRef++;
-                Addressables.LoadAssetAsync<TextAsset>(assetReference).Completed += (obj) =>
+                assetReference.LoadAssetAsync<TextAsset>().Completed += (obj) =>
                 {
                     if (!obj.IsValid())
                     {
@@ -1028,7 +1026,7 @@ retry:
                         completionCallback();
                     }
 
-                    Addressables.Release(obj);
+                    assetReference.ReleaseAsset();
                 };
 
             }

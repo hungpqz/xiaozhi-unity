@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: Localization-String-Tables-zh-Hans
   m_EditorClassIdentifier: 
-  m_GroupName: Localization-String-Tables-zh-Hans
+  m_GroupName: "Localization-String-Tables-zh-Hans"
   m_Data:
     m_SerializedData: []
   m_GUID: 1020dd28a58eec34db5a885310487dc9
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 959fe3146ebb07c49b5323a7b5b04d72
+    m_Address: Lang_zh-Hans
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-Hans
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 63df72acf4c063249aea2a9fa4ba07d6, type: 2}
   m_SchemaSet:

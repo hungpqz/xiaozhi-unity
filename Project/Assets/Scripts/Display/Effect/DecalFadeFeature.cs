@@ -52,12 +52,8 @@ namespace XiaoZhi.Unity
 
             public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
             {
-                var desc = renderingData.cameraData.cameraTargetDescriptor;
-
-                ConfigureTarget(renderingData.cameraData.renderer.cameraColorTargetHandle);
-                ConfigureClear(ClearFlag.None, Color.clear);
-
-                ReAllocate(desc);
+                ResetTarget();
+                ReAllocate(renderingData.cameraData.cameraTargetDescriptor);
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -77,7 +73,7 @@ namespace XiaoZhi.Unity
                     CoreUtils.SetRenderTarget(cmd, cameraData.renderer.cameraColorTargetHandle);
                     ExecuteMainPass(cmd, _copiedColor, _material, 0);
                 }
-
+                
                 context.ExecuteCommandBuffer(cmd);
                 cmd.Clear();
                 CommandBufferPool.Release(cmd);

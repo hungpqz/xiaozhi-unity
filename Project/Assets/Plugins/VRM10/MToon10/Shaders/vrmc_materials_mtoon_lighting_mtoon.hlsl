@@ -118,12 +118,12 @@ inline half3 GetMToonLighting_Rim_Matcap(const MToonInput input)
         
         return _MatcapColor.rgb * MTOON_SAMPLE_TEXTURE2D(_MatcapTex, matcapUv).rgb;
     }
-    return _MatcapColor.rgb;
+    return 0;
 }
 
 inline half3 GetMToonLighting_Rim(const UnityLighting unityLight, const MToonInput input, const half shadow)
 {
-    const half3 parametricRimFactor = pow(saturate(1.0 - dot(input.normalWS, input.viewDirWS) + _RimLift), max(_RimFresnelPower, EPS_COL)) * _RimColor.rgb;
+    const half3 parametricRimFactor = pow(saturate(1.0 - dot(input.normalWS, input.viewDirWS) + _RimLift), max(_RimFresnelPower, EPSILON_FP16)) * _RimColor.rgb;
     const half3 matcapFactor = GetMToonLighting_Rim_Matcap(input);
     const half3 directLightingFactor = unityLight.directLightColor * shadow;
 
