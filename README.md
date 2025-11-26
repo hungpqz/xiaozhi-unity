@@ -1,6 +1,6 @@
 # xiaozhi-unity
 
-基于虾哥的[xiaozhi-esp32](https://github.com/78/xiaozhi-esp32)项目的Unity版本。
+Phiên bản Unity của dự án [xiaozhi-esp32](https://github.com/78/xiaozhi-esp32).
 
 <div style="display: flex; justify-content: space-between;">
   <img src="Docs/Emoji.gif" width="360" />
@@ -10,24 +10,24 @@
   <img src="Docs/MIoT.png" width="360" />
 </div>
 
-## 主要功能
+## Chức năng chính
 
-- 集成MIoT，语音控制米家设备
-- 小智语音聊天
-- 表现模式：
-  - Emoji表情
-  - VRM模型
-- 语音打断模式：
-  - 关键词 (关键词打断-->下一轮对话)
-  - 人声 (VAD打断-->延时1s-->下一轮对话)
-  - 自由 (VAD打断-->无中断对话)
-- 可配置唤醒词/关键词
-- 两种主题切换
-- 提供自定义配置
+- Tích hợp MIoT, điều khiển thiết bị Mi Home bằng giọng nói
+- Trò chuyện thoại với Tiểu Trí
+- Chế độ biểu hiện:
+  - Emoji biểu cảm
+  - Mô hình VRM
+- Chế độ ngắt lời thoại:
+  - Từ khóa (từ khóa ngắt lời --> bước vào lượt thoại tiếp theo)
+  - Giọng người (VAD ngắt lời --> trễ 1 giây --> lượt thoại tiếp theo)
+  - Tự do (VAD ngắt lời --> không ngắt mạch hội thoại)
+- Cấu hình được từ kích hoạt/từ khóa
+- Hai chủ đề giao diện
+- Hỗ trợ cấu hình tùy chỉnh
 
-## 支持平台
+## Nền tảng hỗ trợ
 
-| 平台/架构 | x64 | arm64 | arm32 |
+| Nền tảng/kiến trúc | x64 | arm64 | arm32 |
 |-----------|----|----|----|
 | Windows   | ✅ | -- | -- |
 | Linux     | ⚠️ | -- | -- |
@@ -35,24 +35,24 @@
 | Android   | -- | ✅ | ✅ |
 | iOS       | -- | ⚠️ | -- |
 
-✅ 已支持  
-⚠️ 支持但未测试  
+✅ Đã hỗ trợ  
+⚠️ Hỗ trợ nhưng chưa thử nghiệm  
 
-## 如何实现
+## Cách triển khai
 
-- 使用FMOD进行音频录制和播放
-- 集成WebRTC APM模块进行音频前处理，支持回声消除，噪声抑制，音频增强
-- 集成sherpa-onnx进行实时语音识别，包括VAD和Keyword Spot检测
-- 集成VRM1.0
-- 使用uLipSync实现口型同步
+- Dùng FMOD để thu và phát âm thanh
+- Tích hợp mô-đun WebRTC APM cho tiền xử lý âm thanh, hỗ trợ khử vọng, giảm ồn, tăng cường âm
+- Tích hợp sherpa-onnx cho nhận dạng giọng nói thời gian thực, gồm VAD và Keyword Spot
+- Tích hợp VRM1.0
+- Dùng uLipSync để đồng bộ khẩu hình
 
-## 工具
+## Công cụ
 
-如何构建: 选中Assets/Settings/BuildPresets.asset，在EditorView中即可看到构建界面
+Cách build: chọn `Assets/Settings/BuildPresets.asset`, giao diện build sẽ hiện trong EditorView
 
-导入VRM: 将VRM模型导入Unity之后，Project窗口右键模型选择菜单VRM10/PreProcess进行预处理，最后在Settings/AppPreset.asset中配置VRM Character Model
+Nhập VRM: sau khi import mô hình VRM vào Unity, tại cửa sổ Project hãy nhấp chuột phải vào mô hình và chọn menu `VRM10/PreProcess` để tiền xử lý, sau đó cấu hình VRM Character Model trong `Settings/AppPreset.asset`
 
-*注: Settings/AppPreset.asset基本包含了预设的所有配置*
+*Lưu ý: `Settings/AppPreset.asset` về cơ bản đã chứa sẵn mọi cấu hình mẫu*
 
 ## Reference
 
@@ -62,6 +62,6 @@
 - [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)
 - [uLipSync](https://github.com/hecomi/uLipSync)
 - [UniVRM](https://github.com/vrm-c/UniVRM)
-- [模型资源](https://hub.vroid.com/en/characters/1245908975744054638/models/2140572620978697176)
+- [Nguồn mô hình](https://hub.vroid.com/en/characters/1245908975744054638/models/2140572620978697176)
 - [MiService](https://github.com/Yonsm/MiService)
 - [hass-xiaomi-miot](https://github.com/al-one/hass-xiaomi-miot)
