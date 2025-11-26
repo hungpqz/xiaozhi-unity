@@ -68,13 +68,13 @@ namespace UniVRM10
                         };
                         if (used.Contains(binding))
                         {
-                            UniGLTFLogger.Warning($"duplicated: {binding}");
+                            Debug.LogWarning($"duplicated: {binding}");
                         }
                         else
                         {
                             if (Symbols.VRM_DEVELOP)
                             {
-                                UniGLTFLogger.Log($"{val} >> {binding}");
+                                Debug.Log($"{val} >> {binding}");
                             }
                             used.Add(binding);
                             yield return binding;
@@ -84,7 +84,7 @@ namespace UniVRM10
                 else
                 {
                     // skip
-                    UniGLTFLogger.Warning($"SkinnedMeshRenderer not found: {val.RelativePath}");
+                    Debug.LogWarning($"SkinnedMeshRenderer not found: {val.RelativePath}");
                 }
             }
         }

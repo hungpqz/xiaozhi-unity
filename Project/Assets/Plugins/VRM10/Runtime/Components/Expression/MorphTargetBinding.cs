@@ -1,5 +1,4 @@
 using System;
-using UniGLTF;
 using UnityEngine;
 
 namespace UniVRM10
@@ -48,7 +47,7 @@ namespace UniVRM10
             Index = index;
             if (weight > MAX_WEIGHT)
             {
-                UniGLTFLogger.Warning($"MorphTargetBinding: {weight} > {MAX_WEIGHT}");
+                Debug.LogWarning($"MorphTargetBinding: {weight} > {MAX_WEIGHT}");
             }
             Weight = weight;
         }

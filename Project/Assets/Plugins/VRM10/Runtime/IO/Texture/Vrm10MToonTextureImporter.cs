@@ -118,7 +118,7 @@ namespace UniVRM10
             }
         }
 
-        public static bool TryGetShadeMultiplyTexture(GltfData data, VRMC_materials_mtoon mToon, out SubAssetKey key, out TextureDescriptor desc)
+        private static bool TryGetShadeMultiplyTexture(GltfData data, VRMC_materials_mtoon mToon, out SubAssetKey key, out TextureDescriptor desc)
         {
             return TryGetSRGBTexture(data, new Vrm10TextureInfo(mToon.ShadeMultiplyTexture), out key, out desc);
         }

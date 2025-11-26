@@ -1,5 +1,4 @@
 using System;
-using UniGLTF;
 using UnityEngine;
 
 namespace UniVRM10
@@ -50,7 +49,7 @@ namespace UniVRM10
         {
             if (!Application.isPlaying)
             {
-                UniGLTFLogger.Warning($"{nameof(Vrm10Runtime)} expects runtime behaviour.");
+                Debug.LogWarning($"{nameof(Vrm10Runtime)} expects runtime behaviour.");
             }
 
             m_instance = instance;
@@ -72,7 +71,6 @@ namespace UniVRM10
 
         public void Dispose()
         {
-            Expression.Dispose();
             ControlRig?.Dispose();
             SpringBone.Dispose();
         }

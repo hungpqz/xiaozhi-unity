@@ -5,7 +5,6 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using System;
-using UniGLTF;
 
 namespace UniHumanoid
 {
@@ -411,7 +410,7 @@ namespace UniHumanoid
                 }
                 else
                 {
-                    UniGLTFLogger.Warning($"cannot create {path}");
+                    Debug.LogWarning($"cannot create {path}");
                 }
             }
         }

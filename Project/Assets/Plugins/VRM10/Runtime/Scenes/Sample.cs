@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using UniGLTF;
 using UnityEngine;
 
 
@@ -36,7 +35,7 @@ namespace UniVRM10.Sample
 
             // write
             var path = Path.GetFullPath("vrm10.vrm");
-            UniGLTFLogger.Log($"write : {path}");
+            Debug.Log($"write : {path}");
             File.WriteAllBytes(path, exportedBytes);
         }
     }

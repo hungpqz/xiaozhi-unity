@@ -45,7 +45,7 @@ namespace UniVRM10
             }
             catch (Exception ex)
             {
-                UniGLTFLogger.Exception(ex);
+                Debug.LogException(ex);
             }
 
             if (needsDisablingVertexColor)

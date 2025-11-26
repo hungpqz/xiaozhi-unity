@@ -86,7 +86,7 @@ namespace UniGLTF
                         {
                             // ありえない。はず
                             var join = string.Join(", ", path);
-                            UniGLTFLogger.Warning($"invalid json path: {join}");
+                            Debug.LogWarning($"invalid json path: {join}");
                         }
                     }
                 }

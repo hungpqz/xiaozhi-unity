@@ -16,7 +16,7 @@ namespace UniGLTF
 
             if (awaitCaller == null)
             {
-                UniGLTFLogger.Warning("GltfUtility.LoadAsync: awaitCaller argument is null. ImmediateCaller is used as the default fallback. When playing, we recommend RuntimeOnlyAwaitCaller.");
+                Debug.LogWarning("GltfUtility.LoadAsync: awaitCaller argument is null. ImmediateCaller is used as the default fallback. When playing, we recommend RuntimeOnlyAwaitCaller.");
                 awaitCaller = new ImmediateCaller();
             }
 
@@ -36,7 +36,7 @@ namespace UniGLTF
 
             if (awaitCaller == null)
             {
-                UniGLTFLogger.Warning("GltfUtility.LoadAsync: awaitCaller argument is null. ImmediateCaller is used as the default fallback. When playing, we recommend RuntimeOnlyAwaitCaller.");
+                Debug.LogWarning("GltfUtility.LoadAsync: awaitCaller argument is null. ImmediateCaller is used as the default fallback. When playing, we recommend RuntimeOnlyAwaitCaller.");
                 awaitCaller = new ImmediateCaller();
             }
 

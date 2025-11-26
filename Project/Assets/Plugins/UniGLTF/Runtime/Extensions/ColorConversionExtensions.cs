@@ -21,7 +21,7 @@ namespace UniGLTF
         {
             if (src == null || src.Length < 4)
             {
-                UniGLTFLogger.Warning("Invalid argument.");
+                Debug.LogWarning("Invalid argument.");
                 return Color.magenta;
             }
 
@@ -32,7 +32,7 @@ namespace UniGLTF
         {
             if (src == null || src.Length < 3)
             {
-                UniGLTFLogger.Warning("Invalid argument.");
+                Debug.LogWarning("Invalid argument.");
                 return Color.magenta;
             }
 

@@ -7,15 +7,12 @@ using UniGLTF.Extensions.VRMC_vrm_animation;
 using UniHumanoid;
 using UniJSON;
 using UnityEngine;
-using VrmLib;
 
 namespace UniVRM10
 {
     public class VrmAnimationImporter : UniGLTF.ImporterContext
     {
         VRMC_vrm_animation m_vrma;
-        ExpressionInfo[] m_expressions;
-        Material m_defaultMaterial;
 
         public VrmAnimationImporter(GltfData data,
                 IReadOnlyDictionary<SubAssetKey, UnityEngine.Object> externalObjectMap = null,
@@ -111,6 +108,7 @@ namespace UniVRM10
             {
                 foreach (HumanBodyBones bone in UniGLTF.Utils.CachedEnum.GetValues<HumanBodyBones>())
                 {
+                    // Debug.Log($"{bone} => {index}");
                     var node = GetNodeIndex(animation.Humanoid, bone);
                     if (node.HasValue)
                     {
@@ -232,29 +230,24 @@ namespace UniVRM10
         {
             // Expression は AnimationClip を分ける。
             // glTFData から関連 Animation を取り除いて、取っておく。
-            m_expressions = IterateExpressions().ToArray();
-            foreach (var channelIndex in m_expressions.Select(x => x.ChannelIndex).OrderByDescending(x => x))
+            var expressions = IterateExpressions().ToArray();
+            foreach (var channelIndex in expressions.Select(x => x.ChannelIndex).OrderByDescending(x => x))
             {
                 var nodeIndex = Data.GLTF.animations[0].channels[channelIndex].target.node;
                 Data.GLTF.nodes.RemoveAt(nodeIndex);
                 // 後ろから順に channel を除去
                 Data.GLTF.animations[0].channels.RemoveAt(channelIndex);
 
-                UniGLTFLogger.Log($"remove: {channelIndex}");
+                Debug.Log($"remove: {channelIndex}");
             }
             Data.GLTF.scenes[0].nodes = Data.GLTF.scenes[0].nodes.Take(1).ToArray();
 
             // 可視化メッシュ用マテリアル。base.LoadAsync を呼ぶ前に生成する。
-            m_defaultMaterial = await MaterialFactory.GetDefaultMaterialAsync(awaitCaller);
+            var defaultMaterial = await MaterialFactory.GetDefaultMaterialAsync(awaitCaller);
 
             // Humanoid Animation が Gltf アニメーションとしてロードされる
             var instance = await base.LoadAsync(awaitCaller, measureTime);
 
-            return instance;
-        }
-
-        protected override Task OnLoadHierarchy(IAwaitCaller awaitCaller, Func<string, IDisposable> MeasureTime)
-        {
             // setup humanoid
             var humanMap = GetHumanMap();
             if (humanMap.Count > 0)
@@ -263,23 +256,22 @@ namespace UniVRM10
                 //
                 // avatar
                 //
-                var avatar = description.CreateAvatar(Root.transform);
+                var avatar = description.CreateAvatar(instance.Root.transform);
                 avatar.name = "Avatar";
                 // AvatarDescription = description;
-                var animator = Root.AddComponent<Animator>();
+                var animator = instance.gameObject.AddComponent<Animator>();
                 animator.avatar = avatar;
             }
 
-            if (m_expressions.Length > 0)
+            if (expressions.Length > 0)
             {
-                var animation = Root.GetComponentOrThrow<Animation>();
+                var animation = instance.GetComponentOrThrow<Animation>();
                 var clip = animation.clip;
-                // m_expressionClip.name = "__expression__";
 
                 // Expression の float カーブを追加する
                 // VrmAnimationInstance の "preset_xx" field に連動する
                 var gltfAnimation = Data.GLTF.animations[0];
-                foreach (var expression in m_expressions)
+                foreach (var expression in expressions)
                 {
                     var channel = expression.Channel;
                     var sampler = gltfAnimation.samplers[channel.sampler];
@@ -292,22 +284,11 @@ namespace UniVRM10
                 }
             }
 
-            var animationInstance = Root.AddComponent<Vrm10AnimationInstance>();
+            // VRMA-animation solver
+            var animationInstance = instance.gameObject.AddComponent<Vrm10AnimationInstance>();
+            animationInstance.Initialize(expressions.Select(x => x.Key), defaultMaterial);
 
-            animationInstance.Initialize(m_expressions.Select(x => x.Key), m_defaultMaterial);
-
-            return Task.CompletedTask;
-        }
-
-        public override void TransferOwnership(TakeResponsibilityForDestroyObjectFunc take)
-        {
-            var animationInstance = Root.GetComponent<Vrm10AnimationInstance>();
-            take(SubAssetKey.Create(animationInstance.BoxMan.sharedMesh), animationInstance.BoxMan.sharedMesh);
-
-            var animator = Root.GetComponent<Animator>();
-            take(SubAssetKey.Create(animator.avatar), animator.avatar);
-
-            base.TransferOwnership(take);
+            return instance;
         }
     }
 }

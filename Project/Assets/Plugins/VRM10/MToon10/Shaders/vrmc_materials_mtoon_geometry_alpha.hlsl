@@ -17,7 +17,7 @@ inline half GetMToonGeometry_Alpha(half4 litColor)
     else if (MToon_IsAlphaBlendOn())
     {
         const half alpha = litColor.a;
-        clip(alpha - EPSILON_FP16); // https://github.com/vrm-c/UniVRM/pull/2598
+        clip(alpha - EPS_COL);
         return alpha;
     }
     else

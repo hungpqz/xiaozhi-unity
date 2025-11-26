@@ -6,7 +6,6 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UniGLTF.Utils;
-using UniGLTF;
 
 
 namespace UniHumanoid
@@ -129,7 +128,7 @@ namespace UniHumanoid
         public Avatar CreateAvatar(Transform root)
         {
             // force unique name
-            ForceTransformUniqueName.Validate(root);
+            ForceUniqueName.Process(root);
             return AvatarBuilder.BuildHumanAvatar(root.gameObject, ToHumanDescription(root));
         }
 
@@ -253,17 +252,17 @@ namespace UniHumanoid
                 var importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(target));
                 if (importer != null)
                 {
-                    UniGLTFLogger.Log("AssetImporter Type: " + importer.GetType());
+                    Debug.Log("AssetImporter Type: " + importer.GetType());
                     ModelImporter modelImporter = importer as ModelImporter;
                     if (modelImporter != null)
                     {
                         des = modelImporter.humanDescription;
-                        UniGLTFLogger.Log("## Cool stuff data by ModelImporter ##");
+                        Debug.Log("## Cool stuff data by ModelImporter ##");
                         return true;
                     }
                     else
                     {
-                        UniGLTFLogger.Warning("## Please Select Imported Model in Project View not prefab or other things ##");
+                        Debug.LogWarning("## Please Select Imported Model in Project View not prefab or other things ##");
                     }
                 }
             }

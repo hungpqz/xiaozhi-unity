@@ -362,7 +362,7 @@ namespace UniGLTF
         {
             if (index < 0 || index >= Nodes.Count)
             {
-                UniGLTFLogger.Warning($"nodes[{index}] is not found !");
+                Debug.LogWarning($"nodes[{index}] is not found !");
                 node = default;
                 return false;
             }

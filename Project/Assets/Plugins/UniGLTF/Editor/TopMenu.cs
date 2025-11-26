@@ -23,7 +23,7 @@ namespace UniGLTF
         private static void ExportGameObjectToGltf() => GltfExportWindow.ExportGameObjectToGltfFile();
 
 
-        [MenuItem(UserGltfMenuPrefix + "/" + UniGltfEditorDialog.IMPORT_MENU_NAME, priority = 2)]
+        [MenuItem(UserGltfMenuPrefix + "/" + GltfImportMenu.MENU_NAME, priority = 2)]
         private static void ImportGltfFile() => GltfImportMenu.ImportGltfFileToGameObject();
 
 
@@ -50,11 +50,11 @@ namespace UniGLTF
         {
             if (Selection.activeObject is GameObject go)
             {
-                UniGLTFLogger.Log($"{go.GetPrefabType()}");
+                Debug.Log(go.GetPrefabType());
             }
             else
             {
-                UniGLTFLogger.Log($"{Selection.activeContext.GetType()}");
+                Debug.Log(Selection.activeContext.GetType());
             }
         }
 #endif

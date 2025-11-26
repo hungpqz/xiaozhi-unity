@@ -120,6 +120,7 @@ namespace UniHumanoid
             var _target = (HumanPoseTransfer)target;
             if (_target.PoseClip != old)
             {
+                //Debug.Log("clip != old");
                 if (_target.PoseClip != null)
                 {
                     var pose = _target.PoseClip.GetPose();
@@ -132,7 +133,7 @@ namespace UniHumanoid
             {
                 if (GUILayout.Button("Apply PoseClip"))
                 {
-                    UniGLTFLogger.Log("apply");
+                    Debug.Log("apply");
                     var pose = default(HumanPose);
                     _target.PoseClip.GetPose(out pose);
                     _target.SetPose(pose);

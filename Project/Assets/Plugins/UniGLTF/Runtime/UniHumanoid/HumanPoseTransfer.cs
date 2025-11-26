@@ -65,15 +65,6 @@ namespace UniHumanoid
         }
 
         HumanPoseHandler m_handler;
-        public void Dispose()
-        {
-            if (m_handler != null)
-            {
-                m_handler.Dispose();
-                m_handler = null;
-            }
-        }
-
         public void OnEnable()
         {
             if (TryGetComponent<Animator>(out var animator))
@@ -84,18 +75,12 @@ namespace UniHumanoid
             Setup();
         }
 
-        void OnDisable()
-        {
-            Dispose();
-        }
-
         public void Setup()
         {
             if (Avatar == null)
             {
                 return;
             }
-            Dispose();
             m_handler = new HumanPoseHandler(Avatar, transform);
         }
 

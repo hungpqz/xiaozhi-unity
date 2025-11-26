@@ -68,7 +68,9 @@ namespace UniGLTF
                 }
                 else
                 {
-                    UniGLTFLogger.Warning($"May be partial primitive has blendShape. Require separate mesh or extend blend shape, but not implemented: {blendShape.Name}");
+                    Debug.LogWarningFormat(
+                        "May be partial primitive has blendShape. Require separate mesh or extend blend shape, but not implemented: {0}",
+                        blendShape.Name);
                 }
             }
             else
@@ -89,6 +91,8 @@ namespace UniGLTF
             MeshData data,
             Func<int?, Task<Material>> materialFromIndex)
         {
+
+            //Debug.Log(prims.ToJson());
             var mesh = new Mesh
             {
                 name = data.Name

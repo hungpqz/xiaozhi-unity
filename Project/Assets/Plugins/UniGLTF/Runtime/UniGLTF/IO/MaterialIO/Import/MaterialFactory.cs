@@ -14,22 +14,20 @@ namespace UniGLTF
         private readonly MaterialDescriptor m_defaultMaterialParams;
         private readonly List<MaterialLoadInfo> m_materials = new List<MaterialLoadInfo>();
 
+        /// <summary>
+        /// gltfPritmitive.material が無い場合のデフォルトマテリアル
+        /// https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#default-material
+        ///
+        /// </summary>
+        private Material m_defaultMaterial;
+
         public IReadOnlyList<MaterialLoadInfo> Materials => m_materials;
+
 
         public MaterialFactory(IReadOnlyDictionary<SubAssetKey, Material> externalMaterialMap, MaterialDescriptor defaultMaterialParams)
         {
             m_externalMap = externalMaterialMap;
-            m_defaultMaterialParams = new MaterialDescriptor(
-                m_defaultMaterialKey.Name,
-                defaultMaterialParams.Shader,
-                defaultMaterialParams.RenderQueue,
-                defaultMaterialParams.TextureSlots,
-                defaultMaterialParams.FloatValues,
-                defaultMaterialParams.Colors,
-                defaultMaterialParams.Vectors,
-                defaultMaterialParams.Actions,
-                defaultMaterialParams.AsyncActions
-            );
+            m_defaultMaterialParams = defaultMaterialParams;
         }
 
         public struct MaterialLoadInfo
@@ -58,6 +56,11 @@ namespace UniGLTF
                     UnityObjectDestroyer.DestroyRuntimeOrEditor(x.Asset);
                 }
             }
+
+            if (m_defaultMaterial != null)
+            {
+                UnityObjectDestroyer.DestroyRuntimeOrEditor(m_defaultMaterial);
+            }
         }
 
         /// <summary>
@@ -81,6 +84,12 @@ namespace UniGLTF
                     m_materials.Remove(x);
                 }
             }
+
+            if (m_defaultMaterial != null)
+            {
+                take(m_defaultMaterialKey, m_defaultMaterial);
+                m_defaultMaterial = null;
+            }
         }
 
         public Material GetMaterial(int index)
@@ -90,15 +99,21 @@ namespace UniGLTF
             return m_materials[index].Asset;
         }
 
-        /// <summary>
-        /// gltfPritmitive.material が無い場合のデフォルトマテリアル
-        /// https://www.khronos.org/registry/glTF/specs/2.0/glTF-2.0.html#default-material
-        ///
-        /// </summary>
-        public Task<Material> GetDefaultMaterialAsync(IAwaitCaller awaitCaller)
+        public async Task<Material> GetDefaultMaterialAsync(IAwaitCaller awaitCaller)
         {
-            return LoadAsync(m_defaultMaterialParams, (_, _) => null, awaitCaller);
+            if (m_externalMap.ContainsKey(m_defaultMaterialKey))
+            {
+                m_defaultMaterial = m_externalMap[m_defaultMaterialKey];
+                return m_externalMap[m_defaultMaterialKey];
+            }
+
+            if (m_defaultMaterial == null)
+            {
+                m_defaultMaterial = await LoadAsync(m_defaultMaterialParams, (_, _) => null, awaitCaller);
+            }
+            return m_defaultMaterial;
         }
+
 
         public async Task<Material> LoadAsync(MaterialDescriptor matDesc, GetTextureAsyncFunc getTexture, IAwaitCaller awaitCaller)
         {

@@ -42,7 +42,7 @@ public static class GltfDeserializer
         public static void GenerateSerializer()
         {
             var info = new ObjectSerialization(typeof(glTF), "gltf", "Deserialize_");
-            UniGLTFLogger.Log($"{info}");
+            Debug.Log(info);
 
             using (var s = File.Open(OutPath, FileMode.Create))
             using (var w = new StreamWriter(s, new UTF8Encoding(false)))
@@ -52,7 +52,7 @@ public static class GltfDeserializer
                 w.Write(End);
             }
 
-            UniGLTFLogger.Log($"write: {OutPath}");
+            Debug.LogFormat("write: {0}", OutPath);
             UnityPath.FromFullpath(OutPath).ImportAsset();
         }
     }

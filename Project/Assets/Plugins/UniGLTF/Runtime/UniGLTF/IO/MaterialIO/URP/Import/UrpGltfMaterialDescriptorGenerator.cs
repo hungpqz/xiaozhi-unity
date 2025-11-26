@@ -18,7 +18,7 @@ namespace UniGLTF
             // NOTE: Fallback to default material
             if (Symbols.VRM_DEVELOP)
             {
-                UniGLTFLogger.Warning($"material: {i} out of range. fallback");
+                Debug.LogWarning($"material: {i} out of range. fallback");
             }
             return GetGltfDefault(GltfMaterialImportUtils.ImportMaterialName(i, null));
         }

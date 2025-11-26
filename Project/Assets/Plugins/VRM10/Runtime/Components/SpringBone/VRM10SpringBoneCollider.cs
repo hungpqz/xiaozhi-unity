@@ -34,11 +34,6 @@ namespace UniVRM10
 
         public bool IsSelected => GetInstanceID() == SelectedGuid;
 
-        public void OnValidate()
-        {
-            Normal = Normal.normalized;
-        }
-
         void OnDrawGizmosSelected()
         {
             DrawGizmos();

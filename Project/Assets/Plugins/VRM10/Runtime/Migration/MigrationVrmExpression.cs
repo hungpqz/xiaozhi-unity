@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UniGLTF;
 using UniJSON;
 using UnityEngine;
 
@@ -79,7 +78,7 @@ namespace UniVRM10
                 if (nodeIndex == -1)
                 {
                     // invalid data. skip
-                    UniGLTFLogger.Warning($"[MigrationVrmExpression] node.mesh == {meshIndex} not found");
+                    Debug.LogWarning($"[MigrationVrmExpression] node.mesh == {meshIndex} not found");
                     continue;
                 }
                 bind.Node = nodeIndex;
@@ -141,14 +140,14 @@ namespace UniVRM10
                 if (material == null)
                 {
                     // invalid data. skip
-                    UniGLTFLogger.Warning($"[MigrationVrmExpression] material.name == {materialName} is not found");
+                    Debug.LogWarning($"[MigrationVrmExpression] material.name == {materialName} is not found");
                     continue;
                 }
                 var materialIndex = gltf.materials.IndexOf(material);
                 if (materialIndex == -1)
                 {
                     // invalid data. skip
-                    UniGLTFLogger.Warning($"[MigrationVrmExpression] material.name == {materialName} index");
+                    Debug.LogWarning($"[MigrationVrmExpression] material.name == {materialName} index");
                     continue;
                 }
                 var propertyName = x["propertyName"].GetString();

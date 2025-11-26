@@ -219,7 +219,7 @@ namespace UniGLTF
                             SetBlendShapeAnimationCurve(data, animation, channel, clip, relativePath);
                             break;
                         default:
-                            UniGLTFLogger.Warning($"unknown path: {channel.target.path}");
+                            Debug.LogWarningFormat("unknown path: {0}", channel.target.path);
                             break;
                     }
 
@@ -227,7 +227,7 @@ namespace UniGLTF
                 }
                 else
                 {
-                    UniGLTFLogger.Warning($"ConvertAnimationClipAsync: channel.target.node: out of range: 0<[{channel.target.node}]<{data.GLTF.nodes.Count}");
+                    Debug.LogWarning($"ConvertAnimationClipAsync: channel.target.node: out of range: 0<[{channel.target.node}]<{data.GLTF.nodes.Count}");
                 }
             }
 

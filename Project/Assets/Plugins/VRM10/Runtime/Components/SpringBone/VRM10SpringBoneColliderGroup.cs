@@ -87,10 +87,7 @@ namespace UniVRM10
         {
             foreach (var collider in Colliders)
             {
-                if (collider != null)
-                {
-                    collider.DrawGizmos();
-                }
+                collider.DrawGizmos();
             }
         }
     }

@@ -43,6 +43,7 @@ namespace UniVRM10
                 GameObject.DestroyImmediate(x.gameObject);
             }
 
+            //Debug.Log("new prefab. instanciate");
             // no previous instance detected, so now let's make a fresh one
             // very important: this loads the PreviewInstance prefab and temporarily instantiates it into PreviewInstance
             var go = GameObject.Instantiate(prefab,
@@ -263,6 +264,7 @@ namespace UniVRM10
                         PreviewMaterialItem item;
                         if (m_materialMap.TryGetValue(x.MaterialName, out item))
                         {
+                            //Debug.Log("set material");
                             PropItem prop;
                             if (item.PropMap.TryGetValue(x.BindType, out prop))
                             {

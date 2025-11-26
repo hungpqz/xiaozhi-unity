@@ -262,7 +262,7 @@ namespace UniGLTF
             }
             else
             {
-                UniGLTFLogger.Warning($"unknown renderer: {renderer}", context: renderer);
+                Debug.LogWarning($"unknown renderer: {renderer}", context: renderer);
             }
         }
 

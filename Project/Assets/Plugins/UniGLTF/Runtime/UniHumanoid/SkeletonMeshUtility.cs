@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UniGLTF;
 using UnityEngine;
 
 
@@ -255,7 +254,7 @@ namespace UniHumanoid
                 {
                     if (Application.isEditor)
                     {
-                        UniGLTFLogger.Warning($"{headTail.Head} not found");
+                        Debug.LogWarningFormat("{0} not found", headTail.Head);
                     }
                 }
             }

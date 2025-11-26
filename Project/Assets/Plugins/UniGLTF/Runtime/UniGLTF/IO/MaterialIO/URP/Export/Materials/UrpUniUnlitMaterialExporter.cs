@@ -70,7 +70,7 @@ namespace UniGLTF
             }
             catch (Exception e)
             {
-                UniGLTFLogger.Exception(e);
+                Debug.LogException(e);
                 dst = default;
                 return false;
             }

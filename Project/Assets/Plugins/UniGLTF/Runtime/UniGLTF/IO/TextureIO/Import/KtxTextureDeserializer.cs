@@ -39,7 +39,7 @@ namespace UniGLTF
             }
             catch (Exception e)
             {
-                UniGLTFLogger.Exception(e);
+                Debug.LogException(e);
                 return null;
             }
 #else

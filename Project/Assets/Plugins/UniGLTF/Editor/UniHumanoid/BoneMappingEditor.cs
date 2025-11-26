@@ -4,7 +4,6 @@ using System.Linq;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using UniGLTF;
 
 
 namespace UniHumanoid
@@ -123,7 +122,7 @@ animator.GetBoneTransform(x.Head), animator.GetBoneTransform(x.Tail)))
                         }
                         else
                         {
-                            UniGLTFLogger.Warning("fail to CreateAvatar");
+                            Debug.LogWarning("fail to CreateAvatar");
                         }
                     }
                 }

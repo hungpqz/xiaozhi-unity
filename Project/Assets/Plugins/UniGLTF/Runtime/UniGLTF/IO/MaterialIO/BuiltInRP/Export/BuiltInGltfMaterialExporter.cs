@@ -39,7 +39,7 @@ namespace UniGLTF
                     break;
             }
 
-            UniGLTFLogger.Log($"Material `{m.name}` fallbacks.");
+            Debug.Log($"Material `{m.name}` fallbacks.");
             return BuiltInFallbackMaterialExporter.ExportMaterial(m, textureExporter);
         }
     }

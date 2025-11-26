@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
 using UniGLTF.Utils;
-using UniGLTF;
 
 namespace UniHumanoid
 {
@@ -47,7 +46,7 @@ namespace UniHumanoid
             var hips = Bones[(int)HumanBodyBones.Hips];
             if (hips == null)
             {
-                UniGLTFLogger.Warning("require hips");
+                Debug.LogWarning("require hips");
                 return;
             }
 

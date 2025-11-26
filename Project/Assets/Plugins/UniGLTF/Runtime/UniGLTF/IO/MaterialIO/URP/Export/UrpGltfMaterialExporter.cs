@@ -15,7 +15,7 @@ namespace UniGLTF
             if (UrpUnlitExporter.TryExportMaterial(m, textureExporter, out dst)) return dst;
             if (UrpUniUnlitExporter.TryExportMaterial(m, textureExporter, out dst)) return dst;
 
-            UniGLTFLogger.Log($"Material `{m.name}` fallbacks.");
+            Debug.Log($"Material `{m.name}` fallbacks.");
             return FallbackExporter.ExportMaterial(m, textureExporter);
         }
     }

@@ -9,7 +9,6 @@ namespace UniVRM10
         (INormalizedPoseProvider, ITPoseProvider) ControlRig { get; }
         IReadOnlyDictionary<ExpressionKey, Func<float>> ExpressionMap { get; }
         public void ShowBoxMan(bool enable);
-        public void SetBoxManMaterial(Material material);
         LookAtInput? LookAt { get; }
     }
 }

@@ -42,6 +42,7 @@ namespace UniVRM10
             }
             else
             {
+                // Debug.LogWarning($"${bone} not found");
                 return Quaternion.identity;
             }
         }

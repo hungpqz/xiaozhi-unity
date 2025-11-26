@@ -28,18 +28,18 @@ namespace UniGLTF
                 default:
                     if (string.IsNullOrEmpty(textureInfo.DataMimeType))
                     {
-                        UniGLTFLogger.Log($"Texture image MIME type is empty.");
+                        Debug.Log($"Texture image MIME type is empty.");
                     }
                     else
                     {
-                        UniGLTFLogger.Log($"Texture image MIME type `{textureInfo.DataMimeType}` is not supported.");
+                        Debug.Log($"Texture image MIME type `{textureInfo.DataMimeType}` is not supported.");
                     }
                     break;
             }
 
             if (texture == null)
             {
-                UniGLTFLogger.Log($"Failed to load texture from image data.");
+                Debug.Log($"Failed to load texture from image data.");
                 texture = new Texture2D(2, 2, TextureFormat.ARGB32, textureInfo.UseMipmap, textureInfo.ColorSpace == ColorSpace.Linear);
             }
 

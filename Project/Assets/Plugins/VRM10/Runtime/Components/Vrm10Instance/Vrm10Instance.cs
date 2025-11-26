@@ -188,7 +188,7 @@ namespace UniVRM10
         {
             if (Vrm == null)
             {
-                UniGLTFLogger.Error("no VRM10Object");
+                Debug.LogError("no VRM10Object");
                 enabled = false;
                 return;
             }
@@ -215,11 +215,6 @@ namespace UniVRM10
         }
 
         private void OnDestroy()
-        {
-            DisposeRuntime();
-        }
-
-        public void DisposeRuntime()
         {
             if (m_runtime != null)
             {

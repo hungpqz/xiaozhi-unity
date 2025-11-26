@@ -7,20 +7,10 @@ namespace UniVRM10
     [Serializable]
     public class CurveMapper
     {
-        /// <summary>
-        /// v0.128.3 VRM10ObjectLookAtEditor
-        /// 
-        /// DegreeINput 0-90
-        /// </summary>
+        [Range(20.0f, 90.0f)]
         public float CurveXRangeDegree;
 
-        /// <summary>
-        /// v0.128.3 VRM10ObjectLookAtEditor
-        /// 
-        /// EyeBoneDegree 0-90
-        /// or
-        /// ExpressionWeight 0-1.0
-        /// </summary>
+        [Range(0, 90.0f)]
         public float CurveYRangeDegree;
 
         public CurveMapper(float xRange, float yRange)

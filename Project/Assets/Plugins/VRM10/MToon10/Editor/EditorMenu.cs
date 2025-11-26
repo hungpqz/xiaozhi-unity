@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using UniGLTF;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,11 +25,11 @@ namespace VRM10.MToon10.Editor
 
                 if (obj is Material material && migrator.TryMigrate(material, validateShaderName: true))
                 {
-                    UniGLTFLogger.Log($"Migrated {material.name} to MToon10");
+                    Debug.Log($"Migrated {material.name} to MToon10");
                 }
                 else
                 {
-                    UniGLTFLogger.Warning($"Failed to migrate {obj.name} to MToon10");
+                    Debug.LogWarning($"Failed to migrate {obj.name} to MToon10");
                 }
             }
         }

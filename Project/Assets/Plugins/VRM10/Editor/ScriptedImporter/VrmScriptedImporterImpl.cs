@@ -86,7 +86,7 @@ namespace UniVRM10
         {
             if (Symbols.VRM_DEVELOP)
             {
-                UniGLTFLogger.Log("OnImportAsset to " + scriptedImporter.assetPath);
+                Debug.Log("OnImportAsset to " + scriptedImporter.assetPath);
             }
 
             // 1st parse as vrm1
@@ -117,7 +117,7 @@ namespace UniVRM10
                 // fail to migrate...
                 if (migration != null)
                 {
-                    UniGLTFLogger.Warning(migration.Message);
+                    Debug.LogWarning(migration.Message);
                 }
                 return;
             }

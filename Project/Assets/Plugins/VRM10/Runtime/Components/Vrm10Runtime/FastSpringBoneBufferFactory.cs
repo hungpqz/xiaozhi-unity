@@ -26,7 +26,6 @@ namespace UniVRM10
             if (fastSpringBoneBuffer != null)
             {
                 fastSpringBoneBuffer.Dispose();
-                fastSpringBoneBuffer = null;
             }
 
             Func<Transform, TransformState> GetOrAddDefaultTransformState = (Transform tf) =>
@@ -36,13 +35,13 @@ namespace UniVRM10
                     return defaultTransformState;
                 }
 
-                UniGLTFLogger.Warning($"{tf.name} does not exist on load.");
+                Debug.LogWarning($"{tf.name} does not exist on load.");
                 return new TransformState(null);
             };
 
             // create(Spring情報の再収集。設定変更の反映)
             var springs = vrm.SpringBone.Springs.Select(spring => new FastSpringBoneSpring
-            {
+            {                
                 center = spring.Center,
                 colliders = spring.ColliderGroups
                    .SelectMany(group => group.Colliders)
