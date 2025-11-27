@@ -182,8 +182,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de03f83d03851e54eb4507e6e2236b3e
+    m_Address: Fonts & Materials/BeVietnamPro-Regular
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2926aa68dcd22644aa8cd7b6676dae7
     m_Address: Assets/Res/VRM/Common/stand2.anim
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e88d029d979a98649a89e19a530cd14a
+    m_Address: Assets/Res/VRM/Boy/prefab.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

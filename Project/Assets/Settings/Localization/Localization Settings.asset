@@ -28,7 +28,7 @@ MonoBehaviour:
     - rid: 8193056261008261146
     - rid: 6566248393832398848
   m_ProjectLocaleIdentifier:
-    m_Code: zh-Hans
+    m_Code: en
   m_PreloadBehavior: 1
   m_InitializeSynchronously: 0
   references:
@@ -55,7 +55,6 @@ MonoBehaviour:
         m_CommandLineArgument: -language=
     - rid: 8193056261008261121
       type: {class: SystemLocaleSelector, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
-      data: 
     - rid: 8193056261008261122
       type: {class: SpecificLocaleSelector, ns: UnityEngine.Localization.Settings,
         asm: Unity.Localization}
@@ -64,7 +63,6 @@ MonoBehaviour:
           m_Code: zh-Hans
     - rid: 8193056261008261123
       type: {class: LocalesProvider, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
-      data: 
     - rid: 8193056261008261124
       type: {class: LocalizedAssetDatabase, ns: UnityEngine.Localization.Settings,
         asm: Unity.Localization}
@@ -157,23 +155,18 @@ MonoBehaviour:
     - rid: 8193056261008261131
       type: {class: DictionarySource, ns: UnityEngine.Localization.SmartFormat.Extensions,
         asm: Unity.Localization}
-      data: 
     - rid: 8193056261008261132
       type: {class: ValueTupleSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
         asm: Unity.Localization}
-      data: 
     - rid: 8193056261008261133
       type: {class: XmlSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
         asm: Unity.Localization}
-      data: 
     - rid: 8193056261008261134
       type: {class: ReflectionSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
         asm: Unity.Localization}
-      data: 
     - rid: 8193056261008261135
       type: {class: DefaultSource, ns: UnityEngine.Localization.SmartFormat.Extensions,
         asm: Unity.Localization}
-      data: 
     - rid: 8193056261008261136
       type: {class: PluralLocalizationFormatter, ns: UnityEngine.Localization.SmartFormat.Extensions,
         asm: Unity.Localization}

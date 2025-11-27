@@ -33,6 +33,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7068064069099570093}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -69,8 +70,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Hello World
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 78f28997183270f47ac2bbdeed7eae72, type: 2}
-  m_sharedMaterial: {fileID: -9121277301138378960, guid: 78f28997183270f47ac2bbdeed7eae72,
+  m_fontAsset: {fileID: 11400000, guid: c7f328b0ef8261c46b4e95036e2a3ae0, type: 2}
+  m_sharedMaterial: {fileID: 5290478349189146324, guid: c7f328b0ef8261c46b4e95036e2a3ae0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -226,6 +227,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6136638896499954249}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -262,9 +264,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 78f28997183270f47ac2bbdeed7eae72, type: 2}
-  m_sharedMaterial: {fileID: -9121277301138378960, guid: 78f28997183270f47ac2bbdeed7eae72,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -288,8 +289,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -447,6 +448,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7068064069099570093}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -483,8 +485,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 78f28997183270f47ac2bbdeed7eae72, type: 2}
-  m_sharedMaterial: {fileID: -9121277301138378960, guid: 78f28997183270f47ac2bbdeed7eae72,
+  m_fontAsset: {fileID: 11400000, guid: c7f328b0ef8261c46b4e95036e2a3ae0, type: 2}
+  m_sharedMaterial: {fileID: 5290478349189146324, guid: c7f328b0ef8261c46b4e95036e2a3ae0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -657,6 +659,7 @@ RectTransform:
   - {fileID: 6725136207702850455}
   - {fileID: 7068064069099570093}
   m_Father: {fileID: 0}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -764,6 +767,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6136638896499954249}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -872,6 +876,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6136638896499954249}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -360}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -982,6 +987,7 @@ RectTransform:
   - {fileID: 906961384572733764}
   - {fileID: 8439372105264856542}
   m_Father: {fileID: 6136638896499954249}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1085,7 +1091,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 6136638896499954249}
     m_Modifications:
     - target: {fileID: 1990323792211906804, guid: 28096ff7a433fdd4fb7e25fc62051708,
@@ -1224,9 +1230,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28096ff7a433fdd4fb7e25fc62051708, type: 3}
 --- !u!224 &4659879092763370811 stripped
 RectTransform:
