@@ -60,7 +60,7 @@ MonoBehaviour:
         asm: Unity.Localization}
       data:
         m_LocaleId:
-          m_Code: zh-Hans
+          m_Code: vi
     - rid: 8193056261008261123
       type: {class: LocalesProvider, ns: UnityEngine.Localization.Settings, asm: Unity.Localization}
     - rid: 8193056261008261124

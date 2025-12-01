@@ -12,7 +12,7 @@ namespace XiaoZhi.Unity.IoT
 
         public bool IsPlaying => _videoPlayer.IsPlaying;
 
-        public ThingVideoPlayer() : base("VideoPlayer", "视频播放器")
+        public ThingVideoPlayer() : base("VideoPlayer", "Trình phát video")
         {
         }
 
@@ -23,15 +23,15 @@ namespace XiaoZhi.Unity.IoT
             var playerComp = go.GetComponent<UnityEngine.Video.VideoPlayer>();
             if (!playerComp) throw new NullReferenceException("Missing VideoPlayer");
             _videoPlayer = new VideoPlayer(playerComp);
-            var videoNames = "视频名称, " + string.Join(" 或 ", AppPresets.Instance.Videos.Select(i => i.Name));
-            _properties.AddProperty("IsPlaying", "是否播放中", () => _videoPlayer.IsPlaying);
-            _methods.AddMethod("PlayVideo", "播放视频",
+            var videoNames = "Tên video, " + string.Join(" hoặc ", AppPresets.Instance.Videos.Select(i => i.Name));
+            _properties.AddProperty("IsPlaying", "Có đang phát hay không", () => _videoPlayer.IsPlaying);
+            _methods.AddMethod("PlayVideo", "Phát video",
                 new ParameterList(new[]
                 {
                     new Parameter<string>("videoName", videoNames)
                 }),
                 PlayVideo);
-            _methods.AddMethod("StopVideo", "停止播放视频", new ParameterList(), StopVideo);
+            _methods.AddMethod("StopVideo", "Dừng phát video", new ParameterList(), StopVideo);
             await base.Load();
         }
 

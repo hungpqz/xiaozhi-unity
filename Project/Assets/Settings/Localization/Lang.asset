@@ -45,9 +45,9 @@ MonoBehaviour:
         asm: Unity.Localization.Editor}
       data:
         m_LocaleIdentifier:
-          m_Code: zh-Hans
-        m_FieldName: zh-Hans
-        m_CommentFieldName: zh-Hans Comments
+          m_Code: vi
+        m_FieldName: vi
+        m_CommentFieldName: vi Comments
         m_IncludeComments: 0
     - rid: 8193056261008261191
       type: {class: LocaleColumns, ns: UnityEditor.Localization.Plugins.CSV.Columns,

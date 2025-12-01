@@ -18,8 +18,9 @@ namespace XiaoZhi.Unity.MIoT
                 var code = LocalizationSettings.SelectedLocale.Identifier.Code;
                 return code switch
                 {
-                    "zh-Hans" => "cn",
+                    "vi" => "en",
                     "en" => "en",
+                    "zh-Hans" => "cn",
                     _ => code
                 };
             }

@@ -86,9 +86,6 @@
     <type fullname="TMPro.TMP_Character" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_FontFeatureTable" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_FontWeightPair" preserve="nothing" serialized="true" />
-    <type fullname="TMPro.TMP_GlyphAdjustmentRecord" preserve="nothing" serialized="true" />
-    <type fullname="TMPro.TMP_GlyphPairAdjustmentRecord" preserve="nothing" serialized="true" />
-    <type fullname="TMPro.TMP_GlyphValueRecord" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_InputField/OnChangeEvent" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_InputField/SelectionEvent" preserve="nothing" serialized="true" />
     <type fullname="TMPro.TMP_InputField/SubmitEvent" preserve="nothing" serialized="true" />

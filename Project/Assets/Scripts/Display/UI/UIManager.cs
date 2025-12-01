@@ -115,10 +115,10 @@ namespace XiaoZhi.Unity
             var hideTasks = ListPool<UniTask>.Get();
             hideTasks.Add(FindUI(data.Alias).Hide());
             hideTasks.AddRange(from moduleData in data.Stack
-                select FindUI(moduleData.Alias)
+                               select FindUI(moduleData.Alias)
                 into moduleUI
-                where moduleUI?.IsVisible == true
-                select moduleUI.Hide());
+                               where moduleUI?.IsVisible == true
+                               select moduleUI.Hide());
             var maskUI = FindUI<MaskUI>();
             if (maskUI.IsVisible) hideTasks.Add(maskUI.Hide());
             await UniTask.WhenAll(hideTasks);
@@ -164,7 +164,7 @@ namespace XiaoZhi.Unity
             ui.Init(go);
             return ui;
         }
-        
+
         public async UniTask<T> ShowBgUI<T>(BaseUIData data = null) where T : BaseUI, new()
         {
             return await ShowStackUI<T>(data, UILayer.Bg);
@@ -237,7 +237,7 @@ namespace XiaoZhi.Unity
         {
             if (!string.IsNullOrEmpty(_currentPopup))
             {
-                await CloseUI(FindUI(_currentPopup)); 
+                await CloseUI(FindUI(_currentPopup));
                 return true;
             }
 

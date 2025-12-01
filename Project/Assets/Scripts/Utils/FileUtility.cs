@@ -10,27 +10,27 @@ using UnityEngine.AddressableAssets;
 namespace XiaoZhi.Unity
 {
     /// <summary>
-    /// 文件加载管理
+    /// Quản lý tải tệp
     /// </summary>
     public static class FileUtility
     {
         /// <summary>
-        /// 资源类型
+        /// Loại tài nguyên
         /// </summary>
         public enum FileType
         {
             /// <summary>
-            /// StreamingAssets目录
+            /// Thư mục StreamingAssets
             /// </summary>
             StreamingAssets,
 
             /// <summary>
-            /// 数据目录
+            /// Thư mục dữ liệu
             /// </summary>
             DataPath,
 
             /// <summary>
-            /// Resources目录
+            /// Thư mục Resources
             /// </summary>
             Resources,
 
@@ -41,15 +41,15 @@ namespace XiaoZhi.Unity
         }
 
         /// <summary>
-        /// 获取资源完整路径
+        /// Lấy đường dẫn đầy đủ của tài nguyên
         /// </summary>
-        /// <param name="type">资源类型</param>
-        /// <param name="relativePath">相对路径</param>
-        /// <returns>完整的文件路径</returns>
+        /// <param name="type">Loại tài nguyên</param>
+        /// <param name="relativePath">Đường dẫn tương đối</param>
+        /// <returns>Đường dẫn tệp đầy đủ</returns>
         public static string GetFullPath(FileType type, string relativePath)
         {
             if (string.IsNullOrEmpty(relativePath))
-                throw new ArgumentException("路径不能为空", nameof(relativePath));
+                throw new ArgumentException("Đường dẫn không được để trống", nameof(relativePath));
             relativePath = relativePath.Replace("\\", "/");
             switch (type)
             {
@@ -66,11 +66,11 @@ namespace XiaoZhi.Unity
         }
 
         /// <summary>
-        /// 同步读取文本文件
+        /// Đọc tệp văn bản đồng bộ
         /// </summary>
-        /// <param name="type">资源类型</param>
-        /// <param name="relativePath">相对路径</param>
-        /// <returns>文件内容</returns>
+        /// <param name="type">Loại tài nguyên</param>
+        /// <param name="relativePath">Đường dẫn tương đối</param>
+        /// <returns>Nội dung tệp</returns>
         public static string ReadAllText(FileType type, string relativePath)
         {
             switch (type)
@@ -81,7 +81,7 @@ namespace XiaoZhi.Unity
                     request.SendWebRequest();
                     while (!request.isDone) { }
                     if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success) 
-                        throw new IOException($"读取文件失败: {request.error}");
+                        throw new IOException($"Đọc tệp thất bại: {request.error}");
                     return request.downloadHandler.text;
 #else
                     return File.ReadAllText(GetFullPath(type, relativePath));
@@ -104,11 +104,11 @@ namespace XiaoZhi.Unity
         }
 
         /// <summary>
-        /// 异步读取文本文件
+        /// Đọc tệp văn bản bất đồng bộ
         /// </summary>
-        /// <param name="type">资源类型</param>
-        /// <param name="relativePath">相对路径</param>
-        /// <returns>文件内容</returns>
+        /// <param name="type">Loại tài nguyên</param>
+        /// <param name="relativePath">Đường dẫn tương đối</param>
+        /// <returns>Nội dung tệp</returns>
         public static async Task<string> ReadAllTextAsync(FileType type, string relativePath)
         {
             switch (type)
@@ -118,7 +118,7 @@ namespace XiaoZhi.Unity
                     var request = UnityEngine.Networking.UnityWebRequest.Get(GetFullPath(type, relativePath));
                     await request.SendWebRequest();
                     if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success) 
-                        throw new IOException($"读取文件失败: {request.error}");
+                        throw new IOException($"Đọc tệp thất bại: {request.error}");
                     return request.downloadHandler.text;
 #else
                     return await File.ReadAllTextAsync(GetFullPath(type, relativePath));
@@ -141,11 +141,11 @@ namespace XiaoZhi.Unity
         }
 
         /// <summary>
-        /// 同步读取二进制文件
+        /// Đọc tệp nhị phân đồng bộ
         /// </summary>
-        /// <param name="type">资源类型</param>
-        /// <param name="relativePath">相对路径</param>
-        /// <returns>文件字节数组</returns>
+        /// <param name="type">Loại tài nguyên</param>
+        /// <param name="relativePath">Đường dẫn tương đối</param>
+        /// <returns>Mảng byte của tệp</returns>
         public static byte[] ReadAllBytes(FileType type, string relativePath)
         {
             switch (type)
@@ -156,7 +156,7 @@ namespace XiaoZhi.Unity
                     request.SendWebRequest();
                     while (!request.isDone) { }
                     if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success) 
-                        throw new IOException($"读取文件失败: {request.error}");
+                        throw new IOException($"Đọc tệp thất bại: {request.error}");
                     return request.downloadHandler.data;
 #else
                     return File.ReadAllBytes(GetFullPath(type, relativePath));
@@ -179,11 +179,11 @@ namespace XiaoZhi.Unity
         }
 
         /// <summary>
-        /// 异步读取二进制文件
+        /// Đọc tệp nhị phân bất đồng bộ
         /// </summary>
-        /// <param name="type">资源类型</param>
-        /// <param name="relativePath">相对路径</param>
-        /// <returns>文件字节数组</returns>
+        /// <param name="type">Loại tài nguyên</param>
+        /// <param name="relativePath">Đường dẫn tương đối</param>
+        /// <returns>Mảng byte của tệp</returns>
         public static async Task<byte[]> ReadAllBytesAsync(FileType type, string relativePath)
         {
             switch (type)
@@ -193,7 +193,7 @@ namespace XiaoZhi.Unity
                     var request = UnityEngine.Networking.UnityWebRequest.Get(GetFullPath(type, relativePath));
                     await request.SendWebRequest();
                     if (request.result != UnityEngine.Networking.UnityWebRequest.Result.Success) 
-                        throw new IOException($"读取文件失败: {request.error}");
+                        throw new IOException($"Đọc tệp thất bại: {request.error}");
                     return request.downloadHandler.data;
 #else
                     return await File.ReadAllBytesAsync(GetFullPath(type, relativePath));
@@ -216,12 +216,12 @@ namespace XiaoZhi.Unity
         }
 
         /// <summary>
-        /// 将StreamingAssets目录下的资源复制到PersistentDataPath
+        /// Sao chép tài nguyên trong StreamingAssets sang PersistentDataPath
         /// </summary>
-        /// <param name="relativePath">相对路径</param>
-        /// <param name="force">是否强制复制</param>
+        /// <param name="relativePath">Đường dẫn tương đối</param>
+        /// <param name="force">Có ép sao chép hay không</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>复制是否成功</returns>
+        /// <returns>Sao chép có thành công không</returns>
         public static async UniTask<bool> CopyStreamingAssetsToDataPath(string relativePath, bool force = false,
             CancellationToken cancellationToken = default)
         {
@@ -238,11 +238,11 @@ namespace XiaoZhi.Unity
         }
 
         /// <summary>
-        /// 检查文件是否存在
+        /// Kiểm tra tệp có tồn tại hay không
         /// </summary>
-        /// <param name="type">资源类型</param>
-        /// <param name="relativePath">相对路径</param>
-        /// <returns>文件是否存在</returns>
+        /// <param name="type">Loại tài nguyên</param>
+        /// <param name="relativePath">Đường dẫn tương đối</param>
+        /// <returns>Tệp có tồn tại hay không</returns>
         public static bool FileExists(FileType type, string relativePath)
         {
             switch (type)

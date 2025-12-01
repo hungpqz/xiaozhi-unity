@@ -5,21 +5,21 @@ namespace XiaoZhi.Unity.IoT
 {
     public class ThingAnimation : Thing
     {
-        public ThingAnimation() : base("Animation Controller", "角色动作控制器")
+        public ThingAnimation() : base("Animation Controller", "Bộ điều khiển động tác nhân vật")
         {
         }
 
         public override async UniTask Load()
         {
             var animLib = AppPresets.Instance.GetAnimationLib();
-            var labels = "动作标签, " + string.Join(" 或 ", animLib.Sets.SelectMany(i => i.Labels));
-            _methods.AddMethod("Animate", "角色做动作",
+            var labels = "Nhãn động tác, " + string.Join(" hoặc ", animLib.Sets.SelectMany(i => i.Labels));
+            _methods.AddMethod("Animate", "Nhân vật thực hiện động tác",
                 new ParameterList(new[]
                 {
                     new Parameter<string>("label", labels)
                 }),
                 Animate);
-            _properties.AddProperty("IsEnabled", "角色是否支持动作", IsEnabled);
+            _properties.AddProperty("IsEnabled", "Nhân vật có hỗ trợ động tác không", IsEnabled);
             await base.Load();
         }
 

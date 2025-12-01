@@ -31,7 +31,7 @@ namespace XiaoZhi.Unity.IoT
         private readonly HashSet<string> _watchDids;
         private CancellationTokenSource _mainCts;
 
-        public ThingMIoT() : base("Miot", "小米IoT平台，可以控制智能家居")
+        public ThingMIoT() : base("Miot", "Nền tảng Xiaomi IoT, có thể điều khiển nhà thông minh")
         {
             _command = new MiotCommand();
             _settings = new Settings("miot");

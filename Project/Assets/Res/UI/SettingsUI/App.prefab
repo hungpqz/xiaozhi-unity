@@ -34,6 +34,7 @@ RectTransform:
   - {fileID: 8254721569270033438}
   - {fileID: 2881895949435988785}
   m_Father: {fileID: 0}
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -139,6 +140,7 @@ RectTransform:
   - {fileID: 4619883200421927117}
   - {fileID: 4368692422895632492}
   m_Father: {fileID: 8254721569270033438}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -218,6 +220,7 @@ RectTransform:
   m_Children:
   - {fileID: 7275032736123932126}
   m_Father: {fileID: 3781831546189108356}
+  m_RootOrder: -2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -280,9 +283,26 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_text
+      value: "Ch\u1EBF \u0111\u1ED9 hi\u1EC3n th\u1ECB"
+      objectReference: {fileID: 0}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -520,9 +540,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65f2a93cc2cf7cb4c96358f24619f908, type: 3}
 --- !u!224 &1392506187212082757 stripped
 RectTransform:
@@ -535,9 +553,14 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_text
+      value: "H\xECnh n\u1EC1n"
+      objectReference: {fileID: 0}
     - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -741,6 +764,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -775,9 +810,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65f2a93cc2cf7cb4c96358f24619f908, type: 3}
 --- !u!224 &867462967797311456 stripped
 RectTransform:
@@ -790,7 +823,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 3328619146993155639, guid: fa1572810fcbd2b48a7bd2d04a061d14,
@@ -917,6 +950,23 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 8267674120564941813, guid: fa1572810fcbd2b48a7bd2d04a061d14,
         type: 3}
+      propertyPath: m_text
+      value: "Ch\u1EE7 \u0111\u1EC1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8267674120564941813, guid: fa1572810fcbd2b48a7bd2d04a061d14,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 8267674120564941813, guid: fa1572810fcbd2b48a7bd2d04a061d14,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 8267674120564941813, guid: fa1572810fcbd2b48a7bd2d04a061d14,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -931,13 +981,7 @@ PrefabInstance:
       value: GUID:a7b2e24c04810a64480b1c3fd755abb3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5913678768971977237, guid: fa1572810fcbd2b48a7bd2d04a061d14,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5444286537298300544}
   m_SourcePrefab: {fileID: 100100000, guid: fa1572810fcbd2b48a7bd2d04a061d14, type: 3}
 --- !u!1 &5478500902130701696 stripped
 GameObject:
@@ -971,7 +1015,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 1461360254839064434, guid: 4122934c2cbe8a94ab276ce3836b52b5,
@@ -1237,6 +1281,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
         type: 3}
+      propertyPath: m_text
+      value: WebSocket Access Token
+      objectReference: {fileID: 0}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -1310,10 +1359,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: WebSocketAccessToken
       objectReference: {fileID: 0}
+    - target: {fileID: 8139536070739029955, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_text
+      value: "Vui l\xF2ng nh\u1EADp WebSocket Access Token"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4122934c2cbe8a94ab276ce3836b52b5, type: 3}
 --- !u!224 &624485154761218786 stripped
 RectTransform:
@@ -1326,7 +1378,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 2526010052440570737, guid: 4122934c2cbe8a94ab276ce3836b52b5,
@@ -1581,9 +1633,38 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
         type: 3}
+      propertyPath: m_text
+      value: "T\u1EEB kh\xF3a"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
+    - target: {fileID: 5434995702342359406, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 5434995702342359406, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 5434995702342359406, guid: 4122934c2cbe8a94ab276ce3836b52b5,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -1624,14 +1705,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Keywords
       objectReference: {fileID: 0}
+    - target: {fileID: 8139536070739029955, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_text
+      value: "Vui l\xF2ng nh\u1EADp T\u1EEB kh\xF3a"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3246680836366464520, guid: 4122934c2cbe8a94ab276ce3836b52b5,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7598102224993504034}
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4122934c2cbe8a94ab276ce3836b52b5, type: 3}
 --- !u!224 &2106172921439313892 stripped
 RectTransform:
@@ -1644,9 +1728,26 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_text
+      value: "Nh\xE2n v\u1EADt"
+      objectReference: {fileID: 0}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -1884,9 +1985,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65f2a93cc2cf7cb4c96358f24619f908, type: 3}
 --- !u!224 &2522271909789651395 stripped
 RectTransform:
@@ -1899,7 +1998,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 1461360254839064434, guid: 4122934c2cbe8a94ab276ce3836b52b5,
@@ -2165,6 +2264,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
         type: 3}
+      propertyPath: m_text
+      value: "\u0110\u1ECBa ch\u1EC9 MAC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -2218,10 +2334,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: CustomMacAddress
       objectReference: {fileID: 0}
+    - target: {fileID: 8139536070739029955, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_text
+      value: "Vui l\xF2ng nh\u1EADp \u0110\u1ECBa ch\u1EC9 MAC"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4122934c2cbe8a94ab276ce3836b52b5, type: 3}
 --- !u!224 &7037771993531486808 stripped
 RectTransform:
@@ -2234,9 +2353,14 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_text
+      value: "\u1ED0ng k\xEDnh"
+      objectReference: {fileID: 0}
     - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -2474,9 +2598,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65f2a93cc2cf7cb4c96358f24619f908, type: 3}
 --- !u!224 &5955793443197581704 stripped
 RectTransform:
@@ -2489,7 +2611,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 1461360254839064434, guid: 4122934c2cbe8a94ab276ce3836b52b5,
@@ -2785,6 +2907,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
         type: 3}
+      propertyPath: m_text
+      value: WebSocket URL
+      objectReference: {fileID: 0}
+    - target: {fileID: 3963421267458638256, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -2838,10 +2965,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: WebSocketUrl
       objectReference: {fileID: 0}
+    - target: {fileID: 8139536070739029955, guid: 4122934c2cbe8a94ab276ce3836b52b5,
+        type: 3}
+      propertyPath: m_text
+      value: "Vui l\xF2ng nh\u1EADp WebSocket URL"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4122934c2cbe8a94ab276ce3836b52b5, type: 3}
 --- !u!224 &7193440586532570309 stripped
 RectTransform:
@@ -2854,9 +2984,26 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_text
+      value: "Ng\xF4n ng\u1EEF"
+      objectReference: {fileID: 0}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -3115,6 +3262,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -3149,9 +3308,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65f2a93cc2cf7cb4c96358f24619f908, type: 3}
 --- !u!224 &4619883200421927117 stripped
 RectTransform:
@@ -3164,7 +3321,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 3781831546189108356}
     m_Modifications:
     - target: {fileID: 295558678885074882, guid: 15a086eb0d94b6a4fb05489da22b945e,
@@ -3180,7 +3337,7 @@ PrefabInstance:
     - target: {fileID: 3309053824184009173, guid: 15a086eb0d94b6a4fb05489da22b945e,
         type: 3}
       propertyPath: m_Size
-      value: 0.6876988
+      value: 0.8063694
       objectReference: {fileID: 0}
     - target: {fileID: 3309053824184009173, guid: 15a086eb0d94b6a4fb05489da22b945e,
         type: 3}
@@ -3313,9 +3470,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15a086eb0d94b6a4fb05489da22b945e, type: 3}
 --- !u!224 &2881895949435988785 stripped
 RectTransform:
@@ -3364,7 +3519,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 1276918899707301051, guid: c9b2d82232ff0cc439f7dfeda252a42b,
@@ -3387,6 +3542,23 @@ PrefabInstance:
       propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
       value: GUID:a7b2e24c04810a64480b1c3fd755abb3
       objectReference: {fileID: 0}
+    - target: {fileID: 5563504974444941689, guid: c9b2d82232ff0cc439f7dfeda252a42b,
+        type: 3}
+      propertyPath: m_text
+      value: "T\u1EF1 \u1EA9n UI"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5563504974444941689, guid: c9b2d82232ff0cc439f7dfeda252a42b,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 5563504974444941689, guid: c9b2d82232ff0cc439f7dfeda252a42b,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 5563504974444941689, guid: c9b2d82232ff0cc439f7dfeda252a42b,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -3492,6 +3664,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6384802825877058030, guid: c9b2d82232ff0cc439f7dfeda252a42b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -24
+      objectReference: {fileID: 0}
     - target: {fileID: 7958607661115611067, guid: c9b2d82232ff0cc439f7dfeda252a42b,
         type: 3}
       propertyPath: m_Sprite
@@ -3499,9 +3676,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 46381f89e8174ed459aa1311c88a4c3a,
         type: 3}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9b2d82232ff0cc439f7dfeda252a42b, type: 3}
 --- !u!224 &3903847525097524724 stripped
 RectTransform:
@@ -3526,7 +3701,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 1260802126557467881, guid: 972e90af8e041db48925a0f2c49b49ff,
@@ -3575,6 +3750,18 @@ PrefabInstance:
       propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
       value: GUID:a7b2e24c04810a64480b1c3fd755abb3
       objectReference: {fileID: 0}
+    - target: {fileID: 4784058234218890223, guid: 972e90af8e041db48925a0f2c49b49ff,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 4784058234218890223, guid: 972e90af8e041db48925a0f2c49b49ff,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 6370907087841490007, guid: 972e90af8e041db48925a0f2c49b49ff,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3675,6 +3862,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6839066491628026358, guid: 972e90af8e041db48925a0f2c49b49ff,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e1ea13c416131804fa15eb039047d446,
+        type: 3}
+    - target: {fileID: 6999524358011028781, guid: 972e90af8e041db48925a0f2c49b49ff,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 01508fe01b61b954cb049916480b4f57,
+        type: 3}
     - target: {fileID: 7746825821057403913, guid: 972e90af8e041db48925a0f2c49b49ff,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3728,17 +3927,27 @@ PrefabInstance:
     - target: {fileID: 8488201875961263606, guid: 972e90af8e041db48925a0f2c49b49ff,
         type: 3}
       propertyPath: m_text
-      value: Restart
+      value: "Kh\u1EDFi \u0111\u1ED9ng l\u1EA1i"
       objectReference: {fileID: 0}
+    - target: {fileID: 8488201875961263606, guid: 972e90af8e041db48925a0f2c49b49ff,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 8488201875961263606, guid: 972e90af8e041db48925a0f2c49b49ff,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 8488201875961263606, guid: 972e90af8e041db48925a0f2c49b49ff,
         type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 972e90af8e041db48925a0f2c49b49ff, type: 3}
 --- !u!224 &4368692422895632492 stripped
 RectTransform:
@@ -3751,7 +3960,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 2106172921439313892}
     m_Modifications:
     - target: {fileID: 2152215094562189720, guid: 26aab1e92af96ae49afd1174fee8856b,
@@ -3886,6 +4095,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4793566731124125240, guid: 26aab1e92af96ae49afd1174fee8856b,
         type: 3}
+      propertyPath: m_text
+      value: "<u><i><link=\"0\">C\xE1ch \u0111\u1EB7t t\u1EEB kh\xF3a</link></i></u>"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793566731124125240, guid: 26aab1e92af96ae49afd1174fee8856b,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 4793566731124125240, guid: 26aab1e92af96ae49afd1174fee8856b,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 4793566731124125240, guid: 26aab1e92af96ae49afd1174fee8856b,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -3935,9 +4161,7 @@ PrefabInstance:
       value: Tips_Help
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26aab1e92af96ae49afd1174fee8856b, type: 3}
 --- !u!224 &7598102224993504034 stripped
 RectTransform:
@@ -3950,9 +4174,26 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_text
+      value: "Ch\u1EBF \u0111\u1ED9 ng\u1EAFt"
+      objectReference: {fileID: 0}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
     - target: {fileID: 293192606193653448, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -4156,6 +4397,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
         type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 9061237772914034153, guid: 6e5dfd820ce44514cb41189ed92de1cd,
+        type: 2}
+    - target: {fileID: 3240291641300801061, guid: 65f2a93cc2cf7cb4c96358f24619f908,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4291151812
       objectReference: {fileID: 0}
@@ -4195,9 +4448,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65f2a93cc2cf7cb4c96358f24619f908, type: 3}
 --- !u!224 &7483743108657719079 stripped
 RectTransform:
@@ -4210,7 +4461,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
+    serializedVersion: 2
     m_TransformParent: {fileID: 7275032736123932126}
     m_Modifications:
     - target: {fileID: 1154215867442026407, guid: 41e4d48b03b241047842296065fc44ba,
@@ -4293,6 +4544,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
       value: GUID:a7b2e24c04810a64480b1c3fd755abb3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896665760947604652, guid: 41e4d48b03b241047842296065fc44ba,
+        type: 3}
+      propertyPath: m_text
+      value: "\xC2m l\u01B0\u1EE3ng"
       objectReference: {fileID: 0}
     - target: {fileID: 7896665760947604652, guid: 41e4d48b03b241047842296065fc44ba,
         type: 3}
@@ -4440,13 +4696,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2820130568017048546, guid: 41e4d48b03b241047842296065fc44ba,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8018333500788999900}
   m_SourcePrefab: {fileID: 100100000, guid: 41e4d48b03b241047842296065fc44ba, type: 3}
 --- !u!224 &836680210007013023 stripped
 RectTransform:

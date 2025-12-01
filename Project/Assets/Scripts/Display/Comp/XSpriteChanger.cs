@@ -14,10 +14,10 @@ public class XSpriteChanger : MonoBehaviour
     }
 
     /// <summary>
-    /// 切换到指定索引的Sprite
+    /// Chuyển sang Sprite theo chỉ số chỉ định
     /// </summary>
-    /// <param name="index">目标索引</param>
-    /// <returns>是否切换成功</returns>
+    /// <param name="index">Chỉ số mục tiêu</param>
+    /// <returns>Đã chuyển thành công hay chưa</returns>
     public bool ChangeTo(int index)
     {
         if (_sprites == null || index < 0 || index >= _sprites.Length) return false;
@@ -28,12 +28,12 @@ public class XSpriteChanger : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取当前显示的Sprite索引
+    /// Lấy chỉ số Sprite đang hiển thị
     /// </summary>
     public int CurrentIndex => _currentIndex;
 
     /// <summary>
-    /// 获取Sprite数量
+    /// Lấy số lượng Sprite
     /// </summary>
     public int Count => _sprites?.Length ?? 0;
 }

@@ -48,6 +48,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6a555dd9d723af147884ac38d92d36ee, type: 2}
   - {fileID: 11400000, guid: bb17f64aa963b04449c43405fe0e967c, type: 2}
   - {fileID: 11400000, guid: ba685edd2cd6ef046abeaa3d621dfe8a, type: 2}
+  - {fileID: 11400000, guid: a60cd0af0ef565b42a9b2811e185b9af, type: 2}
   - {fileID: 11400000, guid: b40f3cde8b72286469ad16ef2600c410, type: 2}
   - {fileID: 11400000, guid: 7d9c18fca98bfaf44aa391140426dba9, type: 2}
   - {fileID: 11400000, guid: 13b8443c36485a74b9b3bfd37df78aee, type: 2}
@@ -93,7 +94,7 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - Locale
-    - Locale-zh-Hans
+    - Locale-vi
     - Locale-en
     - Preload
   m_SchemaTemplates: []

@@ -299,6 +299,7 @@ namespace XiaoZhi.Unity.MIoT
                     var code = LocalizationSettings.SelectedLocale.Identifier.Code;
                     return code switch
                     {
+                        "vi" => "en",
                         "zh-Hans" => "zh_cn",
                         "en" => "en",
                         _ => code
@@ -852,7 +853,7 @@ namespace XiaoZhi.Unity.MIoT
             var room = new MiotRoom(home)
             {
                 Id = $"{home.Id}-unassigned",
-                Name = "未分配房间",
+                Name = "Phòng chưa gán",
                 Dids = home.Dids,
                 CreateTime = int.MaxValue
             };

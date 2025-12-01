@@ -48,7 +48,7 @@ namespace XiaoZhi.Unity
             if (string.IsNullOrEmpty(url) || string.IsNullOrEmpty(token) ||
                 string.IsNullOrEmpty(deviceId) || string.IsNullOrEmpty(clientId))
             {
-                Debug.LogError("连接失败: 请检查配置");
+                Debug.LogError("Kết nối thất bại: hãy kiểm tra cấu hình");
                 return false;
             }
 
@@ -59,13 +59,13 @@ namespace XiaoZhi.Unity
             _cancellationTokenSource = new CancellationTokenSource();
             _helloTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            // 设置请求头
+            // Thiết lập header yêu cầu
             _webSocket.Options.SetRequestHeader("Authorization", $"Bearer {token}");
             _webSocket.Options.SetRequestHeader("Protocol-Version", "1");
             _webSocket.Options.SetRequestHeader("Device-Id", deviceId);
             _webSocket.Options.SetRequestHeader("Client-Id", clientId);
 
-            // 异步连接
+            // Kết nối bất đồng bộ
             try
             {
                 await _webSocket.ConnectAsync(new Uri(url), _cancellationTokenSource.Token);
@@ -77,7 +77,7 @@ namespace XiaoZhi.Unity
             }
             
             _isConnected = true;
-            Debug.Log("WebSocket连接已打开");
+            Debug.Log("Kết nối WebSocket đã mở");
             StartReceiving().Forget();
             var helloMessage = new
             {
@@ -95,7 +95,7 @@ namespace XiaoZhi.Unity
             await SendText(JsonConvert.SerializeObject(helloMessage));
             await Task.WhenAny(_helloTaskCompletionSource.Task, Task.Delay(10000));
             if (_helloTaskCompletionSource.Task.IsCompletedSuccessfully) return true;
-            Debug.LogError("连接失败: 连接超时");
+            Debug.LogError("Kết nối thất bại: hết thời gian chờ");
             return false;
         }
 
@@ -129,7 +129,7 @@ namespace XiaoZhi.Unity
             {
                 if (_webSocket?.State == WebSocketState.Open)
                 {
-                    SetError($"接收消息错误: {ex.Message}");
+                    SetError($"Lỗi nhận tin nhắn: {ex.Message}");
                 }
             }
         }
@@ -146,7 +146,7 @@ namespace XiaoZhi.Unity
 
             _isConnected = false;
             _isAudioChannelOpen = false;
-            Debug.Log("WebSocket连接已关闭");
+            Debug.Log("Kết nối WebSocket đã đóng");
             InvokeOnChannelClosed();
         }
 
@@ -165,7 +165,7 @@ namespace XiaoZhi.Unity
             }
             catch (Exception e)
             {
-                Debug.LogError($"解析JSON消息失败: {e.Message}");
+                Debug.LogError($"Phân tích JSON thất bại: {e.Message}");
             }
         }
 
@@ -174,7 +174,7 @@ namespace XiaoZhi.Unity
             if (message["transport"]?.ToString() != "websocket")
             {
                 _helloTaskCompletionSource.SetResult(false);
-                SetError("不支持的传输类型");
+                SetError("Loại truyền tải không được hỗ trợ");
                 return;
             }
 

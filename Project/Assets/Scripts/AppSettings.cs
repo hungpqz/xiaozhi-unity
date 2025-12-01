@@ -113,20 +113,83 @@ namespace XiaoZhi.Unity
         public string GetKeywords(bool forceUpdate = false)
         {
             if (forceUpdate) _keywords = null;
-            _keywords ??=
-                FileUtility.ReadAllText(FileUtility.FileType.DataPath,
-                    AppPresets.Instance.GetKeyword(Lang.Code)
-                        .SpotterKeyWordsFile);
+            _keywords ??= LoadOrRestoreKeywords();
             return _keywords;
         }
 
         public void SetKeywords(string keywords)
         {
-            if (_keywords.Equals(keywords)) return;
-            _keywords = keywords;
-            FileUtility.WriteAllText(
-                AppPresets.Instance.GetKeyword(Lang.Code).SpotterKeyWordsFile,
-                _keywords);
+            var current = _keywords ?? string.Empty;
+            if (string.Equals(current, keywords, StringComparison.Ordinal)) return;
+
+            var newValue = SanitizeKeywords(keywords);
+            if (!IsValidKeywords(newValue))
+            {
+                Debug.LogWarning("Invalid wake word input, restoring default keywords.");
+                newValue = LoadDefaultKeywords();
+            }
+
+            _keywords = newValue;
+            FileUtility.WriteAllText(AppPresets.Instance.GetKeyword(Lang.Code).SpotterKeyWordsFile, _keywords);
+        }
+
+        private string LoadOrRestoreKeywords()
+        {
+            var preset = AppPresets.Instance.GetKeyword(Lang.Code);
+            var path = preset.SpotterKeyWordsFile;
+            if (FileUtility.FileExists(FileUtility.FileType.DataPath, path))
+            {
+                try
+                {
+                    var content = FileUtility.ReadAllText(FileUtility.FileType.DataPath, path);
+                    if (IsValidKeywords(content)) return content;
+                    Debug.LogWarning("Cached wake word file invalid, restoring default.");
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"Failed to read cached wake word file: {ex.Message}");
+                }
+            }
+
+            var defaults = LoadDefaultKeywords();
+            FileUtility.WriteAllText(path, defaults);
+            return defaults;
+        }
+
+        private string LoadDefaultKeywords()
+        {
+            try
+            {
+                var preset = AppPresets.Instance.GetKeyword(Lang.Code);
+                return FileUtility.ReadAllText(FileUtility.FileType.StreamingAssets, preset.SpotterKeyWordsFile);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"Failed to load default wake words, using fallback. {ex.Message}");
+                return "▁HI ▁BI ▁WELL";
+            }
+        }
+
+        private static string SanitizeKeywords(string keywords)
+        {
+            return keywords?.Trim() ?? string.Empty;
+        }
+
+        private static bool IsValidKeywords(string keywords)
+        {
+            if (string.IsNullOrWhiteSpace(keywords)) return false;
+            if (keywords.Length > 256) return false;
+            var lines = keywords.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            if (lines.Length == 0 || lines.Length > 10) return false;
+            foreach (var line in lines)
+            {
+                // Allow letters, numbers, spaces, underscore token markers (▁), and basic punctuation.
+                const string pattern = @"^[\p{L}\p{N}\p{Zs}_\.\-'\u2581]+$";
+                if (!System.Text.RegularExpressions.Regex.IsMatch(line, pattern))
+                    return false;
+            }
+
+            return true;
         }
 
         public bool IsAutoHideUI()

@@ -29,7 +29,7 @@ namespace XiaoZhi.Unity
             var windowSize = _hanningWindow.Length;
             if (pcmData.Length < windowSize)
             {
-                Debug.LogError("PCM数据长度必须大于等于窗口大小");
+                Debug.LogError("Độ dài dữ liệu PCM phải lớn hơn hoặc bằng kích thước cửa sổ");
                 return false;
             }
 

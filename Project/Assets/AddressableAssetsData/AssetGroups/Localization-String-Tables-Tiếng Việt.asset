@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: "Localization-String-Tables-\u7B80\u4F53\u4E2D\u6587"
+  m_Name: "Localization-String-Tables-Ti\u1EBFng Vi\u1EC7t"
   m_EditorClassIdentifier: 
-  m_GroupName: "Localization-String-Tables-\u7B80\u4F53\u4E2D\u6587"
+  m_GroupName: "Localization-String-Tables-Ti\u1EBFng Vi\u1EC7t"
   m_Data:
     m_SerializedData: []
-  m_GUID: cb7008442d196c040808d0d7f253b502
+  m_GUID: acbaf47cc5bbba341a9f069bec2685ac
   m_SerializeEntries:
   - m_GUID: 959fe3146ebb07c49b5323a7b5b04d72
-    m_Address: Lang_zh-Hans
+    m_Address: Lang_vi
     m_ReadOnly: 1
     m_SerializedLabels:
-    - Locale-zh-Hans
+    - Locale-vi
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 1
   m_Settings: {fileID: 11400000, guid: 63df72acf4c063249aea2a9fa4ba07d6, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: b5f1ea1f825ddfd41ab671f94e0b142f, type: 2}
-    - {fileID: 11400000, guid: d6ae9768b94d66a42abc49e3d310f817, type: 2}
+    - {fileID: 11400000, guid: 7ce1af918ae31f042b6d8c575d1c872d, type: 2}
+    - {fileID: 11400000, guid: b7214fff196776b43a73d186db48d62c, type: 2}

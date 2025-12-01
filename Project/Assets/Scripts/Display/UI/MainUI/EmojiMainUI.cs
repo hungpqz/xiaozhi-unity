@@ -17,6 +17,7 @@ namespace XiaoZhi.Unity
         {
             { "sleep", "😴" },
             { "neutral", "🙂" },
+            { "standby", "😐" },
             { "happy", "😄" },
             { "funny", "😜" },
             { "sad", "🙁" },
@@ -25,6 +26,8 @@ namespace XiaoZhi.Unity
 
         private const int SpectrumUpdateInterval = 50;
         private const float OutputScaleFactor = 0.5f;
+        private const string EmotionSpriteRoot = "UI/Emoji/";
+        private readonly Dictionary<string, Sprite> _emotionSpriteCache = new(StringComparer.OrdinalIgnoreCase);
         
         private LocalizeStringEvent _localizeStatus;
         private LocalizeStringEvent _localizeInfo;
@@ -32,6 +35,8 @@ namespace XiaoZhi.Unity
         private TextMeshProUGUI _textChat;
         private Transform _trEmotion;
         private TextMeshProUGUI _textEmotion;
+        private Image _imgEmotion;
+        private Button _btnEmotion;
         private RectTransform _trSet;
         private Button _btnSet;
         private XInputWave _xInputWave;
@@ -72,7 +77,51 @@ namespace XiaoZhi.Unity
             _trEmotion = Tr.Find("Emotion");
             _textEmotion = _trEmotion.GetComponent<TextMeshProUGUI>();
             _textEmotion.text = "";
-            GetComponent<XButton>(_textEmotion).onClick.AddListener(() => Context.App.ToggleChatState().Forget());
+            _btnEmotion = _trEmotion.GetComponent<Button>() ?? _trEmotion.gameObject.AddComponent<Button>();
+            _btnEmotion.transition = Selectable.Transition.None;
+            var btnGraphic = _trEmotion.GetComponent<Graphic>();
+            if (btnGraphic == null)
+            {
+                var bg = _trEmotion.gameObject.AddComponent<Image>();
+                bg.color = new Color(1, 1, 1, 0); // invisible click catcher
+                bg.raycastTarget = true;
+                btnGraphic = bg;
+                var bgRect = bg.rectTransform;
+                bgRect.anchorMin = Vector2.zero;
+                bgRect.anchorMax = Vector2.one;
+                bgRect.offsetMin = Vector2.zero;
+                bgRect.offsetMax = Vector2.zero;
+            }
+            else
+            {
+                btnGraphic.raycastTarget = true;
+            }
+            _btnEmotion.targetGraphic = btnGraphic;
+            _btnEmotion.interactable = true;
+            _btnEmotion.onClick.AddListener(() => Context.App.ToggleChatState().Forget());
+            var iconTr = _trEmotion.Find("Icon");
+            if (iconTr != null) _imgEmotion = iconTr.GetComponent<Image>();
+            if (_imgEmotion == null)
+            {
+                var goIcon = iconTr != null ? iconTr.gameObject : new GameObject("Icon");
+                if (iconTr == null)
+                {
+                    goIcon.transform.SetParent(_trEmotion, false);
+                }
+
+                _imgEmotion = goIcon.GetComponent<Image>() ?? goIcon.AddComponent<Image>();
+            }
+
+            var iconRect = _imgEmotion.rectTransform;
+            iconRect.anchorMin = new Vector2(0.5f, 0.5f);
+            iconRect.anchorMax = new Vector2(0.5f, 0.5f);
+            iconRect.pivot = new Vector2(0.5f, 0.5f);
+            iconRect.anchoredPosition = Vector2.zero;
+            iconRect.localScale = Vector3.one;
+            _imgEmotion.raycastTarget = true;
+            var le = _imgEmotion.GetComponent<LayoutElement>() ?? _imgEmotion.gameObject.AddComponent<LayoutElement>();
+            le.ignoreLayout = true;
+            _imgEmotion.gameObject.SetActive(false);
             _goLoading = Tr.Find("Loading").gameObject;
             _trSet = GetComponent<RectTransform>(Tr, "BtnSet");
             _trSet.GetComponent<XButton>().onClick.AddListener(() => { ShowModuleUI<SettingsUI>().Forget(); });
@@ -169,6 +218,11 @@ namespace XiaoZhi.Unity
         {
             ClearAutoHideCts();
             DetectCompVisible();
+            if (_trEmotion && !_trEmotion.gameObject.activeSelf)
+            {
+                _trEmotion.gameObject.SetActive(true);
+                Debug.Log("[EmojiMainUI] Reactivated Emotion container on state change");
+            }
             if (state is Talk.State.Idle or Talk.State.Connecting) StartBreathingAnimation();
             else StopBreathingAnimation();
             if (_lastTalkState == Talk.State.Connecting && state == Talk.State.Listening)
@@ -176,6 +230,10 @@ namespace XiaoZhi.Unity
             UpdateLoadingState();
             _localizeStatus.StringReference = Lang.GetRef(Talk.State2LocalizedKey(state));
             _lastTalkState = state;
+            if (state is Talk.State.Idle or Talk.State.Connecting)
+            {
+                SetEmotionVisual("standby");
+            }
         }
 
         private void OnTalkChatUpdate(string content)
@@ -193,7 +251,36 @@ namespace XiaoZhi.Unity
 
         private void OnTalkEmotionUpdate(string emotion)
         {
+            Debug.Log($"[EmojiMainUI] OnEmotionUpdate: '{emotion}'");
+            SetEmotionVisual(emotion);
+        }
+
+        private void SetEmotionVisual(string emotion)
+        {
+            if (!_trEmotion.gameObject.activeSelf) _trEmotion.gameObject.SetActive(true);
+            var sprite = LoadEmotionSprite(emotion);
+            if (sprite)
+            {
+                _imgEmotion.sprite = sprite;
+                _imgEmotion.SetNativeSize();
+                var size = _imgEmotion.rectTransform.sizeDelta;
+                if (size == Vector2.zero) _imgEmotion.rectTransform.sizeDelta = new Vector2(128, 128);
+                _imgEmotion.canvasRenderer.SetAlpha(1f);
+                _imgEmotion.color = Color.white;
+                _imgEmotion.enabled = true;
+                _imgEmotion.transform.SetAsLastSibling();
+                _imgEmotion.gameObject.SetActive(true);
+                _textEmotion.enabled = false;
+                Debug.Log(
+                    $"[EmojiMainUI] Showing sprite for emotion '{emotion}' size={_imgEmotion.rectTransform.sizeDelta} active={_imgEmotion.gameObject.activeSelf} enabled={_imgEmotion.enabled} parent={_imgEmotion.transform.parent?.name}");
+                return;
+            }
+
+            _imgEmotion.enabled = false;
+            _imgEmotion.gameObject.SetActive(false);
+            _textEmotion.enabled = true;
             _textEmotion.text = Emojis.GetValueOrDefault(emotion, Emojis["neutral"]);
+            Debug.Log($"[EmojiMainUI] Fallback to text for emotion '{emotion}' -> '{_textEmotion.text}'");
         }
 
         private void OnAutoHideUIUpdate(bool autoHide)
@@ -201,6 +288,24 @@ namespace XiaoZhi.Unity
             ClearAutoHideCts();
             if (autoHide) AutoHideComp();
             else DetectCompVisible();
+        }
+
+        private Sprite LoadEmotionSprite(string emotion)
+        {
+            if (string.IsNullOrEmpty(emotion)) return null;
+            if (_emotionSpriteCache.TryGetValue(emotion, out var cached)) return cached;
+            var path = EmotionSpriteRoot + emotion;
+            var sprite = Resources.Load<Sprite>(path);
+            if (sprite)
+            {
+                _emotionSpriteCache[emotion] = sprite;
+                Debug.Log($"[EmojiMainUI] Loaded sprite for emotion '{emotion}' from Resources '{path}'");
+            }
+            else
+            {
+                Debug.Log($"[EmojiMainUI] No sprite found for emotion '{emotion}' at Resources '{path}', fallback to text");
+            }
+            return sprite;
         }
 
         private void ClearAutoHideCts()

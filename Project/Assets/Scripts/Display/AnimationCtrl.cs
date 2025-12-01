@@ -31,14 +31,14 @@ namespace XiaoZhi.Unity
             "See ya",
             "Catch you later",
             "I'm out",
-            "拜拜",
-            "再见",
-            "回见",
-            "回头见",
-            "下次见",
-            "明天见",
-            "下周见",
-            "晚安"
+            "Tạm biệt",
+            "Hẹn gặp lại",
+            "Gặp lại sau",
+            "Hẹn gặp sau",
+            "Hẹn lần sau",
+            "Hẹn mai gặp",
+            "Hẹn tuần sau gặp",
+            "Chúc ngủ ngon"
         };
 
         private readonly Animator _animator;

@@ -7,42 +7,42 @@ namespace XiaoZhi.Unity.IoT
 {
     public class ThingAppSettings : Thing
     {
-        public ThingAppSettings() : base("AppSettings", "设置中心，可以设置主题/音量/语言等")
+        public ThingAppSettings() : base("AppSettings", "Trung tâm cài đặt, cấu hình chủ đề/âm lượng/ngôn ngữ...")
         {
         }
 
         public override async UniTask Load()
         {
-            _properties.AddProperty("theme", "主题", GetTheme);
-            _methods.AddMethod("SetTheme", "设置主题",
+            _properties.AddProperty("theme", "Chủ đề", GetTheme);
+            _methods.AddMethod("SetTheme", "Thiết lập chủ đề",
                 new ParameterList(new[]
                 {
-                    new Parameter<string>("theme", "主题模式, Light 或 Dark")
+                    new Parameter<string>("theme", "Chế độ chủ đề, Light hoặc Dark")
                 }),
                 SetTheme);
-            _properties.AddProperty("volume", "当前音量值", GetVolume);
-            _methods.AddMethod("SetVolume", "设置音量",
+            _properties.AddProperty("volume", "Giá trị âm lượng hiện tại", GetVolume);
+            _methods.AddMethod("SetVolume", "Thiết lập âm lượng",
                 new ParameterList(new[]
                 {
-                    new Parameter<int>("volume", "0到100之间的整数")
+                    new Parameter<int>("volume", "Số nguyên từ 0 đến 100")
                 }),
                 SetVolume);
-            _properties.AddProperty("lang", "语言", GetLang);
-            _methods.AddMethod("SetLang", "设置语言",
+            _properties.AddProperty("lang", "Ngôn ngữ", GetLang);
+            _methods.AddMethod("SetLang", "Thiết lập ngôn ngữ",
                 new ParameterList(new[]
                 {
-                    new Parameter<string>("lang", "语言, 简体中文 或 English")
+                    new Parameter<string>("lang", "Ngôn ngữ, Tiếng Việt hoặc English")
                 }),
                 SetLang);
-            _properties.AddProperty("zoom", "镜头远近", GetZoom);
-            _methods.AddMethod("SetZoom", "设置镜头远近",
+            _properties.AddProperty("zoom", "Độ thu phóng ống kính", GetZoom);
+            _methods.AddMethod("SetZoom", "Thiết lập độ thu phóng ống kính",
                 new ParameterList(new[]
                 {
-                    new Parameter<string>("zoom", "镜头远近, " + string.Join(" 或 ", Enum.GetNames(typeof(ZoomMode))))
+                    new Parameter<string>("zoom", "Độ thu phóng ống kính, " + string.Join(" hoặc ", Enum.GetNames(typeof(ZoomMode))))
                 }),
                 SetZoom);
-            var wallpaperNames = "壁纸名称, " + string.Join(" 或 ", AppPresets.Instance.Wallpapers.Select(i => i.Name));
-            _methods.AddMethod("SetWallpaper", "设置壁纸",
+            var wallpaperNames = "Tên hình nền, " + string.Join(" hoặc ", AppPresets.Instance.Wallpapers.Select(i => i.Name));
+            _methods.AddMethod("SetWallpaper", "Thiết lập hình nền",
                 new ParameterList(new[]
                 {
                     new Parameter<string>("wallpaperName", wallpaperNames)
