@@ -15,7 +15,7 @@ MonoBehaviour:
   _webSocketUrl: wss://api.tenclass.net/xiaozhi/v1/
   _webSocketAccessToken: test-token
   _opusFrameDurationMs: 60
-  _audioInputSampleRate: 16000
+  _audioInputSampleRate: 48000
   _audioOutputSampleRate: 24000
   _serverInputSampleRate: 16000
   _enableWakeService: 1

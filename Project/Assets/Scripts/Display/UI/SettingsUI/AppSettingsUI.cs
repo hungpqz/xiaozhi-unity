@@ -34,6 +34,8 @@ namespace XiaoZhi.Unity
         private XSpriteChanger _iconTheme;
         private Transform _listLang;
         private XButton _btnRestart;
+        private Toggle _toggleTextInput;
+        private TextMeshProUGUI _textInputLabel;
 
         public override string GetResourcePath()
         {
@@ -81,6 +83,7 @@ namespace XiaoZhi.Unity
             _listLang = content.Find("Lang/List");
             _btnRestart = GetComponent<XButton>(content, "Restart/Button");
             _btnRestart.onClick.AddListener(() => { Context.Restart().Forget(); });
+            InitTextInputToggle(content);
         }
 
         protected override async UniTask OnShow(BaseUIData data = null)
@@ -98,6 +101,7 @@ namespace XiaoZhi.Unity
             UpdateIconVolume();
             UpdateAutoHide();
             UpdateIconTheme();
+            UpdateTextInputToggle();
             UpdateLangList();
             LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChanged;
             LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChanged;
@@ -107,6 +111,8 @@ namespace XiaoZhi.Unity
         protected override async UniTask OnHide()
         {
             LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChanged;
+            if (_toggleTextInput != null)
+                _toggleTextInput.onValueChanged.RemoveListener(OnToggleTextInput);
             await UniTask.CompletedTask;
         }
 
@@ -280,6 +286,42 @@ namespace XiaoZhi.Unity
         private void UpdateAutoHide()
         {
             _radioAutoHide.isOn = AppSettings.Instance.IsAutoHideUI();
+        }
+        
+        private void InitTextInputToggle(Transform content)
+        {
+            var root = content.Find("TextInputToggle");
+            if (root == null)
+            {
+                Debug.LogWarning("[AppSettingsUI] TextInputToggle not found in prefab. Please add a Toggle under Viewport/Content named 'TextInputToggle' with child 'Label' (TextMeshProUGUI).");
+                return;
+            }
+
+            _toggleTextInput = root.GetComponentInChildren<Toggle>(true);
+            _textInputLabel = root.Find("Label")?.GetComponent<TextMeshProUGUI>();
+            if (_toggleTextInput != null)
+            {
+                _toggleTextInput.onValueChanged.AddListener(OnToggleTextInput);
+            }
+            else
+            {
+                Debug.LogWarning("[AppSettingsUI] TextInputToggle missing Toggle component.");
+            }
+        }
+
+        private void UpdateTextInputToggle()
+        {
+            if (_textInputLabel == null) return;
+            var enabled = AppSettings.Instance.IsTextInputEnabled();
+            if (_toggleTextInput != null)
+                _toggleTextInput.SetIsOnWithoutNotify(enabled);
+            _textInputLabel.text = enabled ? "Hide chat box: ON" : "Hide chat box: OFF";
+        }
+
+        private void OnToggleTextInput(bool value)
+        {
+            AppSettings.Instance.SetTextInputEnabled(value);
+            UpdateTextInputToggle();
         }
 
         private void UpdateIconTheme()

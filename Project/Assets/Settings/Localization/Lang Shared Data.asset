@@ -56,7 +56,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3314955681
-    m_Key: SettingsUI_Theme
+    m_Key: SettingsUI_ToggleChatBox
     m_Metadata:
       m_Items: []
   - m_Id: 7054277517205504
@@ -153,6 +153,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3314955680
     m_Key: SettingsUI_AutoHide
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3314955681
+    m_Key: SettingsUI_ToggleChatBox
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3414955682
+    m_Key: SettingsUI_SetBackGround
     m_Metadata:
       m_Items: []
   - m_Id: 3314955686
@@ -315,24 +323,12 @@ MonoBehaviour:
     m_Key: SettingsUI_ZoomMode_MediumShot
     m_Metadata:
       m_Items: []
+  - m_Id: 49667904732356608
+    m_Key: SettingsUI_ZoomMode_CloseUp
+    m_Metadata:
+      m_Items: []
   - m_Id: 49668220370509824
     m_Key: SettingsUI_ZoomMode
-    m_Metadata:
-      m_Items: []
-  - m_Id: 49669933450092544
-    m_Key: Connect_Failed_Tips
-    m_Metadata:
-      m_Items: []
-  - m_Id: 50563706090643456
-    m_Key: SettingsUI_Background
-    m_Metadata:
-      m_Items: []
-  - m_Id: 51076010605674496
-    m_Key: SettingsUI_ZoomMode_CloseShot
-    m_Metadata:
-      m_Items: []
-  - m_Id: 56504903709884416
-    m_Key: STATE_DANCING
     m_Metadata:
       m_Items: []
   m_Metadata:

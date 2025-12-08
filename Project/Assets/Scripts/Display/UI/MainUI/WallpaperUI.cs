@@ -86,37 +86,37 @@ namespace XiaoZhi.Unity
             switch (wallpaper.Type)
             {
                 case WallpaperType.Sprite:
-                {
-                    var sprite = await Addressables.LoadAssetAsync<Sprite>(wallpaper.Path);
-                    if (sprite == null) return;
-                    if (_spriteImage.sprite != sprite)
                     {
-                        if (_spriteImage.sprite) Addressables.Release(_spriteImage.sprite);
-                        _spriteImage.sprite = sprite;
-                        _spriteAspect.aspectRatio = sprite.rect.width / sprite.rect.height;
-                    }
+                        var sprite = await Addressables.LoadAssetAsync<Sprite>(wallpaper.Path);
+                        if (sprite == null) return;
+                        if (_spriteImage.sprite != sprite)
+                        {
+                            if (_spriteImage.sprite) Addressables.Release(_spriteImage.sprite);
+                            _spriteImage.sprite = sprite;
+                            _spriteAspect.aspectRatio = sprite.rect.width / sprite.rect.height;
+                        }
 
-                    break;
-                }
+                        break;
+                    }
                 case WallpaperType.Video:
-                {
-                    if (!_rawVideoPlayer.targetTexture)
                     {
-                        var rect = _videoImage.rectTransform.rect;
-                        var rt = new RenderTexture((int)rect.width, (int)rect.height, 0,
-                            RenderTextureFormat.ARGB32);
-                        _videoImage.texture = rt;
-                        _rawVideoPlayer.targetTexture = rt;
-                    }
+                        if (!_rawVideoPlayer.targetTexture)
+                        {
+                            var rect = _videoImage.rectTransform.rect;
+                            var rt = new RenderTexture((int)rect.width, (int)rect.height, 0,
+                                RenderTextureFormat.ARGB32);
+                            _videoImage.texture = rt;
+                            _rawVideoPlayer.targetTexture = rt;
+                        }
 
-                    _rawVideoPlayer.renderMode = VideoRenderMode.RenderTexture;
-                    var video = await Addressables.LoadAssetAsync<VideoClip>(wallpaper.Path);
-                    if (video == null) return;
-                    if (_videoClip && _videoClip != video) Addressables.Release(_videoClip);
-                    _videoPlayer.Play(video, -1).Forget();
-                    _videoClip = video;
-                    break;
-                }
+                        _rawVideoPlayer.renderMode = VideoRenderMode.RenderTexture;
+                        var video = await Addressables.LoadAssetAsync<VideoClip>(wallpaper.Path);
+                        if (video == null) return;
+                        if (_videoClip && _videoClip != video) Addressables.Release(_videoClip);
+                        _videoPlayer.Play(video, -1).Forget();
+                        _videoClip = video;
+                        break;
+                    }
                 case WallpaperType.Gif:
                     var gif = await Addressables.LoadAssetAsync<Gif>(wallpaper.Path);
                     if (gif == null || gif.Frames.Count == 0) return;

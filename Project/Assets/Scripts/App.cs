@@ -371,12 +371,12 @@ namespace XiaoZhi.Unity
                     switch (_talk.Stat)
                     {
                         case State.Idle:
-                        {
-                            if (!await OpenAudioChannel()) return;
-                            await _protocol.SendWakeWordDetected(wakeWord);
-                            SetListeningMode(ListeningMode.AutoStop);
-                            break;
-                        }
+                            {
+                                if (!await OpenAudioChannel()) return;
+                                await _protocol.SendWakeWordDetected(wakeWord);
+                                SetListeningMode(ListeningMode.AutoStop);
+                                break;
+                            }
                         case State.Speaking:
                             if (AppSettings.Instance.GetBreakMode() == BreakMode.Keyword)
                             {
@@ -444,86 +444,122 @@ namespace XiaoZhi.Unity
                 switch (type)
                 {
                     case "hello":
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                     case "tts":
-                    {
-                        var state = message["state"].ToString();
-                        switch (state)
                         {
-                            case "start":
+                            var state = message["state"].ToString();
+                            switch (state)
                             {
-                                _aborted = false;
-                                if (_talk.Stat is State.Idle or State.Listening)
-                                    _talk.Stat = State.Speaking;
-                                break;
-                            }
-                            case "stop":
-                            {
-                                if (_talk.Stat != State.Speaking) return;
-                                if (_listeningMode == ListeningMode.ManualStop)
-                                {
-                                    _talk.Stat = State.Idle;
-                                }
-                                else
-                                {
-                                    _talk.Stat = State.Listening;
-                                    if (_aborted && _freeBuffer.Count > 0)
+                                case "start":
                                     {
-                                        SendAudio(_freeBuffer.Read());
-                                        _freeBuffer.Clear();
+                                        _aborted = false;
+                                        if (_talk.Stat is State.Idle or State.Listening)
+                                            _talk.Stat = State.Speaking;
+                                        break;
                                     }
-                                }
+                                case "stop":
+                                    {
+                                        if (_talk.Stat != State.Speaking) return;
+                                        if (_listeningMode == ListeningMode.ManualStop)
+                                        {
+                                            _talk.Stat = State.Idle;
+                                        }
+                                        else
+                                        {
+                                            _talk.Stat = State.Listening;
+                                            if (_aborted && _freeBuffer.Count > 0)
+                                            {
+                                                SendAudio(_freeBuffer.Read());
+                                                _freeBuffer.Clear();
+                                            }
+                                        }
 
-                                break;
+                                        break;
+                                    }
+                                case "sentence_start":
+                                    {
+                                        var text = message["text"].ToString();
+                                        if (!string.IsNullOrEmpty(text)) _talk.Chat = text;
+                                        break;
+                                    }
                             }
-                            case "sentence_start":
-                            {
-                                var text = message["text"].ToString();
-                                if (!string.IsNullOrEmpty(text)) _talk.Chat = text;
-                                break;
-                            }
+
+                            break;
                         }
-
-                        break;
-                    }
                     case "stt":
-                    {
-                        var text = message["text"].ToString();
-                        if (!string.IsNullOrEmpty(text)) _talk.Chat = text;
-                        break;
-                    }
-                    case "llm":
-                    {
-                        var emotion = message["emotion"].ToString();
-                        if (!string.IsNullOrEmpty(emotion)) _talk.Emotion = emotion;
-                        break;
-                    }
-                    case "iot":
-                    {
-                        var commands = message["commands"];
-                        if (commands == null) return;
-                        foreach (var command in commands) _context.ThingManager.Invoke(command);
-                        break;
-                    }
-                    case "alert":
-                    {
-                        var status = message["status"].ToString();
-                        var content = message["message"].ToString();
-                        var emotion = message["emotion"].ToString();
-                        if (!string.IsNullOrEmpty(status) && !string.IsNullOrEmpty(content) &&
-                            !string.IsNullOrEmpty(emotion))
                         {
-                            _talk.Emotion = emotion;
-                            _talk.Chat = $"{status}: {content}";
+                            var text = message["text"].ToString();
+                            if (!string.IsNullOrEmpty(text)) _talk.Chat = text;
+                            break;
                         }
+                    case "llm":
+                        {
+                            var emotion = message["emotion"].ToString();
+                            if (!string.IsNullOrEmpty(emotion)) _talk.Emotion = emotion;
+                            break;
+                        }
+                    case "iot":
+                        {
+                            var commands = message["commands"];
+                            if (commands == null) return;
+                            foreach (var command in commands) _context.ThingManager.Invoke(command);
+                            break;
+                        }
+                    case "alert":
+                        {
+                            var status = message["status"].ToString();
+                            var content = message["message"].ToString();
+                            var emotion = message["emotion"].ToString();
+                            if (!string.IsNullOrEmpty(status) && !string.IsNullOrEmpty(content) &&
+                                !string.IsNullOrEmpty(emotion))
+                            {
+                                _talk.Emotion = emotion;
+                                _talk.Chat = $"{status}: {content}";
+                            }
 
-                        break;
-                    }
+                            break;
+                        }
                 }
             };
             _protocol.Start();
+        }
+
+        public async UniTask SendTextMessage(string message)
+        {
+            if (string.IsNullOrWhiteSpace(message)) return;
+            if (_protocol == null) return;
+            if (string.IsNullOrEmpty(_protocol.SessionId)) return;
+            await EnsureListening(ListeningMode.AutoStop);
+            Debug.Log($"[App] SendTextMessage: {message}");
+            await _protocol.SendTextMessage(message);
+        }
+
+        public async UniTask EnsureListening(ListeningMode mode = ListeningMode.AutoStop)
+        {
+            if (_protocol == null) return;
+            if (!_protocol.IsAudioChannelOpened())
+            {
+                var opened = await _protocol.OpenAudioChannel();
+                if (!opened) return;
+            }
+
+            SetListeningMode(mode);
+            await _protocol.SendStartListening(mode);
+        }
+
+        public void OnApplicationFocus(bool focus)
+        {
+            if (focus)
+            {
+                _codec?.EnableInput(true);
+                _codec?.Start();
+            }
+            else
+            {
+                _codec?.EnableInput(false);
+            }
         }
 
         private async UniTask<bool> CheckNewVersion(CancellationToken cancellationToken = default)
@@ -534,7 +570,7 @@ namespace XiaoZhi.Unity
             _ota = new OTA();
             _ota.SetCheckVersionUrl(AppPresets.Instance.OtaVersionUrl);
             _ota.SetHeader("Device-Id", macAddr);
-            _ota.SetHeader("Accept-Language", "zh-CN");
+            _ota.SetHeader("Accept-Language", "vi-VN");
             _ota.SetHeader("User-Agent", $"{boardName}/{AppUtility.GetVersion()}");
             var postData = await OTA.LoadPostData(macAddr, boardName);
             _ota.SetPostData(postData);
@@ -630,7 +666,7 @@ namespace XiaoZhi.Unity
                 await CancelDance();
                 return;
             }
-            
+
             display.Animate(anim);
             display.EnableLipSync(false);
             _clipReader.Setup(bgm, LocalClipFrameSize * LocalClipSampleRate / 1000);

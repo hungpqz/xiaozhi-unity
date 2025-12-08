@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.UI;
+using InputField = UnityEngine.UI.InputField;
 
 namespace XiaoZhi.Unity
 {
@@ -37,6 +38,10 @@ namespace XiaoZhi.Unity
         private TextMeshProUGUI _textEmotion;
         private Image _imgEmotion;
         private Button _btnEmotion;
+        private GameObject _textInputRoot;
+        private InputField _inputText;
+        private Button _btnSend;
+        private Button _btnMic;
         private RectTransform _trSet;
         private Button _btnSet;
         private XInputWave _xInputWave;
@@ -122,6 +127,7 @@ namespace XiaoZhi.Unity
             var le = _imgEmotion.GetComponent<LayoutElement>() ?? _imgEmotion.gameObject.AddComponent<LayoutElement>();
             le.ignoreLayout = true;
             _imgEmotion.gameObject.SetActive(false);
+            BuildTextInput();
             _goLoading = Tr.Find("Loading").gameObject;
             _trSet = GetComponent<RectTransform>(Tr, "BtnSet");
             _trSet.GetComponent<XButton>().onClick.AddListener(() => { ShowModuleUI<SettingsUI>().Forget(); });
@@ -142,6 +148,9 @@ namespace XiaoZhi.Unity
             Context.App.Talk.OnChatUpdate += OnTalkChatUpdate;
             AppSettings.Instance.OnAutoHideUIUpdate -= OnAutoHideUIUpdate;
             AppSettings.Instance.OnAutoHideUIUpdate += OnAutoHideUIUpdate;
+            AppSettings.Instance.OnTextInputEnableUpdate -= OnTextInputToggle;
+            AppSettings.Instance.OnTextInputEnableUpdate += OnTextInputToggle;
+            OnTextInputToggle(AppSettings.Instance.IsTextInputEnabled());
             DetectCompVisible(true);
             await UniTask.CompletedTask;
         }
@@ -153,6 +162,7 @@ namespace XiaoZhi.Unity
             Context.App.Talk.OnInfoUpdate -= OnTalkInfoUpdate;
             Context.App.Talk.OnChatUpdate -= OnTalkChatUpdate;
             AppSettings.Instance.OnAutoHideUIUpdate -= OnAutoHideUIUpdate;
+            AppSettings.Instance.OnTextInputEnableUpdate -= OnTextInputToggle;
             if (_loopCts != null)
             {
                 _loopCts.Cancel();
@@ -306,6 +316,132 @@ namespace XiaoZhi.Unity
                 Debug.Log($"[EmojiMainUI] No sprite found for emotion '{emotion}' at Resources '{path}', fallback to text");
             }
             return sprite;
+        }
+
+        private void BuildTextInput()
+        {
+            _textInputRoot = new GameObject("TextInput", typeof(RectTransform));
+            var rt = _textInputRoot.GetComponent<RectTransform>();
+            rt.SetParent(Tr, false);
+            rt.anchorMin = new Vector2(0.05f, 0.05f);
+            rt.anchorMax = new Vector2(0.95f, 0.15f);
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
+
+            var bg = _textInputRoot.AddComponent<Image>();
+            bg.color = new Color(0, 0, 0, 0.35f);
+            var outline = _textInputRoot.AddComponent<Outline>();
+            outline.effectColor = new Color(1, 1, 1, 0.25f);
+
+            var inputGO = new GameObject("Input", typeof(RectTransform));
+            var inputRT = inputGO.GetComponent<RectTransform>();
+            inputRT.SetParent(rt, false);
+            inputRT.anchorMin = new Vector2(0, 0);
+            inputRT.anchorMax = new Vector2(0.8f, 1);
+            inputRT.offsetMin = new Vector2(8, 6);
+            inputRT.offsetMax = new Vector2(-8, -6);
+
+            _inputText = inputGO.AddComponent<InputField>();
+            var textComp = inputGO.AddComponent<Text>();
+            textComp.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            textComp.color = Color.white;
+            textComp.supportRichText = false;
+            _inputText.textComponent = textComp;
+            _inputText.placeholder = CreatePlaceholder(inputRT, textComp.font);
+            _inputText.lineType = InputField.LineType.SingleLine;
+            _inputText.onEndEdit.AddListener(OnEndEditText);
+
+            var btnGO = new GameObject("SendButton", typeof(RectTransform));
+            var btnRT = btnGO.GetComponent<RectTransform>();
+            btnRT.SetParent(rt, false);
+            btnRT.anchorMin = new Vector2(0.88f, 0);
+            btnRT.anchorMax = new Vector2(1, 1);
+            btnRT.offsetMin = new Vector2(8, 6);
+            btnRT.offsetMax = new Vector2(-8, -6);
+
+            _btnSend = btnGO.AddComponent<Button>();
+            var btnImg = btnGO.AddComponent<Image>();
+            btnImg.color = new Color(0.2f, 0.6f, 1f, 0.9f);
+            _btnSend.targetGraphic = btnImg;
+            var btnTextGO = new GameObject("Text", typeof(RectTransform));
+            var btnTextRT = btnTextGO.GetComponent<RectTransform>();
+            btnTextRT.SetParent(btnRT, false);
+            btnTextRT.anchorMin = btnTextRT.anchorMax = new Vector2(0.5f, 0.5f);
+            btnTextRT.sizeDelta = new Vector2(60, 30);
+            var btnText = btnTextGO.AddComponent<Text>();
+            btnText.font = textComp.font;
+            btnText.color = Color.white;
+            btnText.alignment = TextAnchor.MiddleCenter;
+            btnText.text = "Send";
+            _btnSend.onClick.AddListener(OnClickSendText);
+
+            var micGO = new GameObject("MicButton", typeof(RectTransform));
+            var micRT = micGO.GetComponent<RectTransform>();
+            micRT.SetParent(rt, false);
+            micRT.anchorMin = new Vector2(0.8f, 0);
+            micRT.anchorMax = new Vector2(0.88f, 1);
+            micRT.offsetMin = new Vector2(4, 6);
+            micRT.offsetMax = new Vector2(-4, -6);
+
+            _btnMic = micGO.AddComponent<Button>();
+            var micImg = micGO.AddComponent<Image>();
+            micImg.color = new Color(0.1f, 0.4f, 0.8f, 0.9f);
+            _btnMic.targetGraphic = micImg;
+            var micTextGO = new GameObject("Text", typeof(RectTransform));
+            var micTextRT = micTextGO.GetComponent<RectTransform>();
+            micTextRT.SetParent(micRT, false);
+            micTextRT.anchorMin = micTextRT.anchorMax = new Vector2(0.5f, 0.5f);
+            micTextRT.sizeDelta = new Vector2(40, 30);
+            var micText = micTextGO.AddComponent<Text>();
+            micText.font = textComp.font;
+            micText.color = Color.white;
+            micText.alignment = TextAnchor.MiddleCenter;
+            micText.text = "\uD83C\uDF99"; // mic emoji
+            _btnMic.onClick.AddListener(OnClickMic);
+        }
+
+        private Text CreatePlaceholder(RectTransform parent, Font font)
+        {
+            var go = new GameObject("Placeholder", typeof(RectTransform));
+            var rt = go.GetComponent<RectTransform>();
+            rt.SetParent(parent, false);
+            rt.anchorMin = rt.anchorMax = new Vector2(0, 1);
+            rt.pivot = new Vector2(0, 1);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = new Vector2(0, 0);
+            var txt = go.AddComponent<Text>();
+            txt.font = font;
+            txt.text = "Nhập tin nhắn...";
+            txt.color = new Color(1, 1, 1, 0.6f);
+            txt.alignment = TextAnchor.UpperLeft;
+            return txt;
+        }
+
+        private void OnClickSendText()
+        {
+            SendTextMessage(_inputText?.text);
+        }
+
+        private void OnClickMic()
+        {
+            Context.App.EnsureListening().Forget();
+        }
+
+        private void OnEndEditText(string text)
+        {
+            SendTextMessage(text);
+        }
+
+        private void SendTextMessage(string text)
+        {
+            var msg = text?.Trim();
+            if (string.IsNullOrEmpty(msg)) return;
+            _inputText.text = string.Empty;
+            Context.App.SendTextMessage(msg).Forget();
+        }
+
+        private void OnTextInputToggle(bool enabled)
+        {
+            if (_textInputRoot) _textInputRoot.SetActive(enabled);
         }
 
         private void ClearAutoHideCts()

@@ -20,71 +20,76 @@ MonoBehaviour:
     - rid: 8193056366595407875
   m_TableData:
   - m_Id: 3314955647
-    m_Localized: "K\u00edch ho\u1ea1t thi\u1ebft b\u1ecb"
+    m_Localized: "K\xEDch ho\u1EA1t thi\u1EBFt b\u1ECB"
     m_Metadata:
       m_Items: []
   - m_Id: 2492018094
-    m_Localized: "M\u00e3 k\u00edch ho\u1ea1t \u0111\u00e3 \u0111\u01b0\u1ee3c sao ch\u00e9p. B\u1ea5m v\u00e0o li\u00ean k\u1ebft b\u00ean d\u01b0\u1edbi \u0111\u1ec3 k\u00edch ho\u1ea1t thi\u1ebft b\u1ecb."
+    m_Localized: "M\xE3 k\xEDch ho\u1EA1t \u0111\xE3 \u0111\u01B0\u1EE3c sao ch\xE9p.
+      B\u1EA5m v\xE0o li\xEAn k\u1EBFt b\xEAn d\u01B0\u1EDBi \u0111\u1EC3 k\xEDch
+      ho\u1EA1t thi\u1EBFt b\u1ECB."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955648
-    m_Localized: "K\u00edch ho\u1ea1t th\u1ea5t b\u1ea1i. Vui l\u00f2ng th\u1eed kh\u1edfi \u0111\u1ed9ng l\u1ea1i \u1ee9ng d\u1ee5ng."
+    m_Localized: "K\xEDch ho\u1EA1t th\u1EA5t b\u1EA1i. Vui l\xF2ng th\u1EED kh\u1EDFi
+      \u0111\u1ED9ng l\u1EA1i \u1EE9ng d\u1EE5ng."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955649
-    m_Localized: "\u0110ang t\u1ea3i t\u00e0i nguy\u00ean..."
+    m_Localized: "\u0110ang t\u1EA3i t\xE0i nguy\xEAn..."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955650
-    m_Localized: "\u0110ang t\u1ea3i m\u00f4 h\u00ecnh..."
+    m_Localized: "\u0110ang t\u1EA3i m\xF4 h\xECnh..."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955651
-    m_Localized: "\u0110ang kh\u1edfi \u0111\u1ed9ng"
+    m_Localized: "\u0110ang kh\u1EDFi \u0111\u1ED9ng"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955652
-    m_Localized: "Ch\u1edd"
+    m_Localized: "Ch\u1EDD"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955653
-    m_Localized: "\u0110ang k\u1ebft n\u1ed1i"
+    m_Localized: "\u0110ang k\u1EBFt n\u1ED1i"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955654
-    m_Localized: "\u0110ang l\u1eafng nghe"
+    m_Localized: "\u0110ang l\u1EAFng nghe"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955655
-    m_Localized: "\u0110ang n\u00f3i"
+    m_Localized: "\u0110ang n\xF3i"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955656
-    m_Localized: "L\u1ed7i"
+    m_Localized: "L\u1ED7i"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955657
-    m_Localized: "Kh\u00f4ng t\u00ecm th\u1ea5y micro."
+    m_Localized: "Kh\xF4ng t\xECm th\u1EA5y micro."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955658
-    m_Localized: "C\u00e0i \u0111\u1eb7t"
+    m_Localized: "C\xE0i \u0111\u1EB7t"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955659
-    m_Localized: "Thay \u0111\u1ed5i \u0111\u00e3 \u00e1p d\u1ee5ng. S\u1ebd c\u00f3 hi\u1ec7u l\u1ef1c sau khi kh\u1edfi \u0111\u1ed9ng l\u1ea1i."
+    m_Localized: "Thay \u0111\u1ED5i \u0111\xE3 \xE1p d\u1EE5ng. S\u1EBD c\xF3 hi\u1EC7u
+      l\u1EF1c sau khi kh\u1EDFi \u0111\u1ED9ng l\u1EA1i."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955660
-    m_Localized: "URL kh\u00f4ng h\u1ee3p l\u1ec7. Vui l\u00f2ng th\u1eed l\u1ea1i."
+    m_Localized: "URL kh\xF4ng h\u1EE3p l\u1EC7. Vui l\xF2ng th\u1EED l\u1EA1i."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955661
-    m_Localized: "\u0110\u1ecba ch\u1ec9 MAC kh\u00f4ng h\u1ee3p l\u1ec7. Vui l\u00f2ng th\u1eed l\u1ea1i."
+    m_Localized: "\u0110\u1ECBa ch\u1EC9 MAC kh\xF4ng h\u1EE3p l\u1EC7. Vui l\xF2ng
+      th\u1EED l\u1EA1i."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955662
-    m_Localized: "Vui l\u00f2ng nh\u1eadp {0}"
+    m_Localized: "Vui l\xF2ng nh\u1EADp {0}"
     m_Metadata:
       m_Items:
       - rid: 8193056366595407875
@@ -101,11 +106,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3314955666
-    m_Localized: "\u0110\u1ecba ch\u1ec9 MAC"
+    m_Localized: "\u0110\u1ECBa ch\u1EC9 MAC"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955667
-    m_Localized: "Ch\u1ebf \u0111\u1ed9 hi\u1ec3n th\u1ecb"
+    m_Localized: "Ch\u1EBF \u0111\u1ED9 hi\u1EC3n th\u1ECB"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955668
@@ -117,223 +122,222 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3314955670
-    m_Localized: "Nh\u00e2n v\u1eadt"
+    m_Localized: "Nh\xE2n v\u1EADt"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955671
-    m_Localized: "Ch\u1ebf \u0111\u1ed9 ng\u1eaft"
+    m_Localized: "Ch\u1EBF \u0111\u1ED9 ng\u1EAFt"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955672
-    m_Localized: "T\u1eaft"
+    m_Localized: "T\u1EAFt"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955673
-    m_Localized: "T\u1eeb kh\u00f3a"
+    m_Localized: "T\u1EEB kh\xF3a"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955674
-    m_Localized: "Gi\u1ecdng n\u00f3i"
+    m_Localized: "Gi\u1ECDng n\xF3i"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955675
-    m_Localized: "T\u1ef1 do"
+    m_Localized: "T\u1EF1 do"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955676
-    m_Localized: "T\u1eeb kh\u00f3a"
+    m_Localized: "T\u1EEB kh\xF3a"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955677
-    m_Localized: "<u><i><link=\"0\">C\u00e1ch \u0111\u1eb7t t\u1eeb kh\u00f3a</link></i></u>"
+    m_Localized: "<u><i><link=\"0\">C\xE1ch \u0111\u1EB7t t\u1EEB kh\xF3a</link></i></u>"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955678
-    m_Localized: "Micro"
+    m_Localized: Micro
     m_Metadata:
       m_Items: []
   - m_Id: 3314955679
-    m_Localized: "\u00c2m l\u01b0\u1ee3ng"
+    m_Localized: "\xC2m l\u01B0\u1EE3ng"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955680
-    m_Localized: "T\u1ef1 \u1ea9n UI"
+    m_Localized: "T\u1EF1 \u1EA9n UI"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955681
-    m_Localized: "Ch\u1ee7 \u0111\u1ec1"
+    m_Localized: "\u1EA8n/Hi\u1EC7n Chatbox"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955682
-    m_Localized: "\u0110i\u1ec1n"
+    m_Localized: "\u0110i\u1EC1n"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955683
-    m_Localized: "Ng\u00f4n ng\u1eef"
+    m_Localized: "Ng\xF4n ng\u1EEF"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955684
-    m_Localized: "Kh\u1edfi \u0111\u1ed9ng l\u1ea1i"
+    m_Localized: "Kh\u1EDFi \u0111\u1ED9ng l\u1EA1i"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955685
-    m_Localized: "\u0110\u1ecdc t\u1ec7p"
+    m_Localized: "\u0110\u1ECDc t\u1EC7p"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955686
-    m_Localized: "Ghi t\u1ec7p"
+    m_Localized: "Ghi t\u1EC7p"
     m_Metadata:
       m_Items: []
   - m_Id: 3314955687
-    m_Localized: "Camera"
+    m_Localized: Camera
     m_Metadata:
       m_Items: []
   - m_Id: 3314955688
-    m_Localized: "Micro"
+    m_Localized: Micro
     m_Metadata:
       m_Items: []
   - m_Id: 3314955689
-    m_Localized: "Y\u00eau c\u1ea7u quy\u1ec1n {0} th\u1ea5t b\u1ea1i."
+    m_Localized: "Y\xEAu c\u1EA7u quy\u1EC1n {0} th\u1EA5t b\u1EA1i."
     m_Metadata:
       m_Items: []
   - m_Id: 3314955690
-    m_Localized: "Y\u00eau c\u1ea7u quy\u1ec1n th\u1ea5t b\u1ea1i. Vui l\u00f2ng th\u1eed kh\u1edfi \u0111\u1ed9ng l\u1ea1i \u1ee9ng d\u1ee5ng."
+    m_Localized: "Y\xEAu c\u1EA7u quy\u1EC1n th\u1EA5t b\u1EA1i. Vui l\xF2ng th\u1EED
+      kh\u1EDFi \u0111\u1ED9ng l\u1EA1i \u1EE9ng d\u1EE5ng."
     m_Metadata:
       m_Items: []
   - m_Id: 2159087987941376
-    m_Localized: "XiaoZhi c\u1ea7n s\u1eed d\u1ee5ng camera c\u1ee7a b\u1ea1n"
+    m_Localized: "BigWell c\u1EA7n s\u1EED d\u1EE5ng camera c\u1EE7a b\u1EA1n"
     m_Metadata:
       m_Items: []
   - m_Id: 2159308025323520
-    m_Localized: "XiaoZhi c\u1ea7n truy c\u1eadp v\u1ecb tr\u00ed c\u1ee7a b\u1ea1n"
+    m_Localized: "BigWell c\u1EA7n truy c\u1EADp v\u1ECB tr\xED c\u1EE7a b\u1EA1n"
     m_Metadata:
       m_Items: []
   - m_Id: 2159389092831232
-    m_Localized: "XiaoZhi c\u1ea7n s\u1eed d\u1ee5ng micro \u0111\u1ec3 tr\u00f2 chuy\u1ec7n v\u1edbi b\u1ea1n"
+    m_Localized: "BigWell c\u1EA7n s\u1EED d\u1EE5ng micro \u0111\u1EC3 tr\xF2 chuy\u1EC7n
+      v\u1EDBi b\u1EA1n"
     m_Metadata:
       m_Items: []
   - m_Id: 2159431325278208
-    m_Localized: "XiaoZhi c\u1ea7n truy c\u1eadp m\u00e3 \u0111\u1ecbnh danh qu\u1ea3ng c\u00e1o c\u1ee7a b\u1ea1n"
+    m_Localized: "BigWell c\u1EA7n truy c\u1EADp m\xE3 \u0111\u1ECBnh danh qu\u1EA3ng
+      c\xE1o c\u1EE7a b\u1EA1n"
     m_Metadata:
       m_Items: []
   - m_Id: 2160026320855040
-    m_Localized: "XiaoZhi Unity"
+    m_Localized: BigWell Unity
     m_Metadata:
       m_Items: []
   - m_Id: 2160154335207424
-    m_Localized: "XiaoZhi Unity"
+    m_Localized: BigWell Unity
     m_Metadata:
       m_Items: []
   - m_Id: 7051894095568896
-    m_Localized: "ID ng\u01b0\u1eddi d\u00f9ng/Email/S\u1ed1 \u0111i\u1ec7n tho\u1ea1i"
+    m_Localized: "ID ng\u01B0\u1EDDi d\xF9ng/Email/S\u1ED1 \u0111i\u1EC7n tho\u1EA1i"
     m_Metadata:
       m_Items: []
   - m_Id: 7900086924173312
-    m_Localized: "M\u1eadt kh\u1ea9u"
+    m_Localized: "M\u1EADt kh\u1EA9u"
     m_Metadata:
       m_Items: []
   - m_Id: 7052053349097472
-    m_Localized: "\u0110\u0103ng nh\u1eadp"
+    m_Localized: "\u0110\u0103ng nh\u1EADp"
     m_Metadata:
       m_Items: []
   - m_Id: 7052100107198464
-    m_Localized: "\u0110\u0103ng xu\u1ea5t"
+    m_Localized: "\u0110\u0103ng xu\u1EA5t"
     m_Metadata:
       m_Items: []
   - m_Id: 7052185847160832
-    m_Localized: "\u0110\u0103ng nh\u1eadp th\u00e0nh c\u00f4ng"
+    m_Localized: "\u0110\u0103ng nh\u1EADp th\xE0nh c\xF4ng"
     m_Metadata:
       m_Items: []
   - m_Id: 7052351807381504
-    m_Localized: "\u0110\u0103ng nh\u1eadp th\u1ea5t b\u1ea1i"
+    m_Localized: "\u0110\u0103ng nh\u1EADp th\u1EA5t b\u1EA1i"
     m_Metadata:
       m_Items: []
   - m_Id: 7052665411297280
-    m_Localized: "Nh\u00e0"
+    m_Localized: "Nh\xE0"
     m_Metadata:
       m_Items: []
   - m_Id: 7052731333173248
-    m_Localized: "Ph\u00f2ng"
+    m_Localized: "Ph\xF2ng"
     m_Metadata:
       m_Items: []
   - m_Id: 7052790267338752
-    m_Localized: "\u0110i\u1ec1u khi\u1ec3n b\u1eb1ng gi\u1ecdng n\u00f3i c\u00e1c thi\u1ebft b\u1ecb IoT \u0111\u00e3 ch\u1ecdn b\u00ean d\u01b0\u1edbi, thay \u0111\u1ed5i s\u1ebd c\u00f3 hi\u1ec7u l\u1ef1c sau khi kh\u1edfi \u0111\u1ed9ng l\u1ea1i"
+    m_Localized: "\u0110i\u1EC1u khi\u1EC3n b\u1EB1ng gi\u1ECDng n\xF3i c\xE1c thi\u1EBFt
+      b\u1ECB IoT \u0111\xE3 ch\u1ECDn b\xEAn d\u01B0\u1EDBi, thay \u0111\u1ED5i
+      s\u1EBD c\xF3 hi\u1EC7u l\u1EF1c sau khi kh\u1EDFi \u0111\u1ED9ng l\u1EA1i"
     m_Metadata:
       m_Items: []
   - m_Id: 7053541869838336
-    m_Localized: "L\u00e0m m\u1edbi"
+    m_Localized: "L\xE0m m\u1EDBi"
     m_Metadata:
       m_Items: []
   - m_Id: 7053570470797312
-    m_Localized: "B\u1ecf ch\u1ecdn t\u1ea5t c\u1ea3"
+    m_Localized: "B\u1ECF ch\u1ECDn t\u1EA5t c\u1EA3"
     m_Metadata:
       m_Items: []
   - m_Id: 7053948998344704
-    m_Localized: "Thay \u0111\u1ed5i thu\u1ed9c t\u00ednh {0} th\u1ea5t b\u1ea1i: {1}"
+    m_Localized: "Thay \u0111\u1ED5i thu\u1ED9c t\xEDnh {0} th\u1EA5t b\u1EA1i: {1}"
     m_Metadata:
       m_Items: []
   - m_Id: 7054207824650240
-    m_Localized: "Chung"
+    m_Localized: Chung
     m_Metadata:
       m_Items: []
   - m_Id: 7054277517205504
-    m_Localized: "MIoT"
+    m_Localized: MIoT
     m_Metadata:
       m_Items: []
   - m_Id: 7077900567142400
-    m_Localized: "\u0110ang t\u1ea3i MIoT..."
+    m_Localized: "\u0110ang t\u1EA3i MIoT..."
     m_Metadata:
       m_Items: []
   - m_Id: 7889102125883392
-    m_Localized: "M\u00e3 x\u00e1c minh"
+    m_Localized: "M\xE3 x\xE1c minh"
     m_Metadata:
       m_Items: []
   - m_Id: 7889234766553088
-    m_Localized: "\u0110\u0103ng nh\u1eadp c\u1ee5c b\u1ed9 c\u1ea7n x\u00e1c minh \u0111i\u1ec7n tho\u1ea1i/email c\u1ee7a b\u1ea1n, <color=#FF6C37><u><link=\"0\">b\u1ea5m v\u00e0o \u0111\u00e2y \u0111\u1ec3 l\u1ea5y m\u00e3 x\u00e1c minh</link></u></color>"
+    m_Localized: "\u0110\u0103ng nh\u1EADp c\u1EE5c b\u1ED9 c\u1EA7n x\xE1c minh
+      \u0111i\u1EC7n tho\u1EA1i/email c\u1EE7a b\u1EA1n, <color=#FF6C37><u><link=\"0\">b\u1EA5m
+      v\xE0o \u0111\xE2y \u0111\u1EC3 l\u1EA5y m\xE3 x\xE1c minh</link></u></color>"
     m_Metadata:
       m_Items: []
   - m_Id: 7889508973371392
-    m_Localized: "X\u00e1c minh"
+    m_Localized: "X\xE1c minh"
     m_Metadata:
       m_Items: []
   - m_Id: 7895673413263360
-    m_Localized: "Quay l\u1ea1i \u0111\u0103ng nh\u1eadp"
+    m_Localized: "Quay l\u1EA1i \u0111\u0103ng nh\u1EADp"
     m_Metadata:
       m_Items: []
   - m_Id: 7957408966991872
-    m_Localized: "L\u00e0m m\u1edbi th\u00e0nh c\u00f4ng"
+    m_Localized: "L\xE0m m\u1EDBi th\xE0nh c\xF4ng"
     m_Metadata:
       m_Items: []
   - m_Id: 8675432594366464
-    m_Localized: "K\u1ebft n\u1ed1i \u0111\u00e3 b\u1ecb \u0111\u00f3ng"
+    m_Localized: "K\u1EBFt n\u1ED1i \u0111\xE3 b\u1ECB \u0111\xF3ng"
     m_Metadata:
       m_Items: []
   - m_Id: 49667773039599616
-    m_Localized: "C\u1ea3nh xa"
+    m_Localized: "C\u1EA3nh xa"
     m_Metadata:
       m_Items: []
   - m_Id: 49667893739085824
-    m_Localized: "C\u1ea3nh trung"
+    m_Localized: "C\u1EA3nh trung"
     m_Metadata:
       m_Items: []
   - m_Id: 49668220370509824
-    m_Localized: "\u1ed0ng k\u00ednh"
+    m_Localized: "\u1ED0ng k\xEDnh"
     m_Metadata:
       m_Items: []
-  - m_Id: 49669933450092544
-    m_Localized: "K\u1ebft n\u1ed1i th\u1ea5t b\u1ea1i"
+  - m_Id: 49667904732356608
+    m_Localized: "C\u1EADn c\u1EA3nh"
     m_Metadata:
       m_Items: []
-  - m_Id: 50563706090643456
-    m_Localized: "H\u00ecnh n\u1ec1n"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 51076010605674496
-    m_Localized: "C\u1ea3nh g\u1ea7n"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 56504903709884416
-    m_Localized: "\u0110ang nh\u1ea3y"
+  - m_Id: 3414955682
+    m_Localized: "\u0110\u1EB7t h\xECnh n\u1EC1n"
     m_Metadata:
       m_Items: []
   references:

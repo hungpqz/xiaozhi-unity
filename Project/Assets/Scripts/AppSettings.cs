@@ -35,6 +35,7 @@ namespace XiaoZhi.Unity
         private string _webSocketAccessToken;
 
         private string _customMacAddress;
+        private bool _enableTextInput;
 
         public event Action<bool> OnAutoHideUIUpdate;
         public event Action<int> OnOutputVolumeUpdate;
@@ -42,6 +43,7 @@ namespace XiaoZhi.Unity
         public event Action<ZoomMode> OnZoomModeUpdate;
 
         public event Action<string> OnWallPaperUpdate;
+        public event Action<bool> OnTextInputEnableUpdate;
 
         private AppSettings() : base("app")
         {
@@ -52,6 +54,7 @@ namespace XiaoZhi.Unity
             _vrmModel = GetInt("vrm_model");
             _zoomMode = (ZoomMode)GetInt("zoom_mode");
             _wallpaper = GetString("wallpaper", "Default");
+            _enableTextInput = GetInt("enable_text_input", 0) == 1;
         }
 
         public DisplayMode GetDisplayMode() => _displayMode;
@@ -204,6 +207,17 @@ namespace XiaoZhi.Unity
             SetInt("auto_hide_ui", _autoHideUI ? 1 : 0);
             Save();
             OnAutoHideUIUpdate?.Invoke(_autoHideUI);
+        }
+
+        public bool IsTextInputEnabled() => _enableTextInput;
+
+        public void SetTextInputEnabled(bool enabled)
+        {
+            if (_enableTextInput == enabled) return;
+            _enableTextInput = enabled;
+            SetInt("enable_text_input", enabled ? 1 : 0);
+            Save();
+            OnTextInputEnableUpdate?.Invoke(_enableTextInput);
         }
 
         public int GetOutputVolume()

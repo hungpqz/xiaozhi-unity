@@ -99,6 +99,19 @@ namespace XiaoZhi.Unity
             }));
         }
 
+        public virtual async UniTask SendTextMessage(string text)
+        {
+            UnityEngine.Debug.Log($"[Protocol] SendTextMessage payload: {text}");
+            await SendText(JsonConvert.SerializeObject(new
+            {
+                session_id = SessionId,
+                type = "listen",
+                state = "detect",
+                text,
+                source = "text"
+            }));
+        }
+
         public virtual async UniTask SendIotDescriptors(string descriptors)
         {
             await using var stringWriter = new StringWriter();

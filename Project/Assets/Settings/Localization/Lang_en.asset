@@ -161,7 +161,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3314955681
-    m_Localized: Theme
+    m_Localized: Show/Hide Chatbox
     m_Metadata:
       m_Items: []
   - m_Id: 3314955682
@@ -201,27 +201,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2159087987941376
-    m_Localized: XiaoZhi needs to use your camera
+    m_Localized: BigWell needs to use your camera
     m_Metadata:
       m_Items: []
   - m_Id: 2159308025323520
-    m_Localized: XiaoZhi needs to access your location
+    m_Localized: BigWell needs to access your location
     m_Metadata:
       m_Items: []
   - m_Id: 2159389092831232
-    m_Localized: XiaoZhi needs to use the microphone to talk with you
+    m_Localized: BigWell needs to use the microphone to talk with you
     m_Metadata:
       m_Items: []
   - m_Id: 2159431325278208
-    m_Localized: XiaoZhi needs to access your advertising identifier
+    m_Localized: BigWell needs to access your advertising identifier
     m_Metadata:
       m_Items: []
   - m_Id: 2160026320855040
-    m_Localized: XiaoZhi Unity
+    m_Localized: Bigwell Unity
     m_Metadata:
       m_Items: []
   - m_Id: 2160154335207424
-    m_Localized: XiaoZhi Unity
+    m_Localized: Bigwell  Unity
     m_Metadata:
       m_Items: []
   - m_Id: 7900086924173312
@@ -257,11 +257,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7052185847160832
-    m_Localized: Login successful
+    m_Localized: Login Successful
     m_Metadata:
       m_Items: []
   - m_Id: 7052351807381504
-    m_Localized: Login failed
+    m_Localized: Login Failed
     m_Metadata:
       m_Items: []
   - m_Id: 7052790267338752
@@ -274,7 +274,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7053570470797312
-    m_Localized: Clear selection
+    m_Localized: Clear Selection
     m_Metadata:
       m_Items: []
   - m_Id: 7053948998344704
@@ -322,20 +322,12 @@ MonoBehaviour:
     m_Localized: Lens
     m_Metadata:
       m_Items: []
-  - m_Id: 49669933450092544
-    m_Localized: Connection failed
+  - m_Id: 49667904732356608
+    m_Localized: CloseUp
     m_Metadata:
       m_Items: []
-  - m_Id: 50563706090643456
-    m_Localized: Wallpaper
-    m_Metadata:
-      m_Items: []
-  - m_Id: 51076010605674496
-    m_Localized: CloseShot
-    m_Metadata:
-      m_Items: []
-  - m_Id: 56504903709884416
-    m_Localized: Dancing
+  - m_Id: 3414955682
+    m_Localized: Set background
     m_Metadata:
       m_Items: []
   references:

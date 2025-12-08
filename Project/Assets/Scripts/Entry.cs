@@ -16,4 +16,9 @@ public class Entry : MonoBehaviour
     {
         _context.Dispose();
     }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        _context.App.OnApplicationFocus(focus);
+    }
 }
